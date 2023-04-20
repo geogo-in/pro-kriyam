@@ -7,7 +7,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install --frozen-lockfile --silent --network-timeout=1000000
-RUN yarn add react-scripts@4.0.3 -g --silent
+
 COPY . ./
 RUN yarn run build
 

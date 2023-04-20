@@ -1,7 +1,11 @@
-import { DatePicker, LoadingButton } from "@mui/lab"
+import { LoadingButton } from "@mui/lab"
 import { Box, Divider, Grid, LinearProgress, ListItemIcon, ListItemText, TextField } from "@mui/material"
 import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
+import { DatePicker } from "@mui/x-date-pickers"
+import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
+import { useCreateIssuesMutation, useGetEpicQuery, useGetIssuePriorityQuery, useGetProjectIssuesStatusesQuery } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery, useGetProjectMembershipsQuery, useGetProjectsQuery } from "@redux/services/projectApi"
 import { skipToken } from "@reduxjs/toolkit/dist/query"
 import { NEW_ISSUE_PRIORITY, NEW_ISSUE_TRACKER } from "config/constants"
 import moment from "moment"
@@ -13,9 +17,6 @@ import { DialogContent, DialogFooter, DialogHeader } from "pages/shared/StyledDi
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
-import { useCreateIssuesMutation, useGetEpicQuery, useGetIssuePriorityQuery, useGetProjectIssuesStatusesQuery } from "@redux/services/issueApi"
-import { useGetProjectByIdQuery, useGetProjectMembershipsQuery, useGetProjectsQuery } from "@redux/services/projectApi"
 
 export default function CreateIssue({ project_id, status_id = "", onClose }) {
   const { project_id: project_id_params } = useParams()
@@ -26,7 +27,7 @@ export default function CreateIssue({ project_id, status_id = "", onClose }) {
     status_id,
     tracker_id: "",
     priority_id: "",
-    start_date: new Date(),
+    start_date: moment(),
     due_date: "",
     subject: "",
     done_ratio: 0,
@@ -148,7 +149,6 @@ export default function CreateIssue({ project_id, status_id = "", onClose }) {
           </Grid>
         </Grid>
 
-        {/* <ProTip /> */}
         <Divider sx={{ mb: 2 }} />
         <Typography variant="body2" display="block" sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
           Summary*
@@ -219,7 +219,7 @@ export default function CreateIssue({ project_id, status_id = "", onClose }) {
               disablePast
               inputFormat="DD/MM/YYYY"
               onChange={start_date => setState(x => ({ ...x, start_date }))}
-              renderInput={params => <TextField {...params} required />}
+              slotProps={{ textField: { required: true } }}
             />
           </Box>
           <Box sx={{ ml: 1 }}>
@@ -232,7 +232,7 @@ export default function CreateIssue({ project_id, status_id = "", onClose }) {
               disablePast
               inputFormat="DD/MM/YYYY"
               onChange={due_date => setState(x => ({ ...x, due_date }))}
-              renderInput={params => <TextField {...params} error={state.due_date ? params.error : false} required />}
+              slotProps={{ textField: params => ({ required: true, error: state.due_date ? params.error : false }) }}
             />
           </Box>
         </Box>
@@ -279,15 +279,3 @@ export default function CreateIssue({ project_id, status_id = "", onClose }) {
     </Box>
   )
 }
-
-// const ProTip = () => (
-//   <Stack direction="row" alignItems={"center"} spacing={1} pb={1}>
-//     <Box display="flex">
-//       <LightbulbOutlinedIcon />
-//       <Typography noWrap>Pro Tip!</Typography>
-//     </Box>
-//     <Typography component={"p"} variant="tiny" color="text.secondary">
-//       Some issue types are unavailable due to incompatible field configuration and/or workflow associations.
-//     </Typography>
-//   </Stack>
-// )

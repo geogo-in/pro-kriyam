@@ -1,10 +1,11 @@
 import { Stack } from "@mui/material"
 import Box from "@mui/material/Box"
-import { useDraggableInPortal } from "hooks/draggableInPortal"
-import { Draggable, Droppable } from "react-beautiful-dnd"
-import { useSelector } from "react-redux"
 import { useGetProjectIssuesStatusesQuery } from "@redux/services/issueApi"
 import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
+import { useDraggableInPortal } from "hooks/draggableInPortal"
+import { StrictModeDroppable } from "pages/shared/StrictModeDroppable"
+import { Draggable } from "react-beautiful-dnd"
+import { useSelector } from "react-redux"
 import SprintCreateIssue from "./SprintCreateIssue"
 import SprintHeader from "./SprintHeader"
 import SprintIssue from "./SprintIssue"
@@ -44,7 +45,7 @@ export default function Sprint({ sprint, activeSprint, project_id, filter }) {
     <Box id={`sprint-${sprint.id}`} mb={2}>
       <Stack direction="column">
         <SprintHeader {...sprint} {...{ activeSprint, project_id, backlogEpicWidth }} />
-        <Droppable droppableId={sprint.id}>
+        <StrictModeDroppable droppableId={sprint.id}>
           {(provided, snapshot) => (
             <Box ref={provided.innerRef} minHeight={40} sx={{}} style={getListStyle(snapshot.isDraggingOver)}>
               {sprint.issues.length > 0 ? (
@@ -101,7 +102,7 @@ export default function Sprint({ sprint, activeSprint, project_id, filter }) {
               )}
             </Box>
           )}
-        </Droppable>
+        </StrictModeDroppable>
       </Stack>
       <SprintCreateIssue {...{ project_id, sprint_id: sprint.id, backlogEpicWidth, category_id: filter.category_id }} />
     </Box>

@@ -1,10 +1,11 @@
 import { Circle, DoneOutline as DoneIcon } from "@mui/icons-material"
 import { Box, Button, Card, Dialog, List, Menu, MenuItem, Stack, Typography } from "@mui/material"
+import { useUpdateProjectIssueStatusMutation } from "@redux/services/issueApi"
 import { ISSUE_STATUS_COLORS } from "config/constants"
 import { useSnackbar } from "notistack"
+import { StrictModeDroppable } from "pages/shared/StrictModeDroppable"
 import { useState } from "react"
-import { Draggable, Droppable } from "react-beautiful-dnd"
-import { useUpdateProjectIssueStatusMutation } from "@redux/services/issueApi"
+import { Draggable } from "react-beautiful-dnd"
 import { getErrorMessage } from "utils/helper"
 import IssueStatusRemove from "./IssueStatusRemove"
 import ProjectIssueStatusCreate from "./ProjectIssueStatusCreate"
@@ -17,12 +18,12 @@ const IssueStatusColumn = ({ id, column, project_id }) => {
           {id === "project" ? "Active for this project" : "Other available statues"}
         </Typography>
       </Stack>
-      <Droppable droppableId={id} isDropDisabled={id === "master"}>
+      <StrictModeDroppable droppableId={id} isDropDisabled={id === "master"}>
         {provided => (
           <List ref={provided.innerRef} sx={{ border: "1px solid #f1f5f9", minHeight: "500px", background: "#f7fafc", px: 1, pt: 0 }}>
             {column.map((status, index) => (
-              <Box my={0} key={`${status.id}`}>
-                <Draggable draggableId={`${status.id}`} index={index}>
+              <Box my={0} key={status.id}>
+                <Draggable draggableId={`${status.id}`} key={`${status.id}`} index={index}>
                   {provided => <StatusCard {...{ status, id, column, project_id, provided }} />}
                 </Draggable>
               </Box>
@@ -31,7 +32,7 @@ const IssueStatusColumn = ({ id, column, project_id }) => {
             {id === "project" && <ProjectIssueStatusCreate project_id={project_id} />}
           </List>
         )}
-      </Droppable>
+      </StrictModeDroppable>
     </Box>
   )
 }

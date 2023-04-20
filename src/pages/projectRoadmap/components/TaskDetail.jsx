@@ -1,14 +1,14 @@
 import { LoadingButton } from "@mui/lab"
-import DatePicker from "@mui/lab/DatePicker"
 import { Box, DialogActions, DialogContent, Divider, MenuItem, TextField, Typography } from "@mui/material"
 import Slider from "@mui/material/Slider"
 // import Autocomplete from "@mui/material/Autocomplete"
+import { DatePicker } from "@mui/x-date-pickers"
+import { useCreateIssuesMutation, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import moment from "moment"
 import CustomDialogTitle from "pages/shared/CustomDialogTitle"
 import { useEffect, useState } from "react"
-import { useCreateIssuesMutation, useUpdateIssuesMutation } from "@redux/services/issueApi"
 
-const initialState = { start_date: new Date(), due_date: new Date(), subject: "", done_ratio: 0 }
+const initialState = { start_date: moment(), due_date: "", subject: "", done_ratio: 0 }
 
 function TaskDetail({ onClose, project_id, editable, task }) {
   const [state, setState] = useState(initialState)
@@ -22,9 +22,9 @@ function TaskDetail({ onClose, project_id, editable, task }) {
     try {
       e.preventDefault()
       if (editable) {
-        await updateTask({ ...state, id: task.id, start_date: moment(state.start_date).format("YYYY-MM-DD"), due_date: moment(state.due_date).format("YYYY-MM-DD") }).unwrap()
+        await updateTask({ ...state, id: task.id, start_date: state.start_date.format("YYYY-MM-DD"), due_date: moment(state.due_date).format("YYYY-MM-DD") }).unwrap()
       } else {
-        await createTask({ ...state, project_id, start_date: moment(state.start_date).format("YYYY-MM-DD"), due_date: moment(state.due_date).format("YYYY-MM-DD") }).unwrap()
+        await createTask({ ...state, project_id, start_date: state.start_date.format("YYYY-MM-DD"), due_date: moment(state.due_date).format("YYYY-MM-DD") }).unwrap()
       }
       onClose()
     } catch (r) {
@@ -45,19 +45,19 @@ function TaskDetail({ onClose, project_id, editable, task }) {
         <TextField sx={{ mb: 2 }} fullWidth label="Task Title" value={state.subject} name="subject" onChange={handleChange} />
 
         <DatePicker
-          inputFormat="DD/MM/YYYY"
+          format="DD/MM/YYYY"
           required
           label="Start date"
           value={state.start_date}
           onChange={e => setState({ ...state, start_date: e })}
-          renderInput={params => <TextField {...params} required sx={{ my: 2 }} fullWidth />}
+          slotProps={{ textField: { required: true, sx: { my: 2 }, fullWidth: true } }}
         />
         <DatePicker
           label="End Date"
-          inputFormat="DD/MM/yyyy"
+          format="DD/MM/yyyy"
           value={state.due_date}
           onChange={e => setState({ ...state, due_date: e })}
-          renderInput={params => <TextField {...params} required sx={{ my: 2 }} fullWidth />}
+          slotProps={{ textField: { required: true, sx: { my: 2 }, fullWidth: true } }}
         />
         <Box display="flex" alignItems="center">
           <Typography sx={{ flex: "none" }} pr={1} variant="caption" noWrap>

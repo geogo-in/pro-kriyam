@@ -5,8 +5,8 @@ import Chip from "@mui/material/Chip"
 import { styled } from "@mui/system"
 import CreateIssue from "pages/projectIssues/components/CreateIssue"
 import CustomDialog from "pages/shared/CustomDialog"
+import { StrictModeDroppable } from "pages/shared/StrictModeDroppable"
 import { useState } from "react"
-import { Droppable } from "react-beautiful-dnd"
 import ListItemCustom from "./ListItemComponent"
 
 export const NumberChip = styled(Chip)(({ theme }) => ({
@@ -38,7 +38,7 @@ const Column = ({ column, project_id }) => {
           <AddIcon />
         </IconButton>
       </Stack>
-      <Droppable droppableId={column.id}>
+      <StrictModeDroppable droppableId={column.id}>
         {provided => (
           <List
             ref={provided.innerRef}
@@ -49,7 +49,7 @@ const Column = ({ column, project_id }) => {
             {provided.placeholder}
           </List>
         )}
-      </Droppable>
+      </StrictModeDroppable>
       <CustomDialog back open={open} onClose={handleNewIssue}>
         <CreateIssue onClose={handleNewIssue} project_id={project_id} status_id={column.id} />
       </CustomDialog>

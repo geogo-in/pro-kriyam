@@ -1,9 +1,8 @@
-import axios from "axios"
-import { API_ENDPOINT } from "./config/constants"
 import { authUserForToken, unauthUser } from "@redux/reducerSlices/user/userAuthSlice"
 import store from "@redux/store"
+import axios from "axios"
+import { API_ENDPOINT } from "./config/constants"
 
-export function init() {}
 export class initializeApp {
   token //: string
   constructor() {

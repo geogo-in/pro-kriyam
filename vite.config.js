@@ -1,11 +1,10 @@
-import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react-swc"
 import * as path from "path"
-import envCompatible from "vite-plugin-env-compatible"
+import { defineConfig } from "vite"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), envCompatible],
+  plugins: [react()],
   resolve: {
     alias: [
       { find: "assets", replacement: path.resolve(__dirname, "src/assets") },
@@ -19,5 +18,8 @@ export default defineConfig({
       { find: "theme", replacement: path.resolve(__dirname, "src/theme") },
       { find: "utils", replacement: path.resolve(__dirname, "src/utils") },
     ],
+  },
+  build: {
+    outDir: "build",
   },
 })

@@ -3,6 +3,8 @@ import AccountTreeIcon2 from "@mui/icons-material/AccountTreeOutlined"
 import { Box, ButtonBase, Chip, IconButton, InputBase, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Typography } from "@mui/material"
 import Collapse from "@mui/material/Collapse"
 import { styled } from "@mui/system"
+import { useGetEpicQuery, useGetIssuePriorityQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import { useSnackbar } from "notistack"
 import IssuePriorityIcon from "pages/shared/IssuePriorityIcon"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
@@ -11,8 +13,6 @@ import { StyledTooltip } from "pages/shared/StyledTooltip"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useGetEpicQuery, useGetIssuePriorityQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import { PATH_DASHBOARD } from "routes/paths"
 import { getIssueStatusColor } from "utils/getIssueStatusColor"
 import { SprintBlankSubIssueItem, SprintIssueItem, StickyTitle } from "./SprintIssueComponents"
@@ -111,7 +111,7 @@ export default function SprintIssue({
             </StyledTooltip>
           </Box>
           {subject.length > 50 ? (
-            <StyledTooltip title={subject} placement="auto" enterDelay={500}>
+            <StyledTooltip title={subject} enterDelay={500}>
               <Typography sx={{ alignSelf: "center", width: 350, fontSize: "0.88rem", fontWeight: 500, color: theme => theme.palette.primary.defaultText }} onClick={handleDetails} noWrap>
                 {subject}
               </Typography>
