@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  proteger-pm-app:
+    container_name: proteger-pm-app
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    image: code.geogo.in:5050/proteger/proteger-pm-app:latest
+    environment:
+      GENERATE_SOURCEMAP: "false"
+    ports:
+      - "3000:80"

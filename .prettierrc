@@ -1,0 +1,6 @@
+{
+    "arrowParens": "avoid",
+    "jsxBracketSameLine": true,
+    "printWidth": 190,
+    "semi": false
+}

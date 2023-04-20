@@ -1,0 +1,10 @@
+# Ignore artifacts:
+.next
+node_modules
+public
+.firebase
+build
+public
+
+# Ignore all HTML files:
+*.html
