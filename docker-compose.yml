@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  pro-kriyam:
+    container_name: pro-kriyam
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pro-kriyam:latest
+    environment:
+      PRODUCTION_API_ENDPOINT: $PRODUCTION_API_ENDPOINT
+      PRODUCTION_URL: $PRODUCTION_URL
+    ports:
+      - "3000:80"

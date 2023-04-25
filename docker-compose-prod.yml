@@ -1,9 +1,0 @@
-version: "3.7"
-services:
-  proteger-pm-app:
-    image: code.geogo.in:5050/proteger/proteger-pm-app:latest
-    environment:
-      PRODUCTION_API_ENDPOINT: $PRODUCTION_API_ENDPOINT
-      PRODUCTION_URL: $PRODUCTION_URL
-    ports:
-      - "1337:80"
