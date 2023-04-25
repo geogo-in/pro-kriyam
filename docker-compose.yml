@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     image: pro-kriyam:latest
     environment:
-      PRODUCTION_API_ENDPOINT: $PRODUCTION_API_ENDPOINT
-      PRODUCTION_URL: $PRODUCTION_URL
+      VITE_API_URL: $VITE_API_URL
+      VITE_APP_URL: $VITE_APP_URL
     ports:
       - "3000:80"
