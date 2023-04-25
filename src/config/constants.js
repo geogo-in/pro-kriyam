@@ -10,5 +10,3 @@ export const DEFAULT_ERROR_MSG = "Something went wrong!."
 
 export const NEW_ISSUE_PRIORITY = "new"
 export const NEW_ISSUE_TRACKER = "feature"
-
-console.log(import.meta)
