@@ -18,8 +18,8 @@ COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 
 # use entrypoint for access env changes after build
-COPY ./docker-prod-entrypoint.sh ./
-RUN chmod +x ./docker-prod-entrypoint.sh
+COPY ./docker-entrypoint.sh ./
+RUN chmod +x ./docker-entrypoint.sh
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
 CMD ["nginx", "-g", "daemon off;"]
