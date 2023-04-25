@@ -11,16 +11,15 @@ RUN yarn install --frozen-lockfile --silent --network-timeout=1000000
 COPY . ./
 RUN yarn run build
 
-# production environment
+# production environment: setup local nginx server
 FROM nginx:stable-alpine
 COPY --from=build /app/build /usr/share/nginx/html
-# new
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 
+# use entrypoint for access env changes after build
 COPY ./docker-prod-entrypoint.sh ./
 RUN chmod +x ./docker-prod-entrypoint.sh
-
-ENTRYPOINT ["./docker-prod-entrypoint.sh"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
 
 CMD ["nginx", "-g", "daemon off;"]
