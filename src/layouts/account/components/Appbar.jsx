@@ -166,7 +166,7 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
     onChange: handleSearchClick,
     value: null,
     filterOptions: x => x,
-    getOptionDisabled: x => x.type === "issue-closed",
+    // getOptionDisabled: x => x.type === "issue-closed",
     open,
     onOpen: () => setOpen(true),
     onClose: () => setOpen(false),
