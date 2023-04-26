@@ -206,7 +206,7 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
   function handleSearchClick(e, item) {
     if (e.type === "blur") return
     if (item?.type === "project") navigate(`${PATH_DASHBOARD.projects.root}/${item.id}`)
-    if (["issue", "issue-closed"].includes(item?.type)) navigate(`${PATH_DASHBOARD.projects.root}/${item.project.id}/issues/${item.id}`)
+    if (["issue", "issue-closed"].includes(item?.type)) navigate(`${PATH_DASHBOARD.projects.root}/${item.project.identifier}/issues/${item.id}`)
   }
 
   return (

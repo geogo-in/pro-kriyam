@@ -61,7 +61,7 @@ export default function CreateIssue({ project_id, status_id = "", onClose }) {
   const handleSubmit = async e => {
     try {
       e.preventDefault()
-      const payload = await createTask({ ...state, start_date: moment(state.start_date).format("YYYY-MM-DD"), due_date: moment(state.due_date).format("YYYY-MM-DD") }).unwrap()
+      const payload = await createTask({ ...state, start_date: moment(state.start_date).format("YYYY-MM-DD"), due_date: state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : undefined }).unwrap()
       if (payload) onClose()
     } catch (r) {
       console.error(r)
