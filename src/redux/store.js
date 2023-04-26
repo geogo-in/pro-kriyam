@@ -11,11 +11,7 @@ const store = configureStore({
     currentUser: userAuthSlice,
     projectUi: projectUiSlice,
   },
-  middleware: getDefaultMiddleware => {
-    return getDefaultMiddleware({
-      serializableCheck: false,
-    }).concat(redmineApi.middleware)
-  },
+  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false }).concat(redmineApi.middleware),
 })
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
