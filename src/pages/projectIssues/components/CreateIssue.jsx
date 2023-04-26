@@ -24,7 +24,7 @@ export default function CreateIssue({ project_id, status_id = "", onClose }) {
     assigned_to_id: "",
     category_id: "",
     description: "",
-    status_id:'',
+    status_id,
     tracker_id: "",
     priority_id: "",
     start_date: moment(),
