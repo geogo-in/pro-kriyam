@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@date-io/moment": "^2.11.0",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.11.16",
@@ -30,13 +29,10 @@
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.17.1",
     "react-quill": "^2.0.0",
     "react-redux": "^7.2.5",
     "react-router-dom": "^6.2.1",
-    "source-map-explorer": "^2.5.3",
-    "use-debounce": "^9.0.3",
-    "vite-plugin-env-compatible": "^1.1.1"
+    "use-debounce": "^9.0.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

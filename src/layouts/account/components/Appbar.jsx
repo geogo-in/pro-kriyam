@@ -166,7 +166,7 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
     onChange: handleSearchClick,
     value: null,
     filterOptions: x => x,
-    getOptionDisabled: x => x.type === "issue-closed",
+    // getOptionDisabled: x => x.type === "issue-closed",
     open,
     onOpen: () => setOpen(true),
     onClose: () => setOpen(false),
@@ -206,7 +206,7 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
   function handleSearchClick(e, item) {
     if (e.type === "blur") return
     if (item?.type === "project") navigate(`${PATH_DASHBOARD.projects.root}/${item.id}`)
-    if (["issue", "issue-closed"].includes(item?.type)) navigate(`${PATH_DASHBOARD.projects.root}/${item.project.id}/issues/${item.id}`)
+    if (["issue", "issue-closed"].includes(item?.type)) navigate(`${PATH_DASHBOARD.projects.root}/${item.project.identifier}/issues/${item.id}`)
   }
 
   return (

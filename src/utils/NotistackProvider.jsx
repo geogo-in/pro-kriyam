@@ -10,17 +10,16 @@ export default function NotistackProvider({ children }) {
   }
   return (
     <>
-      {/* <SnackbarStyles /> */}
       <SnackbarProvider
         action={key => (
           <IconButton onClick={onClickDismiss(key)} sx={{ color: "white" }}>
             <Close />
           </IconButton>
         )}
-        // anchorOrigin={{
-        //   vertical: "top",
-        //   horizontal: "right",
-        // }}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
         dense
         ref={notistackRef}
         maxSnack={3}

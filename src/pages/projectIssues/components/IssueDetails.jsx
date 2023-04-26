@@ -146,14 +146,16 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
         <StyledTooltip title={issue.tracker?.name}>
           <IssueTypeIcon type_name={issue.tracker?.name} />
         </StyledTooltip>
+        <StyledTooltip title="Copy issue URL to clipboard" placement="right">
+          <Typography
+            variant="body2"
+            pl={1}
+            sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText, cursor: "pointer" }}
+            onClick={() => copyTextToClipboard(`${window.location.origin}${PATH_DASHBOARD.projects.root}/${project_id}/issues/${issue.id}`)}>
+            #{issue.id}
+          </Typography>
+        </StyledTooltip>
 
-        <Typography
-          variant="body2"
-          pl={1}
-          sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText, cursor: "pointer" }}
-          onClick={() => copyTextToClipboard(`${window.location.origin}${PATH_DASHBOARD.projects.root}/${project_id}/issues/${issue.id}`)}>
-          #{issue.id}
-        </Typography>
         <Box flex={1} />
         <IconButton onClick={handleClick}>
           <MoreVert />
