@@ -11,6 +11,7 @@ import { useSelector } from "react-redux"
 import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
 import { useGetEpicQuery, useGetIssuePriorityQuery, useGetProjectIssuesStatusesQuery } from "@redux/services/issueApi"
 import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import MembershipFilter from "./MembershipFilter"
 
 const SmallButton = styled(Button)(({ theme, variant }) => ({
@@ -34,6 +35,8 @@ export default function FilterContainer({ filter, setFilter, project_id }) {
   const { data: epic } = useGetEpicQuery(project_id)
   const { data: priorities } = useGetIssuePriorityQuery()
   const { data: statuses } = useGetProjectIssuesStatusesQuery(project_id)
+  const { data: project } = useGetProjectByIdQuery(project_id)
+
   const { data: members } = useGetProjectMembershipsQuery(project_id)
   const [state, setState] = useState({ search: "", assigned_to_id: null })
   const [filterOpen, setFilterOpen] = useState()
@@ -119,14 +122,15 @@ export default function FilterContainer({ filter, setFilter, project_id }) {
               </MenuItem>
             ))}
           </TextField>
-          {/* <TextField select label="IssueType" name="tracker_id" value={filter.tracker_id} onChange={handleFilter}>
+          <TextField select label="IssueType" name="tracker_id" value={filter.tracker_id} onChange={handleFilter}>
             <MenuItem value="">All</MenuItem>
-            {issues?.map(({ id, name }) => (
-              <MenuItem value={id} key={id}>
-                {name}
-              </MenuItem>
-            ))}
-          </TextField> */}
+            {
+              project?.tracker?.map(({ id, name }) => (
+                <MenuItem key={id} value={id}> {name}</MenuItem>
+              ))
+            }
+          </TextField>
+
           <TextField select label="Reported by" name="author_id" value={filter.author_id} onChange={handleFilter}>
             <MenuItem value="">All</MenuItem>
             {members?.map(({ user }) => {
@@ -143,3 +147,4 @@ export default function FilterContainer({ filter, setFilter, project_id }) {
     </Stack>
   )
 }
+
