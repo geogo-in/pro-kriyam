@@ -1,13 +1,15 @@
 import AddIcon from "@mui/icons-material/Add"
 import { Box, Button } from "@mui/material"
 import { styled } from "@mui/material/styles"
+import { isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
+import { useGetProjectsQuery } from "@redux/services/projectApi"
 import { omitBy } from "lodash"
 import Loading from "pages/shared/Loading"
 import NoData from "pages/shared/NoData"
 import { SectionTitle } from "pages/shared/SectionTitle"
 import React from "react"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { useGetProjectsQuery } from "@redux/services/projectApi"
 import { useDebounce } from "use-debounce"
 import ProjectListToolbar from "./ProjectListToolbar"
 import ProjectsTable from "./ProjectsTable"
@@ -25,6 +27,7 @@ const NewProjectsList = () => {
   const [filter, setFilter] = React.useState({ project_name: "", project_type_id: "" })
   const [debouncedFilter] = useDebounce(filter, 500)
   const { data, isLoading } = useGetProjectsQuery({ ...omitBy(debouncedFilter, i => !i) }, { refetchOnMountOrArgChange: true })
+  const Admin = useSelector(isAdmin)
 
   if (isLoading) return <Loading listing />
   if (!data) return <NoData />
@@ -32,11 +35,13 @@ const NewProjectsList = () => {
     <div>
       <SectionTitle variant="h6">
         Projects
-        <Box>
-          <StyledButton sx={{}} startIcon={<AddIcon />} component={Link} to="/account/projects/new">
-            Create project
-          </StyledButton>
-        </Box>
+        {Admin && (
+          <Box>
+            <StyledButton sx={{}} startIcon={<AddIcon />} component={Link} to="/account/projects/new">
+              Create project
+            </StyledButton>
+          </Box>
+        )}
       </SectionTitle>
 
       <ProjectListToolbar count={data.projects.length} {...{ filter, setFilter, data }} />

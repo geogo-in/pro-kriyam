@@ -5,14 +5,14 @@ import AddProjectIcon from "@mui/icons-material/PostAdd"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import { alpha, styled } from "@mui/material/styles"
+import { isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
 import CreateMember from "pages/members/Components/CreateMember"
 import CreateIssue from "pages/projectIssues/components/CreateIssue"
 import CustomDialog from "pages/shared/CustomDialog"
 import PrimaryRoundButton from "pages/shared/PrimaryRoundButton"
-import React, { useState } from "react"
+import { useState } from "react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
 import { PATH_DASHBOARD } from "routes/paths"
 
 const StyledMenu = styled(props => (
@@ -117,10 +117,12 @@ const QuickActionButton = () => {
             New Member
           </MenuItem>
         )}
-        <MenuItem onClick={handleMenuClose} disableRipple component={Link} to={PATH_DASHBOARD.projects.new}>
-          <AddProjectIcon />
-          New Project
-        </MenuItem>
+        {Admin && (
+          <MenuItem onClick={handleMenuClose} disableRipple component={Link} to={PATH_DASHBOARD.projects.new}>
+            <AddProjectIcon />
+            New Project
+          </MenuItem>
+        )}
       </StyledMenu>
       <CustomDialog back open={Boolean(state)} onClose={handleClose}>
         {state === "member" ? <CreateMember onClose={handleClose} /> : state === "issue" ? <CreateIssue onClose={handleClose} /> : null}

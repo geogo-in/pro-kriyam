@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import qs from "query-string"
-import { API_ENDPOINT, RESET_PASSWORD_URL } from "../../config/constants"
+import { API_ENDPOINT } from "../../config/constants"
 import { unauthUser } from "../reducerSlices/user/userAuthSlice"
 
 const baseQuery = fetchBaseQuery({
@@ -33,27 +33,6 @@ export const redmineApi = createApi({
   tagTypes: ["Issue", "Backlog", "ActiveSprint", "Sprints", "Epic", "ProjectIssueStatuses", "ProjectMembers", "Projects", "Project", "Users", "Groups", "Group", ""],
 
   endpoints: builder => ({
-    forgotPass: builder.mutation({
-      query: ({ mail }) => ({
-        url: `/api/users/lost_password`,
-        method: "GET",
-        params: { mail, url: RESET_PASSWORD_URL },
-      }),
-    }),
-    resetPass: builder.mutation({
-      query: state => ({
-        url: `/api/users/update_password`,
-        method: "PATCH",
-        body: {
-          token: state.token,
-          user: {
-            password: state.password,
-            password_confirmation: state.confirm,
-          },
-        },
-      }),
-    }),
-
     getBacklogDetails: builder.query({
       query: ({ project_id, filter }) => ({ url: `/api/projects/${project_id}/sprints/backlogs`, params: { ...filter } }),
       providesTags: ["Backlog"],
@@ -100,12 +79,12 @@ export const redmineApi = createApi({
       transformResponse: result => result.sprints,
       providesTags: ["Sprints"],
     }),
+    updateSprintState: builder.mutation({
+      query: ({ project_id, sprint_id, state, ...body }) => ({ url: `/api/projects/${project_id}/sprints/${sprint_id}/update_state/${state}`, method: `PUT`, body }),
+      invalidatesTags: result => (result ? ["Backlog", "ActiveSprint"] : []),
+    }),
     updateSprint: builder.mutation({
-      query: ({ project_id, sprint_id, state, ...body }) => ({
-        url: `/api/projects/${project_id}/sprints/${sprint_id}/update_state/${state}`,
-        method: `PUT`,
-        body,
-      }),
+      query: ({ project_id, sprint_id, state, ...body }) => ({ url: `/api/projects/${project_id}/sprints/${sprint_id}`, method: `PUT`, body }),
       invalidatesTags: result => (result ? ["Backlog", "ActiveSprint"] : []),
     }),
 
@@ -133,10 +112,9 @@ export const {
   useGetBacklogDetailsQuery,
   useCreateSprintMutation,
   useAddTaskToSprintOrBacklogMutation,
-  useForgotPassMutation,
-  useResetPassMutation,
   useDeleteAttachmentMutation,
   useUpdateSprintMutation,
+  useUpdateSprintStateMutation,
   useGetActiveSprintQuery,
   useGetActiveSprintsQuery,
   useGetDashboardQuery,

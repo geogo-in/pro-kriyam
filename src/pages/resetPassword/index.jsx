@@ -5,10 +5,10 @@ import { IconButton } from "@mui/material"
 import InputAdornment from "@mui/material/InputAdornment"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
+import { useResetPassMutation } from "@redux/services/userApi"
 import { useSnackbar } from "notistack"
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useResetPassMutation } from "@redux/services/redmineApi"
 import UserFormLayout from "../shared/UserFormLayout"
 
 const ResetPassword = ({ ...props }) => {

@@ -16,32 +16,26 @@ const issueApi = redmineApi.injectEndpoints({
       transformResponse: response => response.trackers,
     }),
 
+    // Issue
     getIssues: builder.query({
       query: params => ({ url: `/api/issues.json`, params }),
       providesTags: ["Issue"],
     }),
     getIssue: builder.query({
-      query: issue_id => ({
-        url: `/api/issues/${issue_id}.json`,
-        params: { include: "children,attachments,relations,changesets,watchers,reporter" },
-      }),
+      query: issue_id => ({ url: `/api/issues/${issue_id}.json`, params: { include: "children,attachments,relations,changesets,watchers,reporter" } }),
       providesTags: ["Issue"],
       transformResponse: response => response.issue,
     }),
     createIssues: builder.mutation({
-      query: data => ({
-        url: `/issues.json`,
-        method: "POST",
-        body: { issue: data },
-      }),
+      query: data => ({ url: `/issues.json`, method: "POST", body: { issue: data } }),
       invalidatesTags: result => (result ? ["Issue", "Backlog"] : []),
     }),
+    deleteIssue: builder.mutation({
+      query: id => ({ url: `api/issues/${id}.json`, method: "DELETE" }),
+      invalidatesTags: result => (result ? ["ActiveSprint", "Backlog"] : []),
+    }),
     createIssueFromSprint: builder.mutation({
-      query: data => ({
-        url: `/api/issues.json`,
-        method: "POST",
-        body: { issue: data },
-      }),
+      query: data => ({ url: `/api/issues.json`, method: "POST", body: { issue: data } }),
       invalidatesTags: result => (result ? ["Backlog", "Issue"] : []),
     }),
     updateIssues: builder.mutation({
@@ -50,15 +44,12 @@ const issueApi = redmineApi.injectEndpoints({
           var form = new FormData()
           form.append("issue[attach_files][]", data.file)
         }
-        return {
-          url: `/api/issues/${id}.json`,
-          method: "PUT",
-          body: form ?? { issue: data },
-        }
+        return { url: `/api/issues/${id}.json`, method: "PUT", body: form ?? { issue: data } }
       },
       invalidatesTags: (result, error, arg) => ["Issue", "Backlog", "ActiveSprint"],
     }),
 
+    // Issues Statuses
     getProjectIssuesStatuses: builder.query({
       query: project_id => ({ url: `/api/projects/${project_id}/project_issue_statuses.json` }),
       transformResponse: response => response.issue_statuses,
@@ -112,13 +103,16 @@ export const {
 
   useGetIssuesQuery,
   useGetIssueQuery,
+  useCreateIssuesMutation,
+  useUpdateIssuesMutation,
+  useCreateIssueFromSprintMutation,
+  useDeleteIssueMutation,
+
   useGetProjectIssuesStatusesQuery,
   useCreateProjectIssueStatusMutation,
   useDeleteProjectIssueStatusMutation,
   useUpdateProjectIssueStatusMutation,
-  useCreateIssuesMutation,
-  useUpdateIssuesMutation,
-  useCreateIssueFromSprintMutation,
+
   useGetEpicQuery,
   useCreateEpicMutation,
   useUpdateEpicMutation,
