@@ -2,10 +2,10 @@ import { Close, Delete, Edit } from "@mui/icons-material"
 import StartIcon from "@mui/icons-material/FlagOutlined"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import { Box, Dialog, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Typography, styled } from "@mui/material"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import PrimaryRoundButton from "pages/shared/PrimaryRoundButton"
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import CreateSprint from "./CreateSprint"
 import SprintClose from "./SprintClose"
 import SprintDetails from "./SprintDetails"
@@ -34,11 +34,15 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
   }
   const handleSprintMenu = e => async event => {
     switch (e) {
+      case "Update Sprint":
       case "Close Sprint":
       case "Start Sprint": {
         setSprintDialog({ type: e, project_id, sprint_id, ...sprint })
         handleClose()
         return
+      }
+      case "Delete Sprint": {
+        if (!window.confirm("Are you sure? You want to delete this sprint.")) return
       }
 
       default:
@@ -47,7 +51,7 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
   }
   const SPRINT_MENU_ITEM = [
     { title: "Close Sprint", icon: <Close />, hide: aasm_state !== "running", message: "Can be planned but not started until the completion of above active sprint" },
-    { title: "Edit Sprint", icon: <Edit /> },
+    { title: "Update Sprint", icon: <Edit /> },
     { title: "Delete Sprint", icon: <Delete />, hide: aasm_state === "running" },
   ]
   let actionbarWidth = backlogContainerWidth
@@ -56,6 +60,7 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
   const handleDialogClose = () => {
     setSprintDialog()
   }
+
   return (
     <>
       <Stack direction="row" alignItems="end" py={0}>
@@ -112,8 +117,9 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
           <Box sx={{ width: dummybarWidth }}></Box>
         </Stack>
       </Stack>
+
       <Dialog open={!!sprintDialog} onClose={handleDialogClose}>
-        {sprintDialog?.type === "Start Sprint" ? (
+        {["Start Sprint", "Update Sprint"].includes(sprintDialog?.type) ? (
           <SprintDetails editable {...sprintDialog} onClose={handleDialogClose} />
         ) : sprintDialog?.type === "Close Sprint" ? (
           <SprintClose {...sprintDialog} onClose={handleDialogClose} />

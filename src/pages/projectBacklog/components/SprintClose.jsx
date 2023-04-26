@@ -1,13 +1,13 @@
 import { LoadingButton } from "@mui/lab"
 import { Box, Button, DialogActions, DialogContent, MenuItem, TextField, Typography } from "@mui/material"
+import { useListSprintsQuery, useUpdateSprintStateMutation } from "@redux/services/redmineApi"
 import { useSnackbar } from "notistack"
 import CustomDialogTitle from "pages/shared/CustomDialogTitle"
 import { useState } from "react"
-import { useListSprintsQuery, useUpdateSprintMutation } from "@redux/services/redmineApi"
 import { getErrorMessage } from "utils/helper"
 
 export default function SprintClose({ project_id, sprint_id, onClose, ...sprint }) {
-  const [updateSprint, { isLoading }] = useUpdateSprintMutation()
+  const [updateSprintState, { isLoading }] = useUpdateSprintStateMutation()
   const { data: sprints } = useListSprintsQuery({ project_id })
   const [move_sprint_id, setMoveSprintId] = useState("backlog")
   const { enqueueSnackbar } = useSnackbar()
@@ -19,7 +19,7 @@ export default function SprintClose({ project_id, sprint_id, onClose, ...sprint 
   const handleUpdateSprint = async e => {
     try {
       e.preventDefault()
-      await updateSprint({ project_id, sprint_id, state: "close", move_sprint_id }).unwrap()
+      await updateSprintState({ project_id, sprint_id, state: "close", move_sprint_id }).unwrap()
       onClose()
     } catch (r) {
       const { message } = getErrorMessage(r)

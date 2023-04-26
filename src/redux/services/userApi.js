@@ -3,6 +3,10 @@ import { redmineApi } from "./redmineApi"
 
 const issueApi = redmineApi.injectEndpoints({
   endpoints: builder => ({
+    forgotPass: builder.mutation({ query: ({ mail }) => ({ url: `/api/users/lost_password`, method: "GET", params: { mail, url: RESET_PASSWORD_URL } }) }),
+    resetPass: builder.mutation({
+      query: state => ({ url: `/api/users/update_password`, method: "PATCH", body: { token: state.token, user: { password: state.password, password_confirmation: state.confirm } } }),
+    }),
     getUserMemberships: builder.query({
       query: () => ({ url: `/users/current.json`, params: { include: "memberships,groups" } }),
     }),
@@ -44,6 +48,8 @@ const issueApi = redmineApi.injectEndpoints({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
+  useForgotPassMutation,
+  useResetPassMutation,
   useGetUserMembershipsQuery,
   useLoginMutation,
   useCreateUserMutation,

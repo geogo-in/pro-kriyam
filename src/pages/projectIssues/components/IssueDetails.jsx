@@ -21,7 +21,7 @@ import {
 import Box from "@mui/material/Box"
 import CardMedia from "@mui/material/CardMedia"
 import { getCurrentUserKey } from "@redux/reducerSlices/user/userAuthSlice"
-import { useGetIssueQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useDeleteIssueMutation, useGetIssueQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useDeleteAttachmentMutation } from "@redux/services/redmineApi"
 import { useSnackbar } from "notistack"
 import { SleekSelectWithIcon } from "pages/shared/CustomTextField"
@@ -63,6 +63,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   const { data: statuses } = useGetProjectIssuesStatusesQuery(project_id)
   const currentUserKey = useSelector(getCurrentUserKey)
 
+  const [deleteIssue, { isLoading: isDeletingIssue }] = useDeleteIssueMutation()
   const [deleteAttachment, { isLoading: isDeletingAttachment }] = useDeleteAttachmentMutation()
   const [updateTask] = useUpdateIssuesMutation()
   const { enqueueSnackbar } = useSnackbar()
@@ -125,7 +126,9 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   }
   const handleIssueDelete = async () => {
     try {
-      handleClose()
+      if (!window.confirm("Are you sure, you want to delete this issue?")) return
+      await deleteIssue(issue.id).unwrap()
+      onClose()
     } catch (error) {
       const { message } = getErrorMessage(error)
       enqueueSnackbar(message, { variant: "error" })
