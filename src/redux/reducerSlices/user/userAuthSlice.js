@@ -1,3 +1,4 @@
+import { redmineApi } from "@redux/services/redmineApi"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 import { login } from "../../services/userApi"
@@ -15,9 +16,10 @@ export const authUserForToken = createAsyncThunk("user/authUserForToken", async 
 })
 
 // Unauth user
-export const unauthUser = createAsyncThunk("user/unauthUser", async () => {
+export const unauthUser = createAsyncThunk("user/unauthUser", async (_, { dispatch }) => {
   console.debug("un auth user...")
   localStorage.clear()
+  dispatch(redmineApi.util.resetApiState())
 })
 
 const userAuthSlice = createSlice({
