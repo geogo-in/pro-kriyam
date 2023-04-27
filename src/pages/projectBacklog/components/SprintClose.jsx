@@ -28,16 +28,17 @@ export default function SprintClose({ project_id, sprint_id, onClose, ...sprint 
   }
 
   return (
-    <Box component="form" onSubmit={handleUpdateSprint} minWidth={600}>
-      <CustomDialogTitle onClose={onClose}>Complete {sprint.name}</CustomDialogTitle>
-      <DialogContent>
-        <img src="" alt="" height="100" />
-        <Typography fontWeight="bold">This sprint contains</Typography>
-
-        <Typography component={"li"}>{completeIssue.length} Completed issue</Typography>
-        <Typography component={"li"}>{sprint.issues?.length - completeIssue.length || 0} Open issue</Typography>
-
-        <TextField value={move_sprint_id} onChange={handleChange} select label="Move open issues to" fullWidth margin="normal">
+    <Box component="form" onSubmit={handleUpdateSprint} minWidth={500}>
+      <CustomDialogTitle onClose={onClose}>Complete sprint: {sprint.name}</CustomDialogTitle>
+      <DialogContent sx={{ px: 4, mt: 2 }}>
+        <Typography variant="h6" fontWeight="bold" fontSize={16} color={theme => theme.palette.primary.defaultText}>This sprint contains:</Typography>
+        <Typography component={"li"} variant="body2" color={theme =>theme.palette.primary.defaultText}>{completeIssue.length} Completed issue(s)</Typography>
+        <Typography component={"li"} variant="body2" color={theme =>theme.palette.primary.defaultText}>{sprint.issues?.length - completeIssue.length || 0} Open issue(s)</Typography>
+        <br />
+        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText, fontWeight: 500 }}>
+          Move open issues to
+        </Typography>
+        <TextField value={move_sprint_id} onChange={handleChange} select sx={{ width: 300, mt: 1 }}>
           <MenuItem value={"backlog"}>Backlog</MenuItem>
           {sprints
             ?.filter(sprint => sprint.aasm_state !== "running")
@@ -48,12 +49,12 @@ export default function SprintClose({ project_id, sprint_id, onClose, ...sprint 
             ))}
         </TextField>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ px: 2, py: 1.6, mt: 2, borderTop: "1px solid #E5E7EB" }}>
         <Button disabled={isLoading} onClick={onClose}>
           Cancel
         </Button>
         <LoadingButton loading={isLoading} variant="contained" type="submit">
-          Complete Sprint
+          Complete
         </LoadingButton>
       </DialogActions>
     </Box>

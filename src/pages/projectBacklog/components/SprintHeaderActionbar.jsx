@@ -1,4 +1,7 @@
 import { Close, Delete, Edit } from "@mui/icons-material"
+import CloseIcon from "@mui/icons-material/CloseOutlined"
+import EditIcon from "@mui/icons-material/EditOutlined"
+import DeleteIcon from "@mui/icons-material/DeleteOutlined"
 import StartIcon from "@mui/icons-material/FlagOutlined"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import { Box, Dialog, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Typography, styled } from "@mui/material"
@@ -34,7 +37,7 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
   }
   const handleSprintMenu = e => async event => {
     switch (e) {
-      case "Update Sprint":
+      case "Edit Sprint":
       case "Close Sprint":
       case "Start Sprint": {
         setSprintDialog({ type: e, project_id, sprint_id, ...sprint })
@@ -50,9 +53,9 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
     }
   }
   const SPRINT_MENU_ITEM = [
-    { title: "Close Sprint", icon: <Close />, hide: aasm_state !== "running", message: "Can be planned but not started until the completion of above active sprint" },
-    { title: "Update Sprint", icon: <Edit /> },
-    { title: "Delete Sprint", icon: <Delete />, hide: aasm_state === "running" },
+    { title: "Close Sprint", icon: <CloseIcon />, hide: aasm_state !== "running", message: "Can be planned but not started until the completion of above active sprint" },
+    { title: "Edit Sprint", icon: <EditIcon /> },
+    { title: "Delete Sprint", icon: <DeleteIcon />, hide: aasm_state === "running" },
   ]
   let actionbarWidth = backlogContainerWidth
   let dummybarWidth = backlogTableWidth > backlogContainerWidth ? backlogTableWidth - backlogContainerWidth + 1 : 0 //containerWidth === 0 ? actionbarWidth / 2 : containerWidth - actionbarWidth + 6
@@ -119,7 +122,7 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
       </Stack>
 
       <Dialog open={!!sprintDialog} onClose={handleDialogClose}>
-        {["Start Sprint", "Update Sprint"].includes(sprintDialog?.type) ? (
+        {["Start Sprint", "Edit Sprint"].includes(sprintDialog?.type) ? (
           <SprintDetails editable {...sprintDialog} onClose={handleDialogClose} />
         ) : sprintDialog?.type === "Close Sprint" ? (
           <SprintClose {...sprintDialog} onClose={handleDialogClose} />

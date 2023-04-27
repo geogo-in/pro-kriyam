@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab"
-import { Button, DialogActions, DialogContent, Stack, TextField } from "@mui/material"
+import { Typography, Box, Button, DialogActions, DialogContent, Stack, TextField } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
 import { useUpdateSprintMutation, useUpdateSprintStateMutation } from "@redux/services/redmineApi"
 import moment from "moment"
@@ -26,9 +26,8 @@ export default function SprintDetails({ project_id, sprint_id, editable, onClose
       e.preventDefault()
       if (!state.start_date || !state.end_date) return enqueueSnackbar("Please choose sprint duration")
       if (type === "Start Sprint") await updateSprintState({ project_id, sprint_id, state: "activate", ...state }).unwrap()
-      else if (type === "Update Sprint") await updateSprint({ project_id, sprint_id, ...state }).unwrap()
+      else if (type === "Edit Sprint") await updateSprint({ project_id, sprint_id, ...state }).unwrap()
       else throw Error("This dialog has no type")
-
       onClose()
     } catch (r) {
       const { message } = getErrorMessage(r)
@@ -40,39 +39,53 @@ export default function SprintDetails({ project_id, sprint_id, editable, onClose
   }
 
   return (
-    <form onSubmit={handleUpdateSprint}>
-      <CustomDialogTitle onClose={onClose}>Sprint Details</CustomDialogTitle>
-      <DialogContent>
-        <TextField label="Sprint Name" value={state.name} name="name" onChange={handleChange} fullWidth required />
-        <TextField label="Goals" value={state.goals} name="goals" onChange={handleChange} fullWidth />
+    <Box component="form" onSubmit={handleUpdateSprint} minWidth={500}>
+      <CustomDialogTitle onClose={onClose}>{type}: {state.name}</CustomDialogTitle>
+      <DialogContent sx={{ px: 2, mt: 2 }}>
+        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+          Sprint Name*
+        </Typography>
+        <TextField value={state.name} name="name" onChange={handleChange} fullWidth required sx={{ mb: 3}} />
         {/* <TextField multiline minRows={3} fullWidth maxRows={5} label="Description" required name="description" value={state.description} onChange={handleChange} /> */}
-        <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} flexWrap={"wrap"}>
-          <DatePicker
-            label="Start Date"
-            disablePast
-            format="DD/MM/YYYY"
-            value={state.start_date}
-            onChange={date => setState({ ...state, start_date: date })}
-            slotProps={{ textField: { required: true, style: { marginRight: 12 } } }}
-          />
-          <DatePicker
-            label="Due Date"
-            disablePast
-            format="DD/MM/YYYY"
-            value={state.end_date}
-            onChange={date => setState({ ...state, end_date: date })}
-            slotProps={{ textField: { required: true } }}
-          />
+        <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} flexWrap={"wrap"} sx={{ mb: 2 }}>
+          <Box>
+            <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+              Start Date*
+            </Typography>
+            <DatePicker
+              disablePast
+              format="DD/MM/YYYY"
+              value={state.start_date}
+              onChange={date => setState({ ...state, start_date: date })}
+              slotProps={{ textField: { required: true, style: { marginRight: 12 } } }}
+            />
+          </Box>
+          <Box>
+          <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+              End Date*
+            </Typography>
+            <DatePicker
+              disablePast
+              format="DD/MM/YYYY"
+              value={state.end_date}
+              onChange={date => setState({ ...state, end_date: date })}
+              slotProps={{ textField: { required: true } }}
+            />
+          </Box>
         </Stack>
+        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+          Sprint Goal*
+        </Typography>
+        <TextField required value={state.goals} name="goals" onChange={handleChange} fullWidth sx={{ mb: 3}}  />
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ px: 2, py: 1.6, mt: 2, borderTop: "1px solid #E5E7EB" }}>
         <Button disabled={loading} onClick={onClose}>
           Cancel
         </Button>
         <LoadingButton loading={loading} variant="contained" type="submit">
-          {type}
+          {type === "Edit Sprint" ? "Update" : type}
         </LoadingButton>
       </DialogActions>
-    </form>
+    </Box>
   )
 }

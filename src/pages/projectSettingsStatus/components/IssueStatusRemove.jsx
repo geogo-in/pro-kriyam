@@ -26,7 +26,7 @@ export default function IssueStatusRemove({ onClose, project_id, status_id, stat
     }
   }
   return (
-    <Box component="form" onSubmit={handleRemoveStatus} minWidth={500} sx={{ px: 1 }}>
+    <Box component="form" onSubmit={handleRemoveStatus} minWidth={500}>
       <CustomDialogTitle onClose={onClose}>Move issues from {status_name.toUpperCase()} status</CustomDialogTitle>
       <DialogContent sx={{ px: 2, mt: 2 }}>
         <Typography variant="body2">Select a new place for any work with the {status_name.toUpperCase()} status, including the ones in the backlog.</Typography>
