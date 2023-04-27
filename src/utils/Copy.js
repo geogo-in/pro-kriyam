@@ -34,7 +34,7 @@ export function copyTextToClipboard(text) {
   navigator.clipboard.writeText(text).then(
     function () {
       console.debug("Async: Copying to clipboard was successful!")
-      enqueueSnackbar("Copying to clipboard was successful!", { variant: "success" })
+      enqueueSnackbar("Copying to clipboard was successful!", { variant: "success", title: "Success" })
     },
     function (err) {
       console.error("Async: Could not copy text: ", err)
