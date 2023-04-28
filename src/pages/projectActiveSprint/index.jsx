@@ -154,7 +154,7 @@ const ProjectSprint = () => {
                 <Grid container spacing={1}>
                   <Grid item lg={4} sx={{ flexDirection: "row", display: "flex", alignItems: "center" }}>
                     {issues?.status !== "Error" && !isLoading ? (
-                        <StyledTooltip title={`Started at: ${fDate(issues.start_date)} & Due on: ${fDate(issues.end_date)}. ${issues.goals && `Goals: ${issues.goals}`}`}>
+                        <StyledTooltip title={`Change it to popover: Started at: ${fDate(issues.start_date)} & Due on: ${fDate(issues.end_date)}. ${issues.goals && `Goals: ${issues.goals}`}`}>
                           <span>Active Sprint Board: {issues.name}</span>
                         </StyledTooltip>
                     ) : (
