@@ -1,8 +1,8 @@
 import { authUserForToken, unauthUser } from "@redux/reducerSlices/user/userAuthSlice"
 import store from "@redux/store"
 import axios from "axios"
-import { getFirebaseToken, onMessageListener } from "config/firebase"
 import { enqueueSnackbar } from "notistack"
+import { getFirebaseToken, onMessageListener } from "utils/firebase"
 import { API_ENDPOINT } from "./config/constants"
 
 export class initializeApp {

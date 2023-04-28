@@ -20,6 +20,8 @@ export default function SprintClose({ project_id, sprint_id, onClose, ...sprint 
     try {
       e.preventDefault()
       await updateSprintState({ project_id, sprint_id, state: "close", move_sprint_id }).unwrap()
+      enqueueSnackbar(`This sprint is closed successfully.`, { variant: "success" })
+
       onClose()
     } catch (r) {
       const { message } = getErrorMessage(r)
@@ -31,9 +33,15 @@ export default function SprintClose({ project_id, sprint_id, onClose, ...sprint 
     <Box component="form" onSubmit={handleUpdateSprint} minWidth={500}>
       <CustomDialogTitle onClose={onClose}>Complete sprint: {sprint.name}</CustomDialogTitle>
       <DialogContent sx={{ px: 4, mt: 2 }}>
-        <Typography variant="h6" fontWeight="bold" fontSize={16} color={theme => theme.palette.primary.defaultText}>This sprint contains:</Typography>
-        <Typography component={"li"} variant="body2" color={theme =>theme.palette.primary.defaultText}>{completeIssue.length} Completed issue(s)</Typography>
-        <Typography component={"li"} variant="body2" color={theme =>theme.palette.primary.defaultText}>{sprint.issues?.length - completeIssue.length || 0} Open issue(s)</Typography>
+        <Typography variant="h6" fontWeight="bold" fontSize={16} color={theme => theme.palette.primary.defaultText}>
+          This sprint contains:
+        </Typography>
+        <Typography component={"li"} variant="body2" color={theme => theme.palette.primary.defaultText}>
+          {completeIssue.length} Completed issue(s)
+        </Typography>
+        <Typography component={"li"} variant="body2" color={theme => theme.palette.primary.defaultText}>
+          {sprint.issues?.length - completeIssue.length || 0} Open issue(s)
+        </Typography>
         <br />
         <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText, fontWeight: 500 }}>
           Move open issues to
