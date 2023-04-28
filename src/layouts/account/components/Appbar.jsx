@@ -197,6 +197,7 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
 
   function onLogoutClick() {
     dispatch(unauthUser())
+    window.location.href = "/users/sign_in"
   }
 
   function handleChange(e, value) {

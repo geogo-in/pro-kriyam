@@ -22,3 +22,12 @@ export const getErrorMessage = error => {
     return { error: true, message: DEFAULT_ERROR_MSG }
   }
 }
+
+export const issueDeleteMessages = [
+  `Done and dusted! We've given the issue the old 'Ctrl-Alt-Delete' and it's officially outta here!`,
+  `The problem has been vanquished from existence! It's like we hit the "delete" button so hard, even its ancestors feel it.`,
+  `We've sent that issue on a one-way trip to the digital afterlife! Rest in peace, problem.`,
+  `We've just pulled off the digital version of a magic trick - the issue has disappeared into thin air! Poof!`,
+  `We've given the problem a one-way ticket to the digital afterlife. Rest in peace, issue.`,
+]
+export const getRandomMessage = array => array[Math.floor(Math.random() * array.length)]

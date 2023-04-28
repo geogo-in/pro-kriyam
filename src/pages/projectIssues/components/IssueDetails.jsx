@@ -37,7 +37,7 @@ import { PATH_DASHBOARD } from "routes/paths"
 import { copyTextToClipboard } from "utils/Copy"
 import { getFileTypeIcon } from "utils/getFileTypeIcon"
 import { getIssueStatusColor } from "utils/getIssueStatusColor"
-import { getErrorMessage } from "utils/helper"
+import { getErrorMessage, getRandomMessage, issueDeleteMessages } from "utils/helper"
 import { insertParam } from "utils/insertParams"
 import CreateIssueRow from "./CreateIssueRow"
 import IssueAbout from "./IssueAbout"
@@ -128,6 +128,8 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
     try {
       if (!window.confirm("Are you sure, you want to delete this issue?")) return
       await deleteIssue(issue.id).unwrap()
+      const message = getRandomMessage(issueDeleteMessages)
+      enqueueSnackbar(message, { variant: "success" })
       onClose()
     } catch (error) {
       const { message } = getErrorMessage(error)

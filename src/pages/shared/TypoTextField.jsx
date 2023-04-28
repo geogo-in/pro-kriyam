@@ -1,6 +1,7 @@
 import { Close, Done } from "@mui/icons-material"
 import { Box, Button, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
+import "react-quill/dist/quill.snow.css"
 import Editor from "./Editor"
 
 export default function TypoTextField({
@@ -56,6 +57,7 @@ export default function TypoTextField({
   return (
     <Typography
       component={"div"}
+      className="ql-editor"
       onClick={handleEditable}
       {...props}
       {...(editor ? { dangerouslySetInnerHTML: { __html: value || props.placeholder } } : { children: value || props.placeholder })}
