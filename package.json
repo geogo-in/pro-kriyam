@@ -21,6 +21,7 @@
     "devextreme-react": "^21.1.6",
     "echarts": "^5.4.1",
     "echarts-for-react": "^3.0.2",
+    "firebase": "^9.21.0",
     "hotkeys-js": "^3.10.2",
     "moment": "^2.29.1",
     "notistack": "^3.0.1",
