@@ -4,26 +4,39 @@ A easy to use project management system built using React, and under the hood it
 
 # setup
 
-1. rename `.env.example` to `.env` ant update API endpoints
+1. Rename [.env.example](.env.example) to `.env.development`/`.env.production` and update API endpoints
 
 ## Firebase setup
 
-1. create firebase project & create a web app under project settings page
-1. create Cloud Messaging > web push certificate & update `.env` file `VITE_PUSH_NOTIFICATION_CERT_KEY` value
-1. rename `/public/firebase-messaging-sw.js.example` to `firebase-messaging-sw.js` and update firebaseConfig, which you will find on firebase > project settings > general > Your App section
+1. Create firebase project & create a web app under project settings page
+1. Create Cloud Messaging > web push certificate & update [.env](.env) file `VITE_PUSH_NOTIFICATION_CERT_KEY=` value
+1. Rename [firebase-messaging-sw.js.example](/public/firebase-messaging-sw.js.example) to [firebase-messaging-sw.js](public/firebase-messaging-sw.js) and update `firebaseConfig` as shown below., which you will find on firebase > project settings > general > Your App section
 
-# build & deploy
+```
+const firebaseConfig = {
+  apiKey: 'apiKey',
+  authDomain: 'authDomain',
+  projectId: 'projectId',
+  storageBucket: 'storageBucket',
+  messagingSenderId: 'messagingSenderId',
+  appId: 'appId'
+}
+```
 
-use docker to build and deploy
+# Build & Deploy
+
+Use docker to build and deploy, run
 
 ```sh
 docker-compose --env-file .env.production up --build
 ```
 
-# snackbar
+# Components
+
+## snackbar
 
 You can pass title as header of the snackbar
 
 ```js
-enqueueSnackbar("This is a message!", { variant: "success", title: "This is a title" })
+enqueueSnackbar("This is a message!", { title: "This is a title" /*...other_params*/ })
 ```
