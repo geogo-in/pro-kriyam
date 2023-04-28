@@ -57,7 +57,7 @@ export default function TypoTextField({
   return (
     <Typography
       component={"div"}
-      className="ql-editor"
+      className="ql-editor ql-snow"
       onClick={handleEditable}
       {...props}
       {...(editor ? { dangerouslySetInnerHTML: { __html: value || props.placeholder } } : { children: value || props.placeholder })}
