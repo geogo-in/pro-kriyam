@@ -36,3 +36,4 @@ yarn-error.log*
 public/env-config.js
 public/firebase-messaging-sw.js
 src/config/firebase.js
+dev-dist
