@@ -204,15 +204,38 @@ export default function SprintIssue({
         <Typography variant="body2" sx={{ padding: "6px 12px", color: "#64748b" }}>
           Change assignee to:{" "}
         </Typography>
+        {/* <MenuItem value="" >
+          <ListItemIcon>
+            <MemberAvatar tooltipPosition="left" />
+          </ListItemIcon>
+          Unassigned
+        </MenuItem>
         {project_memberships?.map(({ user }) => {
           if (!user) return ""
           return (
             <MenuItem key={user.id} onClick={handleIssueUpdate({ assigned_to_id: user.id })} sx={{ margin: "1px 10px", borderRadius: "4px" }}>
               <ListItemIcon>
                 {/* <Avatar sx={{ width: 24, height: 24 }} /> */}
-                <MemberAvatar name={user.name} tooltipPosition="left" />
+        {/* <MemberAvatar name={user.name} tooltipPosition="left" />
               </ListItemIcon>
               <StyledListItemText>{user.name}</StyledListItemText>
+            </MenuItem>
+          )
+        })} */}
+        <MenuItem value=""  onClick={handleIssueUpdate({ assigned_to_id:null })} sx={{ margin: "1px 10px", borderRadius: "4px" }}>
+        <ListItemIcon>
+          <MemberAvatar tooltipPosition="left" />
+        </ListItemIcon>
+        Unassigned
+      </MenuItem>
+        {project_memberships?.map(({ user }) => {
+          if (!user) return ""
+          return (
+            <MenuItem key={user.id} onClick={handleIssueUpdate({ assigned_to_id: user.id })} sx={{ margin: "1px 10px", borderRadius: "4px" }}>
+              <ListItemIcon>
+                <MemberAvatar name={user?.name} tooltipPosition="left" />
+              </ListItemIcon>
+              <StyledListItemText>{user?.name}</StyledListItemText>
             </MenuItem>
           )
         })}
