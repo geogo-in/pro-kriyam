@@ -49,6 +49,7 @@ function ProjectItem({ locked, registered, ...row }) {
   const [updateUser, { isLoading }] = useUpdateUserMutation()
   const handleUpdateUser = async () => {
     try {
+      if (!window.confirm("Are you sure?")) return
       await updateUser({ id: row.id, status: locked ? 1 : 3 }).unwrap()
       enqueueSnackbar("User updated successfully", { variant: "success" })
     } catch (error) {
