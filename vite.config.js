@@ -9,9 +9,11 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      devOptions: {
-        enabled: true,
-      },
+      workbox: { maximumFileSizeToCacheInBytes: 3_0_00_000 },
+      // selfDestroying: true,
+      // devOptions: {
+      //   enabled: true,
+      // },
     }),
   ],
   resolve: {
