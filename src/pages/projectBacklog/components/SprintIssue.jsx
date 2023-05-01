@@ -215,14 +215,15 @@ export default function SprintIssue({
           return (
             <MenuItem key={user.id} onClick={handleIssueUpdate({ assigned_to_id: user.id })} sx={{ margin: "1px 10px", borderRadius: "4px" }}>
               <ListItemIcon>
-                {/* <Avatar sx={{ width: 24, height: 24 }} /> */}
-        {/* <MemberAvatar name={user.name} tooltipPosition="left" />
+                // <Avatar sx={{ width: 24, height: 24 }} /> 
+         <MemberAvatar name={user.name} tooltipPosition="left" />
               </ListItemIcon>
               <StyledListItemText>{user.name}</StyledListItemText>
             </MenuItem>
           )
         })} */}
-        <MenuItem value=""  onClick={handleIssueUpdate({ assigned_to_id:null })} sx={{ margin: "1px 10px", borderRadius: "4px" }}>
+
+        <MenuItem value=""  onClick={handleIssueUpdate({ assigned_to_id:"" })} sx={{ margin: "1px 10px", borderRadius: "4px" }}>
         <ListItemIcon>
           <MemberAvatar tooltipPosition="left" />
         </ListItemIcon>
