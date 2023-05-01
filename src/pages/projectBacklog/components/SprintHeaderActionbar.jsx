@@ -1,7 +1,6 @@
-import { Close, Delete, Edit } from "@mui/icons-material"
 import CloseIcon from "@mui/icons-material/CloseOutlined"
-import EditIcon from "@mui/icons-material/EditOutlined"
 import DeleteIcon from "@mui/icons-material/DeleteOutlined"
+import EditIcon from "@mui/icons-material/EditOutlined"
 import StartIcon from "@mui/icons-material/FlagOutlined"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import { Box, Dialog, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Typography, styled } from "@mui/material"
@@ -36,21 +35,8 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
     setAnchorEl()
   }
   const handleSprintMenu = e => async event => {
-    switch (e) {
-      case "Edit Sprint":
-      case "Close Sprint":
-      case "Start Sprint": {
-        setSprintDialog({ type: e, project_id, sprint_id, ...sprint })
-        handleClose()
-        return
-      }
-      case "Delete Sprint": {
-        if (!window.confirm("Are you sure? You want to delete this sprint.")) return
-      }
-
-      default:
-        break
-    }
+    setSprintDialog({ type: e, project_id, sprint_id, ...sprint })
+    handleClose()
   }
   const SPRINT_MENU_ITEM = [
     { title: "Close Sprint", icon: <CloseIcon />, hide: aasm_state !== "running", message: "Can be planned but not started until the completion of above active sprint" },
@@ -122,11 +108,11 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
       </Stack>
 
       <Dialog open={!!sprintDialog} onClose={handleDialogClose}>
-        {["Start Sprint", "Edit Sprint"].includes(sprintDialog?.type) ? (
-          <SprintDetails editable {...sprintDialog} onClose={handleDialogClose} />
-        ) : sprintDialog?.type === "Close Sprint" ? (
+        {["Delete Sprint", "Close Sprint"].includes(sprintDialog?.type) ? (
           <SprintClose {...sprintDialog} onClose={handleDialogClose} />
-        ) : null}
+        ) : (
+          <SprintDetails editable {...sprintDialog} onClose={handleDialogClose} />
+        )}
       </Dialog>
     </>
   )
