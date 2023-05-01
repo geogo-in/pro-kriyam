@@ -57,10 +57,9 @@ export default function TypoTextField({
   return (
     <Typography
       component={"div"}
-      className="ql-editor"
       onClick={handleEditable}
       {...props}
-      {...(editor ? { dangerouslySetInnerHTML: { __html: value || props.placeholder } } : { children: value || props.placeholder })}
+      {...(editor ? { className: "ql-editor ql-snow", dangerouslySetInnerHTML: { __html: value || props.placeholder } } : { children: value || props.placeholder })}
       sx={{
         ":hover": { background: "#f1f5f9", borderRadius: "4px", cursor: "text" },
         minHeight: "1.66rem",

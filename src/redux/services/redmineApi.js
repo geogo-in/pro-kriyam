@@ -87,6 +87,10 @@ export const redmineApi = createApi({
       query: ({ project_id, sprint_id, state, ...body }) => ({ url: `/api/projects/${project_id}/sprints/${sprint_id}`, method: `PUT`, body }),
       invalidatesTags: result => (result ? ["Backlog", "ActiveSprint"] : []),
     }),
+    deleteSprint: builder.mutation({
+      query: ({ project_id, sprint_id, ...params }) => ({ url: `/api/projects/${project_id}/sprints/${sprint_id}`, method: "DELETE", params }),
+      invalidatesTags: (_, error) => (error ? [] : ["Backlog"]),
+    }),
 
     addTaskToSprintOrBacklog: builder.mutation({
       query: ({ project_id, sprint_id, issue_id }) => ({
@@ -113,6 +117,7 @@ export const {
   useCreateSprintMutation,
   useAddTaskToSprintOrBacklogMutation,
   useDeleteAttachmentMutation,
+  useDeleteSprintMutation,
   useUpdateSprintMutation,
   useUpdateSprintStateMutation,
   useGetActiveSprintQuery,
