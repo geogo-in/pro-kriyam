@@ -4,26 +4,19 @@ import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import IconButton from "@mui/material/IconButton"
 import Menu from "@mui/material/Menu"
-import MenuItem from "@mui/material/MenuItem"
 import Toolbar from "@mui/material/Toolbar"
 import Logo from "assets/images/Default_Full.svg"
 import React, { useRef, useState } from "react"
 // import { AvatarWithName } from "pages/shared/AvatarWithName"
-import { Settings } from "@mui/icons-material"
-import ProfileIcon from "@mui/icons-material/AccountBoxOutlined"
-import LogoutIcon from "@mui/icons-material/Logout"
 import SearchIcon from "@mui/icons-material/Search"
 import InputBase from "@mui/material/InputBase"
 import { alpha, styled } from "@mui/material/styles"
-import { getCurrentUser, unauthUser } from "@redux/reducerSlices/user/userAuthSlice"
 import { useSearchQuery } from "@redux/services/redmineApi"
 import { skipToken } from "@reduxjs/toolkit/dist/query"
 import hotkeys from "hotkeys-js"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
-import MemberAvatar from "pages/shared/MemberAvatar"
-import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
-import { PATH_AUTH, PATH_DASHBOARD } from "routes/paths"
+import { PATH_DASHBOARD } from "routes/paths"
 import { useDebounce } from "use-debounce"
 import { getOs } from "utils/getOs"
 import QuickActionButton from "./QuickActionButton"
@@ -127,24 +120,6 @@ const Listbox = styled("ul")(({ theme, popupOpen }) => ({
 
   "& li.Mui-focused": { backgroundColor: theme.palette.primary.lightest },
 }))
-const PAPER_PROPS = {
-  elevation: 0,
-  sx: {
-    overflow: "visible",
-    "&:before": {
-      content: '""',
-      display: "block",
-      position: "absolute",
-      top: 0,
-      right: 14,
-      width: 10,
-      height: 10,
-      bgcolor: "background.paper",
-      transform: "translateY(-50%) rotate(45deg)",
-      zIndex: 0,
-    },
-  },
-}
 
 const Appbar = ({ mobileOpen, setMobileOpen }) => {
   const navigate = useNavigate()
@@ -154,7 +129,6 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
   const [open, setOpen] = useState(false)
   const [debouncedFilter] = useDebounce(value, 500)
   const { data, isLoading, isFetching } = useSearchQuery(debouncedFilter || skipToken)
-  const openMenu = Boolean(anchorEl)
   const os = getOs()
   const loading = isLoading || isFetching
 
@@ -181,9 +155,6 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
     searchRef.current?.focus()
   })
 
-  const dispatch = useDispatch()
-  const currentUser = useSelector(getCurrentUser)
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
@@ -194,11 +165,6 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
 
   const handleClose = () => {
     setAnchorEl(null)
-  }
-
-  function onLogoutClick() {
-    dispatch(unauthUser())
-    window.location.href = "/users/sign_in"
   }
 
   function handleChange(e, value) {
@@ -285,25 +251,6 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
           </Search>
 
           <QuickActionButton />
-          <Box sx={{ position: "relative" }}>
-            <IconButton sx={{ padding: "4px" }} size="large" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleMenu} color="inherit">
-              <MemberAvatar name={`${currentUser.firstname} ${currentUser.lastname}`} height={34} width={34} />
-            </IconButton>
-            <StyledMenu anchorEl={anchorEl} PaperProps={PAPER_PROPS} open={openMenu} onClose={handleClose} onClick={handleClose}>
-              <MenuItem disableRipple component={Link} to={PATH_AUTH.me}>
-                <ProfileIcon />
-                Profile
-              </MenuItem>
-              <MenuItem disableRipple component={Link} to={PATH_DASHBOARD.settings}>
-                <Settings />
-                Settings
-              </MenuItem>
-              <MenuItem onClick={onLogoutClick} disableRipple>
-                <LogoutIcon />
-                Logout
-              </MenuItem>
-            </StyledMenu>
-          </Box>
         </Toolbar>
       </AppBar>
       {open && <Box sx={{ zIndex: theme => theme.zIndex.tooltip, inset: 0, position: "absolute", background: "rgb(0,0,0,.5)" }} />}

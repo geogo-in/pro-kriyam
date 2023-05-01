@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react"
-import { Navigate, Outlet, useRoutes } from "react-router-dom"
+import { Navigate, useRoutes } from "react-router-dom"
 import AuthGuard from "../guards/AuthGuard"
 import GuestGuard from "../guards/GuestGuard"
 import AccountLayout from "../layouts/account"
@@ -101,26 +101,10 @@ export default function Router() {
             },
           ],
         },
-        {
-          path: "members",
-          element: (
-            <AuthGuard admin>
-              <Outlet />
-            </AuthGuard>
-          ),
-          children: [
-            { index: true, element: <Members /> },
-            { path: ":user_id", element: <MemberDetails /> },
-            { path: "teams/:team_id", element: <TeamDetails /> },
-          ],
-        },
         // {
         //   path: "analytics",
         //   children: [{ index: true, element: <Analytics /> }],
         // },
-
-        { path: "help", element: <Help /> },
-        { path: "notifications", element: <Notifications /> },
       ],
     },
     {
@@ -130,12 +114,34 @@ export default function Router() {
           <AccountLayout sidebar={"settings"} />
         </AuthGuard>
       ),
+      children: [{ path: "settings", children: [{ index: true, element: <Settings /> }] }],
+    },
+    {
+      path: "account",
+      element: (
+        <AuthGuard admin>
+          <AccountLayout />
+        </AuthGuard>
+      ),
       children: [
         {
-          path: "settings",
-          children: [{ index: true, element: <Settings /> }],
+          path: "members",
+          children: [
+            { index: true, element: <Members /> },
+            { path: ":user_id", element: <MemberDetails /> },
+            { path: "teams/:team_id", element: <TeamDetails /> },
+          ],
         },
       ],
+    },
+    {
+      path: "account",
+      element: (
+        <AuthGuard>
+          <AccountLayout sidebar={false} />
+        </AuthGuard>
+      ),
+      children: [{ path: "notifications", element: <Notifications /> }],
     },
 
     // Main Routes
@@ -144,7 +150,7 @@ export default function Router() {
       element: <LogoOnlyLayout />,
       children: [
         { path: "404", element: <NotFound /> },
-        // { path: "*", element: <Navigate to="/404" replace /> },
+        { path: "*", element: <Navigate to="/404" replace /> },
       ],
     },
     { path: "/", element: <Navigate to="/account/dashboard" replace /> },
