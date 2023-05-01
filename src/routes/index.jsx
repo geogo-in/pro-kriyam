@@ -40,7 +40,7 @@ export default function Router() {
       path: "users",
       element: (
         <AuthGuard>
-          <LogoOnlyLayout />
+          <AccountLayout sidebar={false} />
         </AuthGuard>
       ),
       children: [{ path: "me", element: <Me /> }],
@@ -123,6 +123,20 @@ export default function Router() {
         { path: "notifications", element: <Notifications /> },
       ],
     },
+    {
+      path: "account",
+      element: (
+        <AuthGuard>
+          <AccountLayout sidebar={"settings"} />
+        </AuthGuard>
+      ),
+      children: [
+        {
+          path: "settings",
+          children: [{ index: true, element: <Settings /> }],
+        },
+      ],
+    },
 
     // Main Routes
     {
@@ -154,6 +168,7 @@ const Members = Loadable(lazy(() => import(/* webpackChunkName: "Members" */ "..
 const Me = Loadable(lazy(() => import(/* webpackChunkName: "Me" */ "../pages/me")))
 // const Analytics = Loadable(lazy(() => import(/* webpackChunkName: "Analytics" */ "../pages/analytics")))
 
+const Settings = Loadable(lazy(() => import(/* webpackChunkName: "Settings" */ "../pages/settings")))
 const TeamDetails = Loadable(lazy(() => import(/* webpackChunkName: "TeamDetails" */ "../pages/teamDetails")))
 const MemberDetails = Loadable(lazy(() => import(/* webpackChunkName: "MemberDetails" */ "../pages/memberDetails")))
 const Help = Loadable(lazy(() => import(/* webpackChunkName: "Help" */ "../pages/help")))

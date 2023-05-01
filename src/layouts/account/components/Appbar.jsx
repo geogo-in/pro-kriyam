@@ -9,6 +9,7 @@ import Toolbar from "@mui/material/Toolbar"
 import Logo from "assets/images/Default_Full.svg"
 import React, { useRef, useState } from "react"
 // import { AvatarWithName } from "pages/shared/AvatarWithName"
+import { Settings } from "@mui/icons-material"
 import ProfileIcon from "@mui/icons-material/AccountBoxOutlined"
 import LogoutIcon from "@mui/icons-material/Logout"
 import SearchIcon from "@mui/icons-material/Search"
@@ -253,7 +254,7 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
             />
             {groupedOptions.length > 0 ? (
               <>
-                <Divider variant="middle" sx={{}} />
+                <Divider variant="middle" />
                 <Listbox {...getListboxProps()}>
                   {groupedOptions.map((option, index) => {
                     const type = option.title.split(" ", 1)[0]
@@ -288,10 +289,14 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
             <IconButton sx={{ padding: "4px" }} size="large" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleMenu} color="inherit">
               <MemberAvatar name={`${currentUser.firstname} ${currentUser.lastname}`} height={34} width={34} />
             </IconButton>
-            <StyledMenu anchorEl={anchorEl} PaperProps={PAPER_PROPS} open={openMenu} onClose={handleClose}>
+            <StyledMenu anchorEl={anchorEl} PaperProps={PAPER_PROPS} open={openMenu} onClose={handleClose} onClick={handleClose}>
               <MenuItem disableRipple component={Link} to={PATH_AUTH.me}>
                 <ProfileIcon />
                 Profile
+              </MenuItem>
+              <MenuItem disableRipple component={Link} to={PATH_DASHBOARD.settings}>
+                <Settings />
+                Settings
               </MenuItem>
               <MenuItem onClick={onLogoutClick} disableRipple>
                 <LogoutIcon />
