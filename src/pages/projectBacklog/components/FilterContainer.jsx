@@ -4,14 +4,13 @@ import { Button, DialogContent, MenuItem, TextField as MuiTextField, Stack, styl
 import IconButton from "@mui/material/IconButton"
 import InputBase from "@mui/material/InputBase"
 import Paper from "@mui/material/Paper"
+import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
+import { useGetEpicQuery, useGetIssuePriorityQuery, useGetProjectIssuesStatusesQuery } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery, useGetProjectMembershipsQuery } from "@redux/services/projectApi"
 import CustomDialogTitle from "pages/shared/CustomDialogTitle"
 import CustomMenu from "pages/shared/CustomMenu"
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
-import { useGetEpicQuery, useGetIssuePriorityQuery, useGetProjectIssuesStatusesQuery } from "@redux/services/issueApi"
-import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import MembershipFilter from "./MembershipFilter"
 
 const SmallButton = styled(Button)(({ theme, variant }) => ({
@@ -42,6 +41,7 @@ export default function FilterContainer({ filter, setFilter, project_id }) {
   const [filterOpen, setFilterOpen] = useState()
   const user = useSelector(getCurrentUser)
   const isMyIssue = filter.assigned_to_ids.length === 1 && filter.assigned_to_ids[0] === user.id
+  const isMoreFilterApplied = Boolean(filter.category_id || filter.status_id || filter.priority_id || filter.tracker_id || filter.author_id)
 
   const handleFilterOpen = e => {
     setFilterOpen(e.target)
@@ -89,7 +89,8 @@ export default function FilterContainer({ filter, setFilter, project_id }) {
       <SmallButton variant={filter.unassigned_issues ? "contained" : "outlined"} size="small" onClick={handleUnassigned}>
         Unassigned
       </SmallButton>
-      <SmallButton onClick={handleFilterOpen} endIcon={<Add />} variant="outlined" size="small">
+
+      <SmallButton variant={isMoreFilterApplied ? "contained" : "outlined"} onClick={handleFilterOpen} endIcon={<Add />} size="small">
         More Filters
       </SmallButton>
       <CustomMenu anchorEl={filterOpen} open={Boolean(filterOpen)} onClose={handleDialogClose}>
@@ -124,11 +125,11 @@ export default function FilterContainer({ filter, setFilter, project_id }) {
           </TextField>
           <TextField select label="IssueType" name="tracker_id" value={filter.tracker_id} onChange={handleFilter}>
             <MenuItem value="">All</MenuItem>
-            {
-              project?.tracker?.map(({ id, name }) => (
-                <MenuItem key={id} value={id}> {name}</MenuItem>
-              ))
-            }
+            {project?.tracker?.map(({ id, name }) => (
+              <MenuItem key={id} value={id}>
+                {name}
+              </MenuItem>
+            ))}
           </TextField>
 
           <TextField select label="Reported by" name="author_id" value={filter.author_id} onChange={handleFilter}>
@@ -147,4 +148,3 @@ export default function FilterContainer({ filter, setFilter, project_id }) {
     </Stack>
   )
 }
-

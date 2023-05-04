@@ -19,7 +19,7 @@ export const NumberChip = styled(Chip)(({ theme }) => ({
   },
 }))
 
-const Column = ({ column, project_id }) => {
+const Column = ({ column, project_id, sprint_id }) => {
   const [open, setOpen] = useState()
   const handleNewIssue = () => {
     setOpen(!open)
@@ -51,7 +51,7 @@ const Column = ({ column, project_id }) => {
         )}
       </StrictModeDroppable>
       <CustomDialog back open={open} onClose={handleNewIssue}>
-        <CreateIssue onClose={handleNewIssue} project_id={project_id} status_id={column.id} />
+        <CreateIssue onClose={handleNewIssue} project_id={project_id} status_id={column.id} sprint_id={sprint_id} />
       </CustomDialog>
     </Box>
   )
