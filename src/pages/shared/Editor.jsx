@@ -1,9 +1,9 @@
 import { Box, styled } from "@mui/material"
 import "quill-mention"
 import "quill-mention/dist/quill.mention.css"
-import "react-quill/dist/quill.snow.css"
 import { useMemo } from "react"
 import ReactQuill, { Quill } from "react-quill"
+import "react-quill/dist/quill.snow.css"
 
 // Custom Undo button icon component for Quill editor. You can import it directly
 // from 'quill/assets/icons/undo.svg' but I found that a number of loaders do not
@@ -145,7 +145,7 @@ export const QuillToolbar = () => {
         <select className="ql-background" title="Background color" />
       </StyledQlBox>
       <StyledQlBox className="ql-formats">
-        {/* <button className="ql-link" />   */}
+        <button className="ql-link" />
         <button className="ql-image" title="Insert image" />
         {/*  <button className="ql-video" /> */}
       </StyledQlBox>
@@ -154,14 +154,14 @@ export const QuillToolbar = () => {
         <button className="ql-code-block" title="Code block" />
         <button className="ql-clean" title="Clear formatting" />
       </StyledQlBox>
-      <StyledQlBox className="ql-formats">
+      {/* <StyledQlBox className="ql-formats">
         <button className="ql-undo" title="Undo">
           <CustomUndo />
         </button>
         <button className="ql-redo" title="Redo">
           <CustomRedo />
         </button>
-      </StyledQlBox>
+      </StyledQlBox> */}
     </Box>
   )
 }
