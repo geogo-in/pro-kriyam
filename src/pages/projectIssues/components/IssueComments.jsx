@@ -1,11 +1,11 @@
 import { LoadingButton } from "@mui/lab"
 import { Box, Paper, Stack, Typography, styled } from "@mui/material"
+import { useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
 import { useSnackbar } from "notistack"
 import Editor from "pages/shared/Editor"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import { useState } from "react"
-import { useUpdateIssuesMutation } from "@redux/services/issueApi"
-import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
 import { fDateTime } from "utils/formatDate"
 import { getErrorMessage } from "utils/helper"
 

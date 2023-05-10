@@ -1,17 +1,20 @@
 import { LoadingButton } from "@mui/lab"
 import { Box, Button, DialogActions, DialogContent, MenuItem, TextField, Typography } from "@mui/material"
+import { useDeleteSprintMutation, useListSprintsQuery, useUpdateSprintStateMutation } from "@redux/services/redmineApi"
 import { useSnackbar } from "notistack"
 import CustomDialogTitle from "pages/shared/CustomDialogTitle"
 import { useState } from "react"
-import { useListSprintsQuery, useUpdateSprintMutation } from "@redux/services/redmineApi"
 import { getErrorMessage } from "utils/helper"
 
-export default function SprintClose({ project_id, sprint_id, onClose, ...sprint }) {
-  const [updateSprint, { isLoading }] = useUpdateSprintMutation()
+export default function SprintClose({ project_id, sprint_id, onClose, type, ...sprint }) {
+  const [updateSprintState, { isLoading }] = useUpdateSprintStateMutation()
+  const [deleteSprint, { isLoading: isDeleting }] = useDeleteSprintMutation()
   const { data: sprints } = useListSprintsQuery({ project_id })
   const [move_sprint_id, setMoveSprintId] = useState("backlog")
   const { enqueueSnackbar } = useSnackbar()
   const completeIssue = sprint.issues?.filter(issue => issue.closed_on) || []
+  const isDelete = type === "Delete Sprint"
+  const loading = isDeleting || isLoading
 
   const handleChange = e => {
     setMoveSprintId(e.target.value)
@@ -19,7 +22,15 @@ export default function SprintClose({ project_id, sprint_id, onClose, ...sprint 
   const handleUpdateSprint = async e => {
     try {
       e.preventDefault()
-      await updateSprint({ project_id, sprint_id, state: "close", move_sprint_id }).unwrap()
+      if (isDelete) {
+        if (!window.confirm("Are you sure? You want to delete this sprint.")) return
+        await deleteSprint({ project_id, sprint_id, move_sprint_id }).unwrap()
+        enqueueSnackbar("This sprint is deleted successfully", { variant: "success" })
+      } else {
+        await updateSprintState({ project_id, sprint_id, state: "close", move_sprint_id }).unwrap()
+        enqueueSnackbar(`This sprint is closed successfully.`, { variant: "success" })
+      }
+
       onClose()
     } catch (r) {
       const { message } = getErrorMessage(r)
@@ -28,19 +39,26 @@ export default function SprintClose({ project_id, sprint_id, onClose, ...sprint 
   }
 
   return (
-    <Box component="form" onSubmit={handleUpdateSprint} minWidth={600}>
-      <CustomDialogTitle onClose={onClose}>Complete {sprint.name}</CustomDialogTitle>
-      <DialogContent>
-        <img src="" alt="" height="100" />
-        <Typography fontWeight="bold">This sprint contains</Typography>
-
-        <Typography component={"li"}>{completeIssue.length} Completed issue</Typography>
-        <Typography component={"li"}>{sprint.issues?.length - completeIssue.length || 0} Open issue</Typography>
-
-        <TextField value={move_sprint_id} onChange={handleChange} select label="Move open issues to" fullWidth margin="normal">
+    <Box component="form" onSubmit={handleUpdateSprint} minWidth={500}>
+      <CustomDialogTitle onClose={onClose}>Complete sprint: {sprint.name}</CustomDialogTitle>
+      <DialogContent sx={{ px: 4, mt: 2 }}>
+        <Typography variant="h6" fontWeight="bold" fontSize={16} color={theme => theme.palette.primary.defaultText}>
+          This sprint contains:
+        </Typography>
+        <Typography component={"li"} variant="body2" color={theme => theme.palette.primary.defaultText}>
+          {completeIssue.length} Completed issue(s)
+        </Typography>
+        <Typography component={"li"} variant="body2" color={theme => theme.palette.primary.defaultText}>
+          {sprint.issues?.length - completeIssue.length || 0} Open issue(s)
+        </Typography>
+        <br />
+        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText, fontWeight: 500 }}>
+          Move open issues to
+        </Typography>
+        <TextField value={move_sprint_id} onChange={handleChange} select sx={{ width: 300, mt: 1 }}>
           <MenuItem value={"backlog"}>Backlog</MenuItem>
           {sprints
-            ?.filter(sprint => sprint.aasm_state !== "running")
+            ?.filter(sprint => sprint.id != sprint_id)
             .map(sprint => (
               <MenuItem key={sprint.id} value={sprint.id}>
                 {sprint.name}
@@ -48,12 +66,12 @@ export default function SprintClose({ project_id, sprint_id, onClose, ...sprint 
             ))}
         </TextField>
       </DialogContent>
-      <DialogActions>
-        <Button disabled={isLoading} onClick={onClose}>
+      <DialogActions sx={{ px: 2, py: 1.6, mt: 2, borderTop: "1px solid #E5E7EB" }}>
+        <Button disabled={loading} onClick={onClose}>
           Cancel
         </Button>
-        <LoadingButton loading={isLoading} variant="contained" type="submit">
-          Complete Sprint
+        <LoadingButton loading={loading} variant="contained" color={isDelete && "error"} type="submit">
+          {isDelete ? "Delete" : "Complete"}
         </LoadingButton>
       </DialogActions>
     </Box>

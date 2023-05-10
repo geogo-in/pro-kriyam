@@ -1,0 +1,20 @@
+{
+  "javascript.validate.enable": false,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "git.autofetch": false,
+  "files.exclude": {
+    "node_modules": true
+  },
+  "files.associations": {
+    "*.js": "javascriptreact"
+  },
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[dotenv]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "typescript.preferences.importModuleSpecifier": "non-relative"
+}

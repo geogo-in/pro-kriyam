@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  pro-kriyam:
+    container_name: pro-kriyam
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pro-kriyam:latest
+    environment:
+      VITE_API_URL: $VITE_API_URL
+      VITE_APP_URL: $VITE_APP_URL
+    ports:
+      - "3000:80"

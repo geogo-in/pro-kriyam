@@ -1,9 +1,10 @@
 import { Box, styled } from "@mui/material"
 import "quill-mention"
 import "quill-mention/dist/quill.mention.css"
+import "react-quill/dist/quill.snow.css"
 import { useMemo } from "react"
 import ReactQuill, { Quill } from "react-quill"
-import "react-quill/dist/quill.snow.css"
+
 // Custom Undo button icon component for Quill editor. You can import it directly
 // from 'quill/assets/icons/undo.svg' but I found that a number of loaders do not
 // handle them correctly

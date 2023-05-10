@@ -43,6 +43,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
   },
 }))
+
 const FloatingBack = styled(IconButton)(({ theme }) => ({
   position: "absolute",
   left: "-20px",
