@@ -41,7 +41,6 @@ export default function SprintIssue({
   const { data: priorities } = useGetIssuePriorityQuery()
   const { data: epics } = useGetEpicQuery(project_id)
   const { data: project } = useGetProjectByIdQuery(project_id)
-
   const { enqueueSnackbar } = useSnackbar()
   const [updateTask] = useUpdateIssuesMutation()
   const [open, setOpen] = useState({ collapse: false, details: false })

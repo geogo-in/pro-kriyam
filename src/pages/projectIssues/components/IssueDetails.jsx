@@ -1,7 +1,23 @@
 import { Attachment, DeleteOutline, Download } from "@mui/icons-material"
 import AccountTreeIcon from "@mui/icons-material/AccountTreeOutlined"
 import { LoadingButton } from "@mui/lab"
-import { Alert, Button, CardContent, Grid, LinearProgress, Link, ListItemText, MenuItem, IconButton as MuiIconButton, Stack, Typography, styled } from "@mui/material"
+import {
+  ListItemIcon,
+  Menu,
+  Alert,
+  Button,
+  CardContent,
+  Grid,
+  LinearProgress,
+  Link,
+  ListItemText,
+  MenuItem,
+  IconButton,
+  IconButton as MuiIconButton,
+  Stack,
+  Typography,
+  styled,
+} from "@mui/material"
 import Box from "@mui/material/Box"
 import CardMedia from "@mui/material/CardMedia"
 import { useSnackbar } from "notistack"
@@ -17,6 +33,7 @@ import { useSelector } from "react-redux"
 import { getCurrentUserKey } from "@redux/reducerSlices/user/userAuthSlice"
 import { useGetIssueQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useDeleteAttachmentMutation } from "@redux/services/redmineApi"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import { PATH_DASHBOARD } from "routes/paths"
 import { copyTextToClipboard } from "utils/Copy"
 import { getFileTypeIcon } from "utils/getFileTypeIcon"
@@ -49,6 +66,8 @@ export const StyledListItemText = styled(ListItemText)(({ theme }) => ({
 export default function IssueDetails({ project_id, issue_id, referrer = "issues", onClose }) {
   const { data: issue, isLoading, isError } = useGetIssueQuery(issue_id, { refetchOnMountOrArgChange: true })
   const { data: statuses } = useGetProjectIssuesStatusesQuery(project_id)
+  const { data: project } = useGetProjectByIdQuery(project_id)
+
   const currentUserKey = useSelector(getCurrentUserKey)
 
   const [deleteAttachment, { isLoading: isDeletingAttachment }] = useDeleteAttachmentMutation()
@@ -57,9 +76,14 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   const [tab, setTab] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
   const [newSubtask, setNewSubtask] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
 
   const inputFile = useRef()
   const subtaskRef = useRef(null)
+
+  const handleMenu = type => event => {
+    setAnchorEl({ [type]: event.currentTarget })
+  }
 
   const handleTabChange = (e, newValue) => {
     setTab(newValue)
@@ -76,6 +100,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   const handleIssueUpdate = data => async () => {
     try {
       await updateTask({ id: issue_id, ...data }).unwrap()
+      onClose()
     } catch (r) {
       const { message } = getErrorMessage(r)
       enqueueSnackbar(message, { variant: "error" })
@@ -111,14 +136,28 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   return (
     <Box p={3}>
       <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
-        {issue.parent?.id && (
+        {/* {issue.parent?.id && (
           <Typography variant="body2" pl={1} sx={{ fontWeight: 500, mr: 1, color: theme => theme.palette.primary.defaultText }}>
             # {issue.parent?.id} /
           </Typography>
-        )}
+        )} */}
+
         <StyledTooltip title={issue.tracker?.name}>
-          <IssueTypeIcon type_name={issue.tracker?.name} />
+          <IconButton size="small" onClick={handleMenu("tracker")}>
+            <IssueTypeIcon type_name={issue.tracker?.name} />
+          </IconButton>
         </StyledTooltip>
+
+        <Menu anchorEl={anchorEl?.tracker} open={Boolean(anchorEl?.tracker)} onClose={onClose}>
+          {project?.tracker?.map(item => (
+            <MenuItem key={item.id} onClick={handleIssueUpdate({ tracker_id: item.id })}>
+              <ListItemIcon>
+                <IssueTypeIcon type_name={item.name} type_id={item.id} />
+              </ListItemIcon>
+              <ListItemText>{item.name}</ListItemText>
+            </MenuItem>
+          ))}
+        </Menu>
 
         <Typography
           variant="body2"
