@@ -33,12 +33,10 @@ import TabPanel from "pages/shared/TabPanel"
 import TypoTextField from "pages/shared/TypoTextField"
 import { useRef, useState } from "react"
 import { useSelector } from "react-redux"
-
 import { getCurrentUserKey } from "@redux/reducerSlices/user/userAuthSlice"
 import { useGetIssueQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useDeleteAttachmentMutation } from "@redux/services/redmineApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
-
 import { PATH_DASHBOARD } from "routes/paths"
 import { copyTextToClipboard } from "utils/Copy"
 import { getFileTypeIcon } from "utils/getFileTypeIcon"
@@ -68,9 +66,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   const { data: issue, isLoading, isError } = useGetIssueQuery(issue_id, { refetchOnMountOrArgChange: true })
   const { data: statuses } = useGetProjectIssuesStatusesQuery(project_id)
   const { data: project } = useGetProjectByIdQuery(project_id)
-
   const currentUserKey = useSelector(getCurrentUserKey)
-
   const [deleteIssue, { isLoading: isDeletingIssue }] = useDeleteIssueMutation()
   const [deleteAttachment, { isLoading: isDeletingAttachment }] = useDeleteAttachmentMutation()
   const [updateTask] = useUpdateIssuesMutation()
@@ -79,23 +75,18 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   const [isUploading, setIsUploading] = useState(false)
   const [newSubtask, setNewSubtask] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
-
   const inputFile = useRef()
-  const subtaskRef = useRef(null)
 
   const handleMenu = type => event => {
     setAnchorEl({ [type]: event.currentTarget })
   }
-  
   const handleTabChange = (e, newValue) => {
     setTab(newValue)
   }
-
   const handleCreateSubtask = async () => {
     await setNewSubtask(true)
     await subtaskRef.current.scrollIntoView({ behavior: "smooth" })
   }
-
   const handleUpdate = async data => {
     await updateTask({ id: issue_id, ...data }).unwrap()
   }
@@ -155,7 +146,6 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
             # {issue.parent?.id} /
           </Typography>
         )}
-
         <StyledTooltip title={issue.tracker?.name}>
           <IconButton size="small" onClick={handleMenu("tracker")}>
             <IssueTypeIcon type_name={issue.tracker?.name} />
@@ -170,7 +160,6 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
             #{issue.id}
           </Typography>
         </StyledTooltip>
-
         <Menu anchorEl={anchorEl?.tracker} open={Boolean(anchorEl?.tracker)} onClose={onClose}>
           {project?.tracker?.map(item => (
             <MenuItem key={item.id} onClick={handleIssueUpdate({ tracker_id: item.id })}>
@@ -181,7 +170,6 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
             </MenuItem>
           ))}
         </Menu>
-
         <Typography
           variant="body2"
           pl={1}
@@ -299,7 +287,6 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
         Details
       </Typography>
       <IssueAbout {...issue} project_id={project_id} />
-
       <Box sx={{ borderTop: "1px solid rgba(229,231,235, 0.5)", pb: 2, mt: 3 }}>
         <StyledTabs value={tab} onChange={handleTabChange}>
           <StyledTab label="Comments" value={0} />
