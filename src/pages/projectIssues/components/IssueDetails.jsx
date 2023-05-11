@@ -136,11 +136,11 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   return (
     <Box p={3}>
       <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
-        {/* {issue.parent?.id && (
+        {issue.parent?.id && (
           <Typography variant="body2" pl={1} sx={{ fontWeight: 500, mr: 1, color: theme => theme.palette.primary.defaultText }}>
             # {issue.parent?.id} /
           </Typography>
-        )} */}
+        )}
 
         <StyledTooltip title={issue.tracker?.name}>
           <IconButton size="small" onClick={handleMenu("tracker")}>
