@@ -1,18 +1,18 @@
-import { Attachment, Delete, DeleteOutline, Download, MoreVert } from "@mui/icons-material"
+import { Attachment, DeleteOutline, Download } from "@mui/icons-material"
 import AccountTreeIcon from "@mui/icons-material/AccountTreeOutlined"
 import { LoadingButton } from "@mui/lab"
 import {
-  ListItemIcon,
-  Menu,
   Alert,
   Button,
   CardContent,
   Grid,
+  IconButton,
   LinearProgress,
   Link,
+  ListItemIcon,
   ListItemText,
+  Menu,
   MenuItem,
-  IconButton,
   IconButton as MuiIconButton,
   Stack,
   Typography,
@@ -22,6 +22,7 @@ import Box from "@mui/material/Box"
 import CardMedia from "@mui/material/CardMedia"
 import { getCurrentUserKey } from "@redux/reducerSlices/user/userAuthSlice"
 import { useDeleteIssueMutation, useGetIssueQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import { useDeleteAttachmentMutation } from "@redux/services/redmineApi"
 import { useSnackbar } from "notistack"
 import { SleekSelectWithIcon } from "pages/shared/CustomTextField"
@@ -33,10 +34,6 @@ import TabPanel from "pages/shared/TabPanel"
 import TypoTextField from "pages/shared/TypoTextField"
 import { useRef, useState } from "react"
 import { useSelector } from "react-redux"
-import { getCurrentUserKey } from "@redux/reducerSlices/user/userAuthSlice"
-import { useGetIssueQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
-import { useDeleteAttachmentMutation } from "@redux/services/redmineApi"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import { PATH_DASHBOARD } from "routes/paths"
 import { copyTextToClipboard } from "utils/Copy"
 import { getFileTypeIcon } from "utils/getFileTypeIcon"
