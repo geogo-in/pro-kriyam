@@ -1,12 +1,13 @@
 import react from "@vitejs/plugin-react-swc"
 import * as path from "path"
-import { defineConfig } from "vite"
+import { defineConfig, splitVendorChunkPlugin } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
+    splitVendorChunkPlugin(),
     VitePWA({
       registerType: "autoUpdate",
       workbox: { maximumFileSizeToCacheInBytes: 3_0_00_000 },
