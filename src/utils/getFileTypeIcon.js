@@ -15,10 +15,10 @@ export function getFileTypeIcon(content_type) {
     // case "video":
     //   return <img src={require("../assets/images/video.svg").default} alt="image_icon" />
     case "application/pdf":
-      return require("../assets/images/pdf.png")
+      return "/assets/images/pdf.png"
     case "doc":
-      return require("../assets/images/doc.png")
+      return "/assets/images/doc.png"
     default:
-      return require("../assets/images/file.png")
+      return "/assets/images/file.png"
   }
 }

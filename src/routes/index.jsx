@@ -114,10 +114,10 @@ export default function Router() {
             { path: "teams/:team_id", element: <TeamDetails /> },
           ],
         },
-        {
-          path: "analytics",
-          children: [{ index: true, element: <Analytics /> }],
-        },
+        // {
+        //   path: "analytics",
+        //   children: [{ index: true, element: <Analytics /> }],
+        // },
 
         { path: "help", element: <Help /> },
         { path: "notifications", element: <Notifications /> },
@@ -152,7 +152,7 @@ const Projects = Loadable(lazy(() => import(/* webpackChunkName: "Projects" */ "
 // const MyWork = Loadable(lazy(() => import(/* webpackChunkName: "MyWork" */ "../pages/myWork")))
 const Members = Loadable(lazy(() => import(/* webpackChunkName: "Members" */ "../pages/members")))
 const Me = Loadable(lazy(() => import(/* webpackChunkName: "Me" */ "../pages/me")))
-const Analytics = Loadable(lazy(() => import(/* webpackChunkName: "Analytics" */ "../pages/analytics")))
+// const Analytics = Loadable(lazy(() => import(/* webpackChunkName: "Analytics" */ "../pages/analytics")))
 
 const TeamDetails = Loadable(lazy(() => import(/* webpackChunkName: "TeamDetails" */ "../pages/teamDetails")))
 const MemberDetails = Loadable(lazy(() => import(/* webpackChunkName: "MemberDetails" */ "../pages/memberDetails")))

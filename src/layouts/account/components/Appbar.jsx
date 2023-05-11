@@ -14,14 +14,14 @@ import LogoutIcon from "@mui/icons-material/Logout"
 import SearchIcon from "@mui/icons-material/Search"
 import InputBase from "@mui/material/InputBase"
 import { alpha, styled } from "@mui/material/styles"
+import { getCurrentUser, unauthUser } from "@redux/reducerSlices/user/userAuthSlice"
+import { useSearchQuery } from "@redux/services/redmineApi"
 import { skipToken } from "@reduxjs/toolkit/dist/query"
 import hotkeys from "hotkeys-js"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
-import { getCurrentUser, unauthUser } from "@redux/reducerSlices/user/userAuthSlice"
-import { useSearchQuery } from "@redux/services/redmineApi"
 import { PATH_AUTH, PATH_DASHBOARD } from "routes/paths"
 import { useDebounce } from "use-debounce"
 import { getOs } from "utils/getOs"
@@ -166,7 +166,7 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
     onChange: handleSearchClick,
     value: null,
     filterOptions: x => x,
-    getOptionDisabled: x => x.type === "issue-closed",
+    // getOptionDisabled: x => x.type === "issue-closed",
     open,
     onOpen: () => setOpen(true),
     onClose: () => setOpen(false),
@@ -197,6 +197,7 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
 
   function onLogoutClick() {
     dispatch(unauthUser())
+    window.location.href = "/users/sign_in"
   }
 
   function handleChange(e, value) {
@@ -206,7 +207,7 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
   function handleSearchClick(e, item) {
     if (e.type === "blur") return
     if (item?.type === "project") navigate(`${PATH_DASHBOARD.projects.root}/${item.id}`)
-    if (["issue", "issue-closed"].includes(item?.type)) navigate(`${PATH_DASHBOARD.projects.root}/${item.project.id}/issues/${item.id}`)
+    if (["issue", "issue-closed"].includes(item?.type)) navigate(`${PATH_DASHBOARD.projects.root}/${item.project.identifier}/issues/${item.id}`)
   }
 
   return (

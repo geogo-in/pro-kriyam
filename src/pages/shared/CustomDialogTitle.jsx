@@ -16,4 +16,11 @@ export default function CustomDialogTitle(props) {
   )
 }
 
-const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({ padding: "10px 5px", paddingLeft: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }))
+const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({ 
+  padding: "10px 16px", 
+  paddingLeft: 16, 
+  display: "flex", 
+  justifyContent: "space-between", 
+  alignItems: "center",
+  boxShadow: "1px 1px 8px -5px #00000080",
+}))

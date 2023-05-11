@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Check"
-import { Box, Button, Dialog, Typography } from "@mui/material"
+import { Box, Button, Dialog, Grid, LinearProgress, Typography } from "@mui/material"
 import { styled } from "@mui/system"
 import NoTaskImg from "assets/images/no-task.png"
 import { omitBy } from "lodash"
@@ -17,6 +17,8 @@ import { fDate } from "utils/formatDate"
 import FilterContainer from "../projectBacklog/components/FilterContainer"
 import PageContainer from "../shared/PageContainer"
 import Column from "./components/column"
+import { StyledTooltip } from "pages/shared/StyledTooltip"
+import {Tooltip} from "@mui/material"
 
 export const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: 4,
@@ -26,7 +28,7 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   lineHeight: 2.0,
   color: "#000",
   marginRight: 12,
-  marginLeft: 24,
+  marginLeft: 8,
 }))
 
 export const ScrollableGrid = styled(Box)(({ theme }) => ({
@@ -149,24 +151,31 @@ const ProjectSprint = () => {
           <Box sx={{ marginTop: "0px" }} display="flex" flexDirection="column" flex={1} id="backlog-container">
             {project?.project_type?.name === "Scrum" && (
               <SectionTitle variant="h6">
-                <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                  Active Sprint Board
-                  {issues?.status !== "Error" && !isLoading && <>: {issues.name}</>}
-                </Box>
-                <Box>
-                  {issues?.status !== "Error" && !isLoading && (
-                    <Box sx={{ flexDirection: "row", display: "flex", alignItems: "center" }}>
-                      <Typography variant="body2" color={theme => theme.palette.primary.defaultText} sx={{ fontSize: "0.8em", textAlign: "right" }}>
-                        Started at: {fDate(issues.start_date)} & <strong>Due on: {fDate(issues.end_date)}</strong>
-                        <br />
-                        <Typography sx={{ fontSize: "0.8rem" }}>(Goals: {issues.goals})</Typography>
-                      </Typography>
-                      <StyledButton onClick={handleCloseSprint} disableElevation startIcon={<AddIcon />}>
-                        Complete sprint
-                      </StyledButton>
-                    </Box>
-                  )}
-                </Box>
+                <Grid container spacing={1}>
+                  <Grid item lg={4} sx={{ flexDirection: "row", display: "flex", alignItems: "center" }}>
+                    {issues?.status !== "Error" && !isLoading ? (
+                        <StyledTooltip title={`Started at: ${fDate(issues.start_date)} & Due on: ${fDate(issues.end_date)}. ${issues.goals && `Goals: ${issues.goals}`}`}>
+                          <span>Active Sprint Board: {issues.name}</span>
+                        </StyledTooltip>
+                    ) : (
+                      <>Active Sprint Board</>
+                    )}
+                  </Grid>
+                  <Grid item lg={4}>
+                    {issues?.status !== "Error" && !isLoading && (
+                      <LinearProgress />
+                    )}
+                  </Grid>
+                  <Grid item lg={4}>
+                    {issues?.status !== "Error" && !isLoading && (
+                      <Box sx={{ flexDirection: "row", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                        <StyledButton onClick={handleCloseSprint} disableElevation startIcon={<AddIcon />}>
+                          Complete sprint
+                        </StyledButton>
+                      </Box>
+                    )}
+                  </Grid>
+                </Grid>
               </SectionTitle>
             )}
             {issues?.status === "Error" ? (

@@ -1,4 +1,4 @@
-import { Attachment, DeleteOutline, Download } from "@mui/icons-material"
+import { Attachment, Delete, DeleteOutline, Download, MoreVert } from "@mui/icons-material"
 import AccountTreeIcon from "@mui/icons-material/AccountTreeOutlined"
 import { LoadingButton } from "@mui/lab"
 import {
@@ -20,6 +20,9 @@ import {
 } from "@mui/material"
 import Box from "@mui/material/Box"
 import CardMedia from "@mui/material/CardMedia"
+import { getCurrentUserKey } from "@redux/reducerSlices/user/userAuthSlice"
+import { useDeleteIssueMutation, useGetIssueQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useDeleteAttachmentMutation } from "@redux/services/redmineApi"
 import { useSnackbar } from "notistack"
 import { SleekSelectWithIcon } from "pages/shared/CustomTextField"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
@@ -30,15 +33,17 @@ import TabPanel from "pages/shared/TabPanel"
 import TypoTextField from "pages/shared/TypoTextField"
 import { useRef, useState } from "react"
 import { useSelector } from "react-redux"
+
 import { getCurrentUserKey } from "@redux/reducerSlices/user/userAuthSlice"
 import { useGetIssueQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useDeleteAttachmentMutation } from "@redux/services/redmineApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
+
 import { PATH_DASHBOARD } from "routes/paths"
 import { copyTextToClipboard } from "utils/Copy"
 import { getFileTypeIcon } from "utils/getFileTypeIcon"
 import { getIssueStatusColor } from "utils/getIssueStatusColor"
-import { getErrorMessage } from "utils/helper"
+import { getErrorMessage, getRandomMessage, issueDeleteMessages } from "utils/helper"
 import { insertParam } from "utils/insertParams"
 import CreateIssueRow from "./CreateIssueRow"
 import IssueAbout from "./IssueAbout"
@@ -57,11 +62,7 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   marginTop: 4,
   minWidth: 20,
 }))
-export const StyledListItemText = styled(ListItemText)(({ theme }) => ({
-  ".MuiTypography-root": {
-    fontSize: "0.80rem",
-  },
-}))
+export const StyledListItemText = styled(ListItemText)(({ theme }) => ({ ".MuiTypography-root": { fontSize: "0.80rem" } }))
 
 export default function IssueDetails({ project_id, issue_id, referrer = "issues", onClose }) {
   const { data: issue, isLoading, isError } = useGetIssueQuery(issue_id, { refetchOnMountOrArgChange: true })
@@ -70,6 +71,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
 
   const currentUserKey = useSelector(getCurrentUserKey)
 
+  const [deleteIssue, { isLoading: isDeletingIssue }] = useDeleteIssueMutation()
   const [deleteAttachment, { isLoading: isDeletingAttachment }] = useDeleteAttachmentMutation()
   const [updateTask] = useUpdateIssuesMutation()
   const { enqueueSnackbar } = useSnackbar()
@@ -84,7 +86,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   const handleMenu = type => event => {
     setAnchorEl({ [type]: event.currentTarget })
   }
-
+  
   const handleTabChange = (e, newValue) => {
     setTab(newValue)
   }
@@ -129,6 +131,18 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
     e.preventDefault()
     await deleteAttachment({ id, invalidatesTags: ["Issue"] }).unwrap()
   }
+  const handleIssueDelete = async () => {
+    try {
+      if (!window.confirm("Are you sure, you want to delete this issue?")) return
+      await deleteIssue(issue.id).unwrap()
+      const message = getRandomMessage(issueDeleteMessages)
+      enqueueSnackbar(message, { variant: "success" })
+      onClose()
+    } catch (error) {
+      const { message } = getErrorMessage(error)
+      enqueueSnackbar(message, { variant: "error" })
+    }
+  }
 
   if (isLoading) return <LinearProgress />
   if (isError) return <Alert severity="error">error</Alert>
@@ -146,6 +160,15 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
           <IconButton size="small" onClick={handleMenu("tracker")}>
             <IssueTypeIcon type_name={issue.tracker?.name} />
           </IconButton>
+        </StyledTooltip>
+        <StyledTooltip title="Copy issue URL to clipboard" placement="right">
+          <Typography
+            variant="body2"
+            pl={1}
+            sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText, cursor: "pointer" }}
+            onClick={() => copyTextToClipboard(`${window.location.origin}${PATH_DASHBOARD.projects.root}/${project_id}/issues/${issue.id}`)}>
+            #{issue.id}
+          </Typography>
         </StyledTooltip>
 
         <Menu anchorEl={anchorEl?.tracker} open={Boolean(anchorEl?.tracker)} onClose={onClose}>
