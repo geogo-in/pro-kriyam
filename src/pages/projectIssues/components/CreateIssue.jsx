@@ -17,6 +17,7 @@ import { DialogContent, DialogFooter, DialogHeader } from "pages/shared/StyledDi
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
+import { getErrorMessage } from "utils/helper"
 
 export default function CreateIssue({ project_id, status_id = "", sprint_id, onClose }) {
   const { project_id: project_id_params } = useParams()
@@ -32,7 +33,6 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
     subject: "",
     done_ratio: 0,
     project_id: project_id || project_id_params,
-    sprint_id,
   })
   const { data, isLoading: isProjectsLoading } = useGetProjectsQuery(state.project_id ? skipToken : undefined)
   const { data: project } = useGetProjectByIdQuery(state.project_id || skipToken)
@@ -64,13 +64,14 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
       e.preventDefault()
       const payload = await createTask({
         ...state,
+        sprint_id: sprint_id || (project.project_type.name === "Kanban" ? project.active_sprint?.id : undefined),
         start_date: moment(state.start_date).format("YYYY-MM-DD"),
         due_date: state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : undefined,
       }).unwrap()
       if (payload) onClose()
     } catch (r) {
-      console.error(r)
-      enqueueSnackbar(r.data?.errors?.join(", "), { variant: "error" })
+      const { message } = getErrorMessage(r)
+      enqueueSnackbar(message, { variant: "error" })
     }
   }
 
