@@ -23,6 +23,7 @@ export const PATH_DASHBOARD = {
   myWork: path(ROOTS_DASHBOARD, "/my-work"),
   members: path(ROOTS_DASHBOARD, "/members"),
   analytics: path(ROOTS_DASHBOARD, "/analytics"),
+  settings: path(ROOTS_DASHBOARD, "/settings"),
   help: path(ROOTS_DASHBOARD, "/help"),
   notifications: path(ROOTS_DASHBOARD, "/notifications"),
 }

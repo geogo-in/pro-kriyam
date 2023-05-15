@@ -4,14 +4,18 @@ import Slider from "@mui/material/Slider"
 // import Autocomplete from "@mui/material/Autocomplete"
 import { DatePicker } from "@mui/x-date-pickers"
 import { useCreateIssuesMutation, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import moment from "moment"
+import { enqueueSnackbar } from "notistack"
 import CustomDialogTitle from "pages/shared/CustomDialogTitle"
 import { useEffect, useState } from "react"
+import { getErrorMessage } from "utils/helper"
 
 const initialState = { start_date: moment(), due_date: "", subject: "", done_ratio: 0 }
 
 function TaskDetail({ onClose, project_id, editable, task }) {
   const [state, setState] = useState(initialState)
+  const { data: project } = useGetProjectByIdQuery(project_id)
   const [createTask, { isLoading }] = useCreateIssuesMutation()
   const [updateTask, { isLoading: isUpdating }] = useUpdateIssuesMutation()
 
@@ -24,12 +28,18 @@ function TaskDetail({ onClose, project_id, editable, task }) {
       if (editable) {
         await updateTask({ ...state, id: task.id, start_date: state.start_date.format("YYYY-MM-DD"), due_date: moment(state.due_date).format("YYYY-MM-DD") }).unwrap()
       } else {
-        await createTask({ ...state, project_id, start_date: state.start_date.format("YYYY-MM-DD"), due_date: moment(state.due_date).format("YYYY-MM-DD") }).unwrap()
+        await createTask({
+          ...state,
+          sprint_id: project.project_type.name === "Kanban" ? project.active_sprint?.id : undefined,
+          project_id,
+          start_date: state.start_date.format("YYYY-MM-DD"),
+          due_date: moment(state.due_date).format("YYYY-MM-DD"),
+        }).unwrap()
       }
       onClose()
     } catch (r) {
-      console.error(r)
-      window.alert(r.data?.errors?.[0])
+      const { message } = getErrorMessage(r)
+      enqueueSnackbar(message, { variant: "error" })
     }
   }
 

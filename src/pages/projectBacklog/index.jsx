@@ -1,6 +1,6 @@
 import AddIcon from "@mui/icons-material/Add"
-import { Box, Button } from "@mui/material"
-import { styled } from "@mui/material/styles"
+import { Box } from "@mui/material"
+import { StyledButton } from "pages/projectIssues"
 import CreateIssue from "pages/projectIssues/components/CreateIssue"
 import CustomDialog from "pages/shared/CustomDialog"
 import { SectionTitle } from "pages/shared/SectionTitle"
@@ -9,15 +9,6 @@ import { useState } from "react"
 import { Outlet, useParams } from "react-router-dom"
 import PageContainer from "../shared/PageContainer"
 import BacklogContainer from "./components/BacklogContainer"
-export const StyledButton = styled(Button)(({ theme }) => ({
-  borderRadius: 4,
-  backgroundColor: "#F1F5F9",
-  paddingLeft: 20,
-  paddingRight: 24,
-  lineHeight: 2.0,
-  color: "#000",
-  marginRight: 12,
-}))
 
 const ProjectBacklog = props => {
   const { project_id } = useParams()

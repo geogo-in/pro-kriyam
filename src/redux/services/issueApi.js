@@ -27,16 +27,12 @@ const issueApi = redmineApi.injectEndpoints({
       transformResponse: response => response.issue,
     }),
     createIssues: builder.mutation({
-      query: data => ({ url: `/issues.json`, method: "POST", body: { issue: data } }),
-      invalidatesTags: result => (result ? ["Issue", "Backlog"] : []),
+      query: issue => ({ url: `/api/issues.json`, method: "POST", body: { issue } }),
+      invalidatesTags: result => (result ? ["Issue", "Backlog", "ActiveSprint"] : []),
     }),
     deleteIssue: builder.mutation({
       query: id => ({ url: `api/issues/${id}.json`, method: "DELETE" }),
       invalidatesTags: result => (result ? ["ActiveSprint", "Backlog"] : []),
-    }),
-    createIssueFromSprint: builder.mutation({
-      query: data => ({ url: `/api/issues.json`, method: "POST", body: { issue: data } }),
-      invalidatesTags: result => (result ? ["Backlog", "Issue"] : []),
     }),
     updateIssues: builder.mutation({
       query: ({ id, invalidatesTags, ...data }) => {
@@ -105,7 +101,6 @@ export const {
   useGetIssueQuery,
   useCreateIssuesMutation,
   useUpdateIssuesMutation,
-  useCreateIssueFromSprintMutation,
   useDeleteIssueMutation,
 
   useGetProjectIssuesStatusesQuery,

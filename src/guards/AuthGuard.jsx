@@ -1,7 +1,7 @@
+import { isAdmin, isAuthenticated, isLoading } from "@redux/reducerSlices/user/userAuthSlice"
 import { useSelector } from "react-redux"
 import { Navigate, useLocation } from "react-router-dom"
 import LinearProgressBar from "../pages/shared/LinearProgressBar"
-import { isAdmin, isAuthenticated, isLoading } from "@redux/reducerSlices/user/userAuthSlice"
 import { PATH_AUTH } from "../routes/paths"
 
 export default function AuthGuard({ children, admin }) {

@@ -1,3 +1,5 @@
+import MuiListItem from "@mui/material/ListItem"
+import MuiListItemIcon from "@mui/material/ListItemIcon"
 import Menu from "@mui/material/Menu"
 import { alpha, styled } from "@mui/material/styles"
 import * as React from "react"
@@ -38,3 +40,49 @@ const CustomMenu = styled(props => (
   },
 }))
 export default CustomMenu
+
+const activeLinkMixin = theme => ({
+  backgroundColor: "#f1f5f9",
+  color: "black",
+  "& .MuiSvgIcon-root": {
+    height: "1.6em",
+    color: "black",
+  },
+  "& .MuiListItemText-primary": {
+    transition: "font-size .1s",
+
+    fontSize: "1.05rem",
+    fontWeight: 500,
+  },
+})
+
+export const ListItem = styled(MuiListItem)(({ theme, active }) => ({
+  padding: "7px 2px 7px 20px",
+  marginBottom: 4,
+  borderRadius: "4px",
+  position: "relative",
+  color: theme.palette.primary.defaultText,
+  "& .MuiSvgIcon-root": {
+    height: "1.6em",
+  },
+  "& .MuiListItemText-primary": {
+    transition: "font-size .1s",
+    fontSize: "0.9rem",
+    fontWeight: 500,
+  },
+  ...(active === "true" && {
+    ...activeLinkMixin(theme),
+  }),
+}))
+
+const activeLinkIconMixin = theme => ({
+  color: "#63F5AF",
+})
+
+export const ListItemIcon = styled(MuiListItemIcon)(({ theme, active }) => ({
+  color: "#5F6368",
+  minWidth: 48,
+  ...(active === "true" && {
+    ...activeLinkIconMixin(theme),
+  }),
+}))

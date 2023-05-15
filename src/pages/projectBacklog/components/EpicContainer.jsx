@@ -1,11 +1,11 @@
 import { Add, ArrowDropDown, Clear } from "@mui/icons-material"
-import { Box, Button, Card, IconButton, List, ListItem, ListItemButton, ListItemText, Menu, Stack, styled, Typography } from "@mui/material"
+import { Box, Button, Card, IconButton, List, ListItem, ListItemButton, ListItemText, Menu, Stack, Typography, styled } from "@mui/material"
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip"
+import { toggleEpic } from "@redux/reducerSlices/ui/projectUiSlice"
+import { useGetEpicQuery } from "@redux/services/issueApi"
 import CustomMenu from "pages/shared/CustomMenu"
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { toggleEpic } from "@redux/reducerSlices/ui/projectUiSlice"
-import { useGetEpicQuery } from "@redux/services/issueApi"
 import CreateEpic from "./CreateEpic"
 
 const BootstrapTooltip = styled(({ className, ...props }) => <Tooltip enterDelay={10} {...props} arrow classes={{ popper: className }} />)(({ theme }) => ({
@@ -65,7 +65,7 @@ export default function EpicContainer({ project_id, category_id, onFilter }) {
   if (minimize)
     return (
       <>
-        <StickyLineCard sx={{}}>
+        <StickyLineCard>
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: "4px 6px 4px 12px", borderBottom: "1px solid #ebebeb" }}>
             <Typography variant="body2" sx={{ padding: "6px 2px", color: theme => theme.palette.primary.defaultText, fontWeight: "bold" }}>
               EPICS
