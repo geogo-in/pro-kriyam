@@ -73,6 +73,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   const [newSubtask, setNewSubtask] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const inputFile = useRef()
+  const subtaskRef = useRef()
 
   const handleMenu = type => event => {
     setAnchorEl({ [type]: event.currentTarget })
@@ -167,13 +168,6 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
             </MenuItem>
           ))}
         </Menu>
-        <Typography
-          variant="body2"
-          pl={1}
-          sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText, cursor: "pointer" }}
-          onClick={() => copyTextToClipboard(`${window.location.origin}${PATH_DASHBOARD.projects.root}/${project_id}/issues/${issue.id}`)}>
-          #{issue.id}
-        </Typography>
       </Stack>
       <Box sx={{ minHeight: "44px" }}>
         <TypoTextField variant="h6" py={0.8} value={issue.subject} name="subject" onSubmit={handleUpdate} />
