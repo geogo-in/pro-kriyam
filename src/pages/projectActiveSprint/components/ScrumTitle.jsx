@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Check"
-import { Box, Dialog, Grid, LinearProgress } from "@mui/material"
+import { Box, Dialog, Grid } from "@mui/material"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import SprintClose from "pages/projectBacklog/components/SprintClose"
 import { SectionTitle } from "pages/shared/SectionTitle"
@@ -32,7 +32,7 @@ export default function ScrumTitle({ sprint, project_id, isLoading }) {
           )}
         </Grid>
         <Grid item lg={4}>
-          {sprint?.status !== "Error" && !isLoading && <LinearProgress />}
+          {/* {sprint?.status !== "Error" && !isLoading && <LinearProgress />} */}
         </Grid>
         <Grid item lg={4}>
           {sprint?.status !== "Error" && !isLoading && (

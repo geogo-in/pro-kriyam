@@ -5,6 +5,7 @@ import firebaseConfig from "config/firebase"
 import { getAnalytics } from "firebase/analytics"
 import { initializeApp } from "firebase/app"
 import { deleteToken, getMessaging, getToken, onMessage } from "firebase/messaging"
+import { enqueueSnackbar } from "notistack"
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
