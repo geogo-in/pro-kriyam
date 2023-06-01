@@ -60,7 +60,7 @@ const ProjectSprint = () => {
             ) : error ? (
               "error"
             ) : (
-              <ActiveSprintContainer {...{ columns, filter, setFilter, project_id, sprint }} />
+              <ActiveSprintContainer {...{ columns, setColumns, filter, setFilter, project_id, sprint }} />
             )}
           </Box>
         </OneBox>

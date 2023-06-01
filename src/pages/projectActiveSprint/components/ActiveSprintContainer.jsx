@@ -6,7 +6,7 @@ import React from "react"
 import { DragDropContext } from "react-beautiful-dnd"
 import Column from "./column"
 
-export default function ActiveSprintContainer({ columns, filter, setFilter, project_id, sprint }) {
+export default function ActiveSprintContainer({ columns, setColumns, filter, setFilter, project_id, sprint }) {
   const [updateTask] = useUpdateIssuesMutation()
 
   const onDragEnd = async ({ source, destination }) => {
