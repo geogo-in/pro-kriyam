@@ -1,17 +1,19 @@
 import { LoadingButton } from "@mui/lab"
 import { Checkbox, FormControlLabel, FormGroup, Grid, Stack, Typography } from "@mui/material"
+import { useGetIssueTypeQuery } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery, useUpdateProjectDetailsMutation } from "@redux/services/projectApi"
 import { useSnackbar } from "notistack"
+import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import Loading from "pages/shared/Loading"
 import { LineCard as Card } from "pages/shared/StyledCard"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { useGetIssueTypeQuery } from "@redux/services/issueApi"
-import { useGetProjectByIdQuery, useUpdateProjectDetailsMutation } from "@redux/services/projectApi"
 import { getErrorMessage } from "utils/helper"
 const ProjectSettingsIssueType = () => {
   const { project_id } = useParams()
   const { data: project, isLoading } = useGetProjectByIdQuery(project_id)
   const { data: trackers, isLoading: isGISLoading } = useGetIssueTypeQuery()
+  //console.log("Trackers", trackers)
   const [trackerIds, setTrackerIds] = useState([])
   const [updateProject] = useUpdateProjectDetailsMutation()
   const { enqueueSnackbar } = useSnackbar()
@@ -51,7 +53,7 @@ const ProjectSettingsIssueType = () => {
           </Typography>
           <FormGroup column>
             {trackers.map(tracker => (
-              <FormControlLabel key={tracker.id} control={<Checkbox checked={trackerIds.includes(tracker.id)} onChange={handleChange(tracker.id)} />} label={tracker.name} />
+              <FormControlLabel key={tracker.id} control={<Checkbox  checked={trackerIds.includes(tracker.id)} onChange={handleChange(tracker.id)} />} label={<IssueTypeIcon type_name={tracker.name} />} />
             ))}
           </FormGroup>
           <Stack direction="row" alignItems="center" sx={{ mt: 2 }}>
