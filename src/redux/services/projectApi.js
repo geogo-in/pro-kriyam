@@ -14,7 +14,7 @@ export const projectApi = redmineApi.injectEndpoints({
     }),
     getProjectById: builder.query({ query: projectId => `/api/projects/${projectId}.json`, transformResponse: response => response?.project, providesTags: ["Project"] }),
     getProjectMemberships: builder.query({
-      query: projectId => `/projects/${projectId}/memberships.json`,
+      query: projectId => ({ url: `/projects/${projectId}/memberships.json`, params: { limit: 1000 } }),
       transformResponse: response => response?.memberships,
       providesTags: ["ProjectMemberships"],
     }),
