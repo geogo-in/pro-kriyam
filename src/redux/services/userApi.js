@@ -30,7 +30,7 @@ const issueApi = redmineApi.injectEndpoints({
       query: ({ user_id, firebase_key }) => ({ url: `/api/users/${user_id}.json`, method: "PUT", body: { user: { firebase_key } } }),
       invalidatesTags: (_, error) => (error ? [] : ["Users"]),
     }),
-    getUsers: builder.query({ query: params => ({ url: `/users.json`, params }), providesTags: ["Users"] }),
+    getUsers: builder.query({ query: params => ({ url: `/users.json`, params: params || { limit: 10000 } }), providesTags: ["Users"] }),
     getUser: builder.query({ query: user_id => ({ url: `/users/${user_id}.json` }), transformResponse: result => result.user }),
 
     getRoles: builder.query({ query: () => ({ url: `/roles.json` }) }),
