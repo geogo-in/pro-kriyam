@@ -78,7 +78,6 @@ export default function ActiveSprintContainer({ columns, setColumns, filter, set
       }
     } catch (r) {
       console.error(r)
-      window.alert(r)
     }
   }
   return (
