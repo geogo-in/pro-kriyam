@@ -1,3 +1,5 @@
+import { RESET_PASSWORD_URL } from "config/constants"
+import { initializePushNotification } from "utils/firebase"
 import { unauthUser } from "../reducerSlices/user/userAuthSlice"
 import { redmineApi } from "./redmineApi"
 
@@ -16,13 +18,19 @@ const issueApi = redmineApi.injectEndpoints({
         if (auth.rememberMe) localStorage.setItem("token", response.user.api_key)
         return response.user
       },
-      onQueryStarted: async (_, { dispatch }) => {
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         await dispatch(unauthUser())
+        const { data } = await queryFulfilled
+        initializePushNotification(data.user)
       },
     }),
     createUser: builder.mutation({ query: user => ({ url: `/api/users.json`, method: "POST", body: { user } }), invalidatesTags: (_, error) => (error ? [] : ["Users"]) }),
     updateUser: builder.mutation({ query: ({ id, ...user }) => ({ url: `/users/${id}.json`, method: "PUT", body: { user } }), invalidatesTags: (_, error) => (error ? [] : ["Users"]) }),
-    getUsers: builder.query({ query: params => ({ url: `/users.json`, params }), providesTags: ["Users"] }),
+    updateUserFCM: builder.mutation({
+      query: ({ user_id, firebase_key }) => ({ url: `/api/users/${user_id}.json`, method: "PUT", body: { user: { firebase_key } } }),
+      invalidatesTags: (_, error) => (error ? [] : ["Users"]),
+    }),
+    getUsers: builder.query({ query: params => ({ url: `/users.json`, params: params || { limit: 10000 } }), providesTags: ["Users"] }),
     getUser: builder.query({ query: user_id => ({ url: `/users/${user_id}.json` }), transformResponse: result => result.user }),
 
     getRoles: builder.query({ query: () => ({ url: `/roles.json` }) }),
@@ -64,4 +72,4 @@ export const {
   useUpdateGroupMutation,
   useDeleteGroupMutation,
 } = issueApi
-export const { login } = issueApi.endpoints
+export const { login, updateUserFCM } = issueApi.endpoints

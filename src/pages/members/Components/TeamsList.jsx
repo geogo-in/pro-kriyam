@@ -1,25 +1,15 @@
 import AddIcon from "@mui/icons-material/Add"
-import { Box, Button, Grid, Link, Typography } from "@mui/material"
-import { styled } from "@mui/material/styles"
+import { Box, Grid, Link, Typography } from "@mui/material"
+import { useGetGroupsQuery } from "@redux/services/userApi"
 import CustomDialog from "pages/shared/CustomDialog"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import { SectionTitle } from "pages/shared/SectionTitle"
 import { Card } from "pages/shared/StyledCard"
 import React from "react"
 import { Link as RouterLink } from "react-router-dom"
-import { useGetGroupsQuery } from "@redux/services/userApi"
 import { PATH_DASHBOARD } from "routes/paths"
 import CreateTeam from "./CreateTeam"
-
-export const StyledButton = styled(Button)(({ theme }) => ({
-  borderRadius: 4,
-  backgroundColor: "#F1F5F9",
-  paddingLeft: 20,
-  paddingRight: 24,
-  lineHeight: 2.0,
-  color: "#000",
-  marginLeft: 8,
-}))
+import { StyledButton } from "./MembersList"
 
 const TeamsList = () => {
   const { data: teams, isLoading } = useGetGroupsQuery()

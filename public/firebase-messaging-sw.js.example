@@ -29,10 +29,9 @@ messaging.onBackgroundMessage(function (payload) {
       { action: 'view', title: 'View' },
       { action: 'close', title: 'Close' }
     ],
-    // data: {
-    //   url: payload.data.url
-    // },
-    // body: payload.data.body,
+    data: {
+      url: payload.fcmOptions.link
+    },
     // icon: payload.data.icon,
     // silent: true
   };

@@ -1,16 +1,17 @@
 import AddIcon from "@mui/icons-material/Add"
 import { Box, Button } from "@mui/material"
 import { styled } from "@mui/material/styles"
+import { useGetIssuesQuery } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import { omitBy } from "lodash"
 import CreateIssue from "pages/projectIssues/components/CreateIssue"
 import CustomDialog from "pages/shared/CustomDialog"
 import Loading from "pages/shared/Loading"
+import { ScrollableGrid } from "pages/shared/Scrollables"
 import { SectionTitle } from "pages/shared/SectionTitle"
 import { OneBox } from "pages/shared/SplitContainer"
 import { useState } from "react"
 import { Outlet, useParams } from "react-router-dom"
-import { useGetIssuesQuery } from "@redux/services/issueApi"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import PageContainer from "../shared/PageContainer"
 import IssueList from "./components/IssueList"
 import IssueListToolbar from "./components/IssueListToolbar"
@@ -24,22 +25,7 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   color: "#000",
   marginRight: 12,
 }))
-export const ScrollableGrid = styled(Box)(({ theme }) => ({
-  height: "calc( 100vh - 186px )",
-  width: "100%",
-  overflow: "auto",
-  "&::-webkit-scrollbar": {
-    width: 6,
-    height: 16,
-  },
-  "&::-webkit-scrollbar-thumb": {
-    backgroundColor: "#DFDFDF",
-    borderRadius: "1px",
-  },
-  "&::-webkit-scrollbar-track": {
-    backgroundColor: "transparent",
-  },
-}))
+
 export default function ProjectIssues() {
   const { project_id } = useParams()
   const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(project_id)
@@ -84,7 +70,7 @@ export default function ProjectIssues() {
               {data && (
                 <>
                   <IssueListToolbar {...data} {...{ project_id, filter, onFilter: handleFilter, onSearch: handleSearch }} />
-                  <ScrollableGrid>
+                  <ScrollableGrid style={{ height: "calc( 100vh - 186px )" }}>
                     <IssueList issues={data.issues} project_id={project_id} />
                   </ScrollableGrid>
                 </>

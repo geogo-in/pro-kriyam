@@ -37,7 +37,7 @@ const NewProjectsList = () => {
         Projects
         {Admin && (
           <Box>
-            <StyledButton sx={{}} startIcon={<AddIcon />} component={Link} to="/account/projects/new">
+            <StyledButton startIcon={<AddIcon />} component={Link} to="/account/projects/new">
               Create project
             </StyledButton>
           </Box>

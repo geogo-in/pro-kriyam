@@ -17,8 +17,9 @@ import { DialogContent, DialogFooter, DialogHeader } from "pages/shared/StyledDi
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
+import { getErrorMessage } from "utils/helper"
 
-export default function CreateIssue({ project_id, status_id = "", onClose }) {
+export default function CreateIssue({ project_id, status_id = "", sprint_id, onClose }) {
   const { project_id: project_id_params } = useParams()
   const [state, setState] = useState({
     assigned_to_id: "",
@@ -46,7 +47,7 @@ export default function CreateIssue({ project_id, status_id = "", onClose }) {
   useEffect(() => {
     const extra = {}
 
-    if (statuses?.length) extra.status_id = statuses[0].id
+    if (!state.status_id && statuses?.length) extra.status_id = statuses[0].id
     if (priorities?.length) extra.priority_id = priorities.find(p => p.name.toLowerCase() === NEW_ISSUE_PRIORITY)?.id || priorities[0].id
     if (project?.tracker?.length) extra.tracker_id = project.tracker.find(p => p.name.toLowerCase() === NEW_ISSUE_TRACKER)?.id || project?.tracker[0].id
     // if (project?.default_assignee) extra.assigned_to_id = project.default_assignee.id || ""
@@ -61,11 +62,16 @@ export default function CreateIssue({ project_id, status_id = "", onClose }) {
   const handleSubmit = async e => {
     try {
       e.preventDefault()
-      const payload = await createTask({ ...state, start_date: moment(state.start_date).format("YYYY-MM-DD"), due_date: state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : undefined }).unwrap()
+      const payload = await createTask({
+        ...state,
+        sprint_id: sprint_id || (project.project_type.name === "Kanban" ? project.active_sprint?.id : undefined),
+        start_date: moment(state.start_date).format("YYYY-MM-DD"),
+        due_date: state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : undefined,
+      }).unwrap()
       if (payload) onClose()
     } catch (r) {
-      console.error(r)
-      enqueueSnackbar(r.data?.errors?.join(", "), { variant: "error" })
+      const { message } = getErrorMessage(r)
+      enqueueSnackbar(message, { variant: "error" })
     }
   }
 

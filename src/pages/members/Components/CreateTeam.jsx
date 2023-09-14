@@ -6,10 +6,10 @@ import ListItem from "@mui/material/ListItem"
 import ListItemAvatar from "@mui/material/ListItemAvatar"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemText from "@mui/material/ListItemText"
+import { useCreateGroupsMutation, useGetUsersQuery, useUpdateGroupMutation } from "@redux/services/userApi"
 import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useCreateGroupsMutation, useGetUsersQuery, useUpdateGroupMutation } from "@redux/services/userApi"
 import { PATH_DASHBOARD } from "routes/paths"
 import { stringAvatar } from "utils/Avatar"
 import { getErrorMessage } from "utils/helper"
@@ -18,7 +18,7 @@ export default function CreateTeam({ onClose, team }) {
   const [state, setState] = useState({ name: "", user_ids: [] })
   const [createTeam, { isLoading }] = useCreateGroupsMutation()
   const [updateTeam, { isLoading: isUpdating }] = useUpdateGroupMutation()
-  const { data, isLoading: isUserLoading } = useGetUsersQuery({ limit: 10000 })
+  const { data, isLoading: isUserLoading } = useGetUsersQuery()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const loading = isLoading || isUpdating

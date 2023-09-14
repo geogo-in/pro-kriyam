@@ -1,7 +1,7 @@
 import { Box, List, ListItem, ListItemText, Typography } from "@mui/material"
 import ListItemIcon from "@mui/material/ListItemIcon"
-import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import { useGetIssueTypeQuery } from "@redux/services/issueApi"
+import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 
 const OtherDetails = ({ template }) => {
   const { data: trackers } = useGetIssueTypeQuery()
@@ -31,7 +31,7 @@ const OtherDetails = ({ template }) => {
       <Typography variant="caption">ISSUE STATUSES</Typography>
       <List>
         {["New", "In Progress", "Done"].map(status => (
-          <ListItem disablePadding key={status} sx={{}}>
+          <ListItem disablePadding key={status}>
             <ListItemText primary={status} sx={{ "& .MuiTypography-root": { fontSize: "0.8rem", fontWeight: 500 } }} />
           </ListItem>
         ))}

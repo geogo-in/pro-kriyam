@@ -1,9 +1,9 @@
 import { Add, Clear } from "@mui/icons-material"
 import { Box, Button, CircularProgress, IconButton, InputBase, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Tooltip } from "@mui/material"
+import { useCreateIssuesMutation, useGetIssueTypeQuery } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import { useEffect, useState } from "react"
-import { useCreateIssueFromSprintMutation, useGetIssueTypeQuery } from "@redux/services/issueApi"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 
 import { styled } from "@mui/material"
 
@@ -33,7 +33,7 @@ const SmallButton = styled(Button)(({ theme }) => ({
 }))
 export default function CreateIssueRow({ isEditable, sprint_id, parent_issue_id, project_id, category_id }) {
   const [editable, setEditable] = useState(false)
-  const [createTask, { isLoading }] = useCreateIssueFromSprintMutation()
+  const [createTask, { isLoading }] = useCreateIssuesMutation()
   const { data: trackers } = useGetIssueTypeQuery()
   const [state, setState] = useState({ subject: "", tracker_id: "", tracker_name: "" })
   const [anchorEl, setAnchorEl] = useState()

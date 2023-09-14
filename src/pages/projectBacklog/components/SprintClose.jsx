@@ -70,7 +70,7 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
         <Button disabled={loading} onClick={onClose}>
           Cancel
         </Button>
-        <LoadingButton loading={loading} variant="contained" color={isDelete && "error"} type="submit">
+        <LoadingButton loading={loading} variant="contained" color={isDelete ? "error" : "primary"} type="submit">
           {isDelete ? "Delete" : "Complete"}
         </LoadingButton>
       </DialogActions>

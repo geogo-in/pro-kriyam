@@ -1,6 +1,7 @@
 import { redmineApi } from "@redux/services/redmineApi"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
+import { removeFirebaseToken } from "utils/firebase"
 import { login } from "../../services/userApi"
 
 // authUserForToken
@@ -20,6 +21,7 @@ export const unauthUser = createAsyncThunk("user/unauthUser", async (_, { dispat
   console.debug("un auth user...")
   localStorage.clear()
   dispatch(redmineApi.util.resetApiState())
+  removeFirebaseToken()
 })
 
 const userAuthSlice = createSlice({
