@@ -1,11 +1,11 @@
-import { NotificationsNoneSharp, Settings } from "@mui/icons-material"
+import { Add, NotificationsNoneSharp, Settings } from "@mui/icons-material"
 import ProfileIcon from "@mui/icons-material/AccountBoxOutlined"
 import AddIcon from "@mui/icons-material/Add"
 import AddIssueIcon from "@mui/icons-material/AddTask"
 import LogoutIcon from "@mui/icons-material/Logout"
 import AddUserIcon from "@mui/icons-material/PersonAdd"
 import AddProjectIcon from "@mui/icons-material/PostAdd"
-import { IconButton, ListItem, ListItemText, Typography } from "@mui/material"
+import { IconButton, ListItem, ListItemText, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import { alpha, styled } from "@mui/material/styles"
@@ -63,6 +63,9 @@ const QuickActionButton = () => {
   const [anchorEl, setAnchorEl] = useState({ profile: null, add: null, notification: null })
   const [state, setState] = useState()
   const navigate = useNavigate()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
   const handleClick = type => event => {
     setAnchorEl({ [type]: event.currentTarget })
   }
@@ -84,19 +87,16 @@ const QuickActionButton = () => {
   }
 
   return (
-    <div>
-      <PrimaryRoundButton
-        id="demo-customized-button"
-        aria-controls={open ? "demo-customized-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        variant="contained"
-        disableElevation
-        startIcon={<AddIcon />}
-        onClick={handleClick("add")}
-        sx={{ mr: 2 }}>
-        Add
-      </PrimaryRoundButton>
+    <Stack direction="row" alignItems="center" spacing={1}>
+      {isMobile ? (
+        <IconButton onClick={handleClick("add")} color="primary">
+          <Add />
+        </IconButton>
+      ) : (
+        <PrimaryRoundButton variant="contained" disableElevation startIcon={<AddIcon />} onClick={handleClick("add")}>
+          Add
+        </PrimaryRoundButton>
+      )}
       <StyledMenu anchorEl={anchorEl.add} PaperProps={PAPER_PROPS} open={Boolean(anchorEl.add)} onClose={handleMenuClose}>
         <MenuItem disableRipple onClick={handleMenu("issue")}>
           <AddIssueIcon />
@@ -116,7 +116,7 @@ const QuickActionButton = () => {
         )}
       </StyledMenu>
 
-      <IconButton onClick={handleClick("notification")} sx={{ mr: 2, color: "primary.main" }}>
+      <IconButton onClick={handleClick("notification")} sx={{ color: "primary.main" }}>
         <NotificationsNoneSharp />
       </IconButton>
       <StyledMenu anchorEl={anchorEl.notification} PaperProps={PAPER_PROPS} open={Boolean(anchorEl.notification)} onClose={handleMenuClose} onClick={handleMenuClose}>
@@ -150,7 +150,7 @@ const QuickActionButton = () => {
       <CustomDialog back open={Boolean(state)} onClose={handleClose}>
         {state === "member" ? <CreateMember onClose={handleClose} /> : state === "issue" ? <CreateIssue onClose={handleClose} /> : null}
       </CustomDialog>
-    </div>
+    </Stack>
   )
 }
 
