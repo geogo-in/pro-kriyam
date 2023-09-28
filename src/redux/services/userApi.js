@@ -1,5 +1,6 @@
 import { RESET_PASSWORD_URL } from "config/constants"
 import { initializePushNotification } from "utils/firebase"
+import { getErrorMessage } from "utils/helper"
 import { unauthUser } from "../reducerSlices/user/userAuthSlice"
 import { redmineApi } from "./redmineApi"
 
@@ -8,6 +9,7 @@ const issueApi = redmineApi.injectEndpoints({
     forgotPass: builder.mutation({ query: ({ mail }) => ({ url: `/api/users/lost_password`, method: "GET", params: { mail, url: RESET_PASSWORD_URL } }) }),
     resetPass: builder.mutation({
       query: state => ({ url: `/api/users/update_password`, method: "PATCH", body: { token: state.token, user: { password: state.password, password_confirmation: state.confirm } } }),
+      transformErrorResponse: error => getErrorMessage(error),
     }),
     getUserMemberships: builder.query({
       query: () => ({ url: `/users/current.json`, params: { include: "memberships,groups" } }),

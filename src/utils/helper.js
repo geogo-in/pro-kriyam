@@ -15,6 +15,7 @@ export const getErrorMessage = error => {
       if (Array.isArray(errors)) message = errors.map(err => (typeof err === "string" ? err : `${err.rule} : ${err.field}`)).join(", ")
       else if (error.data.message?.message) message = error.data.message?.message
       else if (error.data.message) message = error.data.message
+      else if (typeof error.data.error === "string") message = error.data.error
     }
     console.error("Error => ", error.response?.data || error, message)
     return { error: true, message }
