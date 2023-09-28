@@ -13,7 +13,7 @@ const ProjectSettingsIssueType = () => {
   const { project_id } = useParams()
   const { data: project, isLoading } = useGetProjectByIdQuery(project_id)
   const { data: trackers, isLoading: isGISLoading } = useGetIssueTypeQuery()
-  //console.log("Trackers", trackers)
+
   const [trackerIds, setTrackerIds] = useState([])
   const [updateProject] = useUpdateProjectDetailsMutation()
   const { enqueueSnackbar } = useSnackbar()
@@ -53,7 +53,11 @@ const ProjectSettingsIssueType = () => {
           </Typography>
           <FormGroup column>
             {trackers.map(tracker => (
-              <FormControlLabel key={tracker.id} control={<Checkbox  checked={trackerIds.includes(tracker.id)} onChange={handleChange(tracker.id)} />} label={<IssueTypeIcon type_name={tracker.name} />} />
+              <FormControlLabel
+                key={tracker.id}
+                control={<Checkbox checked={trackerIds.includes(tracker.id)} onChange={handleChange(tracker.id)} />}
+                label={<IssueTypeIcon type_name={tracker.name} />}
+              />
             ))}
           </FormGroup>
           <Stack direction="row" alignItems="center" sx={{ mt: 2 }}>
