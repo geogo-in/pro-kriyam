@@ -47,7 +47,7 @@ export default function Sprint({ sprint, activeSprint, project_id, filter }) {
         <SprintHeader {...sprint} {...{ activeSprint, project_id, backlogEpicWidth }} />
         <StrictModeDroppable droppableId={sprint.id}>
           {(provided, snapshot) => (
-            <Box ref={provided.innerRef} minHeight={40} sx={{}} style={getListStyle(snapshot.isDraggingOver)}>
+            <Box ref={provided.innerRef} minHeight={40} style={getListStyle(snapshot.isDraggingOver)}>
               {sprint.issues.length > 0 ? (
                 <>
                   {sprint.issues?.map((itemObject, index) => (

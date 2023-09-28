@@ -6,6 +6,7 @@ import EpicIcon from "@mui/icons-material/Pages"
 import StoryIcon from "@mui/icons-material/PlaylistAddCheck"
 import SubTaskIcon from "@mui/icons-material/StyleOutlined"
 import TaskIcon from "@mui/icons-material/VerticalSplitOutlined"
+import React from "react"
 
 export default function IssueTypeIcon({ type_id, type_name }) {
   if (type_name) {

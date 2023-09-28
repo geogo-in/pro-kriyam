@@ -1,40 +1,16 @@
 import { Box, Stack } from "@mui/material"
 import { styled } from "@mui/system"
+import { setWindowWidth } from "@redux/reducerSlices/ui/projectUiSlice"
+import { useAddTaskToSprintOrBacklogMutation, useGetBacklogDetailsQuery } from "@redux/services/redmineApi"
 import { omitBy } from "lodash"
 import { useSnackbar } from "notistack"
 import { useEffect, useState } from "react"
 import { DragDropContext } from "react-beautiful-dnd"
 import { useDispatch } from "react-redux"
-import { setWindowWidth } from "@redux/reducerSlices/ui/projectUiSlice"
-import { useAddTaskToSprintOrBacklogMutation, useGetBacklogDetailsQuery } from "@redux/services/redmineApi"
 import EpicContainer from "./EpicContainer"
 import FilterContainer from "./FilterContainer"
 import LoadingSkeleton from "./LoadingSkeleton"
 import Sprint from "./Sprint"
-
-export const ScrollableGrid = styled(Stack)(({ theme }) => ({
-  marginTop: "0px",
-  paddingTop: 12,
-  overflowX: "auto",
-  overflowY: "auto",
-  outlineOffset: "-2px",
-  position: "relative",
-  height: "calc( 100vh - 182px )",
-  width: "100%",
-
-  // },
-  "&::-webkit-scrollbar": {
-    width: 6,
-    height: 16,
-  },
-  "&::-webkit-scrollbar-thumb": {
-    backgroundColor: "#DFDFDF",
-    borderRadius: "1px",
-  },
-  "&::-webkit-scrollbar-track": {
-    backgroundColor: "transparent",
-  },
-}))
 
 export default function BacklogContainer({ project_id, ...props }) {
   const dispatch = useDispatch()
@@ -154,20 +130,40 @@ export default function BacklogContainer({ project_id, ...props }) {
         ) : (
           <>
             <EpicContainer project_id={project_id} onFilter={handleFilter} category_id={filter.category_id} />
-            <>
-              <DragDropContext onDragEnd={onDragEnd}>
-                <ScrollableGrid direction="column">
-                  {Object.values(columns).map(sprint => {
-                    if (sprint.aasm_state === "running" || sprint.aasm_state === "planned" || sprint.id === "backlog")
-                      return <Sprint key={sprint.id} {...{ sprint, activeSprint }} project_id={project_id} filter={filter} />
-                    return ""
-                  })}
-                </ScrollableGrid>
-              </DragDropContext>
-            </>
+
+            <DragDropContext onDragEnd={onDragEnd}>
+              <BacklogScrollableGrid direction="column">
+                {Object.values(columns).map(sprint => {
+                  if (sprint.aasm_state === "running" || sprint.aasm_state === "planned" || sprint.id === "backlog")
+                    return <Sprint key={sprint.id} {...{ sprint, activeSprint }} project_id={project_id} filter={filter} />
+                  return ""
+                })}
+              </BacklogScrollableGrid>
+            </DragDropContext>
           </>
         )}
       </Stack>
     </>
   )
 }
+
+const BacklogScrollableGrid = styled(Stack)(({ theme }) => ({
+  height: "calc( 100vh - 182px )",
+  marginTop: 0,
+  paddingTop: 12,
+  overflow: "auto",
+  outlineOffset: "-2px",
+  position: "relative",
+  width: "100%",
+  "&::-webkit-scrollbar": {
+    width: 6,
+    height: 16,
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "#DFDFDF",
+    borderRadius: "1px",
+  },
+  "&::-webkit-scrollbar-track": {
+    backgroundColor: "transparent",
+  },
+}))

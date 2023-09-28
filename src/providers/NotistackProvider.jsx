@@ -25,7 +25,7 @@ export default function NotistackProvider({ children }) {
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
       ref={notistackRef}
       maxSnack={5}
-      autoHideDuration={30000}>
+      autoHideDuration={8000}>
       {children}
     </SnackbarProvider>
   )

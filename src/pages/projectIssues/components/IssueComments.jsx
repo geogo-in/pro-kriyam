@@ -67,7 +67,7 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
           Add a comment
         </Typography>
         <Box>
-          <Editor value={comment} onChange={e => setComment(e)} style={{ height: 250 }} people={data?.map(({ user }) => ({ id: user.id, value: user.name }))} />
+          <Editor value={comment} onChange={e => setComment(e)} style={{ height: 250 }} people={data?.filter(d => d.user).map(({ user }) => ({ id: user.id, value: user.name }))} />
         </Box>
 
         <LoadingButton loading={isLoading} mt={1} variant="contained" onClick={handleIssueUpdate({ notes: comment })} sx={{ alignSelf: "flex-start", borderRadius: "4px" }}>

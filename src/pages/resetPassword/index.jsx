@@ -27,8 +27,7 @@ const ResetPassword = ({ ...props }) => {
       enqueueSnackbar(message, { variant: status === "Success" ? "success" : "error" })
       if (status === "Success") navigate("../sign_in")
     } catch (error) {
-      console.error(error)
-      enqueueSnackbar("Password could not be reset, please try again.", { variant: "error" })
+      enqueueSnackbar(error.message || "Password could not be reset, please try again.", { variant: "error" })
     }
   }
   const handleClickShowPassword = e => {

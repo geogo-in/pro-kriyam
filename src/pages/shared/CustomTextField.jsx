@@ -20,28 +20,28 @@ export const SelectWithIcon = styled(props => <TextField select SelectProps={{ d
   },
 }))
 
-export const SleekSelectWithIcon = styled(props => <TextField select SelectProps={{ displayEmpty: true }} InputLabelProps={{ shrink: true }} size="small" {...props} />)(
-  ({ theme, bgcolor = "white", minWidth = 120 }) => {
-    return {
-      marginTop: "4px",
-      minWidth: `${minWidth}px !important`,
-      background: bgcolor,
-      borderRadius: 4,
-      ".MuiSelect-select": {
-        padding: "6px 14px 6px 14px !important",
-        // paddingLeft: 4,
-        display: "flex",
-        alignItems: "center",
-        ".MuiListItemIcon-root": {
-          minWidth: 40,
-        },
-        ".MuiListItemText-root": {
-          margin: 0,
-        },
+export const SleekSelectWithIcon = styled(props => <TextField select SelectProps={{ displayEmpty: true }} InputLabelProps={{ shrink: true }} size="small" {...props} />, {
+  shouldForwardProp: prop => prop !== "minWidth",
+})(({ theme, bgcolor = "white", minWidth = 120 }) => {
+  return {
+    marginTop: "4px",
+    minWidth: `${minWidth}px !important`,
+    background: bgcolor,
+    borderRadius: 4,
+    ".MuiSelect-select": {
+      padding: "6px 14px 6px 14px !important",
+      // paddingLeft: 4,
+      display: "flex",
+      alignItems: "center",
+      ".MuiListItemIcon-root": {
+        minWidth: 40,
       },
-      "& fieldset": {
-        borderColor: bgcolor,
+      ".MuiListItemText-root": {
+        margin: 0,
       },
-    }
+    },
+    "& fieldset": {
+      borderColor: bgcolor,
+    },
   }
-)
+})

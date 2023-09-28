@@ -1,8 +1,7 @@
 import { authUserForToken, unauthUser } from "@redux/reducerSlices/user/userAuthSlice"
 import store from "@redux/store"
 import axios from "axios"
-import { enqueueSnackbar } from "notistack"
-import { getFirebaseToken, onMessageListener } from "utils/firebase"
+import { initializePushNotification } from "utils/firebase"
 import { API_ENDPOINT } from "./config/constants"
 
 export class initializeApp {
@@ -11,30 +10,17 @@ export class initializeApp {
     this.token = localStorage.getItem("token")
     this.initializeAxios()
     this.checkAuth()
-    this.initializePushNotification()
   }
 
-  checkAuth() {
+  async checkAuth() {
     if (this.token) {
-      store.dispatch(authUserForToken(this.token)).unwrap()
+      const user = await store.dispatch(authUserForToken(this.token)).unwrap()
+      initializePushNotification(user)
     } else {
       store.dispatch(unauthUser())
     }
   }
   initializeAxios() {
     axios.defaults.baseURL = API_ENDPOINT
-  }
-
-  initializePushNotification() {
-    getFirebaseToken(token => {
-      // store.dispatch(updateFCMToken())
-    })
-
-    onMessageListener()
-      .then(payload => {
-        enqueueSnackbar(payload.notification.body, { title: payload.notification.title })
-        console.debug(payload)
-      })
-      .catch(err => console.error("push notification failed: ", err))
   }
 }
