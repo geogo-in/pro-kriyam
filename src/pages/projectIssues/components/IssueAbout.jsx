@@ -15,9 +15,14 @@ import TypoTextField from "pages/shared/TypoTextField"
 import { fDate } from "utils/formatDate"
 
 export const StyledListItemText = styled(ListItemText)(({ theme }) => ({
-  ".MuiTypography-root": {
-    fontSize: "0.80rem",
-  },
+  ".MuiTypography-root": { fontSize: "0.80rem" },
+}))
+const TableCell = styled(MuiTableCell)(({ theme }) => ({
+  padding: "4px 8px",
+  // borderBottom: "1px solid #EEE",
+  color: theme.palette.primary.secondaryText,
+  "&:first-of-child": { paddingLeft: "4px", fontWeight: 500 },
+  "&:last-child": { paddingRight: "32px" },
 }))
 
 export default function IssueAbout({ project_id, comments, sprint, author, priority, assigned_to, category, created_on, updated_on, ...issue }) {
@@ -39,19 +44,6 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
   const handleUpdate = async data => {
     handleIssueUpdate(data)()
   }
-
-  const TableCell = styled(MuiTableCell)(({ theme }) => ({
-    padding: "4px 8px",
-    // borderBottom: "1px solid #EEE",
-    color: theme.palette.primary.secondaryText,
-    "&:first-of-child": {
-      paddingLeft: "4px",
-      fontWeight: 500,
-    },
-    "&:last-child": {
-      paddingRight: "32px",
-    },
-  }))
 
   return (
     <TableContainer>
@@ -117,19 +109,8 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
           <TableRow sx={{ "td, th": { border: 0 } }}>
             <TableCell>Story Point</TableCell>
             <TableCell align="left">
-              <Box sx={{ minHeight: 60, display: "flex", alignItems: "center", width: "300px" }}>
-                <TypoTextField
-                  type="number"
-                  placeholder=""
-                  my={0.8}
-                  minWidth={150}
-                  maxWidth={300}
-                  bgcolor="#f1f5f9"
-                  p={0.8}
-                  value={issue.story_point}
-                  name="story_point"
-                  onSubmit={handleUpdate}
-                />
+              <Box sx={{ minHeight: 50, display: "flex", alignItems: "center", width: "300px" }}>
+                <TypoTextField type="number" placeholder="" my={0.8} maxWidth={300} bgcolor="#f1f5f9" p={0.8} value={issue.story_point} name="story_point" onSubmit={handleUpdate} />
               </Box>
             </TableCell>
           </TableRow>

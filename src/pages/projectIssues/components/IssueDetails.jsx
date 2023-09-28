@@ -149,7 +149,9 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
           </Typography>
         )}
         <StyledTooltip title={issue.tracker?.name}>
-          <IssueTypeIcon type_name={issue.tracker?.name} />
+          <Box p={1} display="flex">
+            <IssueTypeIcon type_name={issue.tracker?.name} />
+          </Box>
         </StyledTooltip>
         <StyledTooltip title="Copy issue URL to clipboard" placement="right">
           <Typography
