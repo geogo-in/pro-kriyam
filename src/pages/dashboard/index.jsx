@@ -8,11 +8,11 @@ import StarredProjects from "./components/StarredProjects"
 const Dashboard = () => (
   <PageContainer>
     <Box sx={{ flexDirection: "row", display: "flex" }}>
-      <LeftBox sx={{ px: 3, py: 1, width: ["100%"] }}>
+      <LeftBox sx={{ px: 3, py: 1 }}>
         <StarredProjects />
         <ActiveSprints />
       </LeftBox>
-      <RightBox sx={{ px: 3, py: 1, display: ["none", "none", "none", "block"] }}>{/* <ActivityStream /> */}</RightBox>
+      <RightBox sx={{ px: 3, py: 1 }}>{/* <ActivityStream /> */}</RightBox>
     </Box>
   </PageContainer>
 )

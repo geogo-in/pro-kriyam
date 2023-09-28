@@ -6,10 +6,16 @@ export const LeftBox = styled(Box)(({ theme }) => ({
   background: "white",
   minHeight: `calc( 100vh - 64px )`,
   width: `calc( 100% - ${RBoxWidth}px )`,
+  [theme.breakpoints.down("lg")]: {
+    width: "100%",
+  },
 }))
 export const RightBox = styled(Box)(({ theme }) => ({
   width: RBoxWidth,
   borderLeft: "1px solid #f1f5f9",
+  [theme.breakpoints.down("lg")]: {
+    display: "none",
+  },
 }))
 export const OneBox = styled(Box)(({ theme }) => ({
   background: "white",
