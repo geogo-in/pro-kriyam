@@ -144,6 +144,16 @@ export default function Router() {
       children: [{ path: "notifications", element: <Notifications /> }],
     },
 
+    // Issues routes redirect
+    {
+      path: "issues/:issue_id",
+      element: (
+        <AuthGuard>
+          <IssueDetails />
+        </AuthGuard>
+      ),
+    },
+
     // Main Routes
     {
       path: "*",
@@ -189,6 +199,7 @@ const ProjectRoadmap = Loadable(lazy(() => import(/* webpackChunkName: "ProjectR
 const ProjectIssues = Loadable(lazy(() => import(/* webpackChunkName: "ProjectIssues" */ "../pages/projectIssues")))
 const ProjectIssueDetails = Loadable(lazy(() => import(/* webpackChunkName: "ProjectIssueDetails" */ "../pages/projectIssueDetails")))
 const ProjectReports = Loadable(lazy(() => import(/* webpackChunkName: "ProjectReports" */ "../pages/projectReports")))
+const IssueDetails = Loadable(lazy(() => import(/* webpackChunkName: "ProjectIssueDetails" */ "../pages/issueDetails")))
 
 const ProjectSettings = Loadable(lazy(() => import(/* webpackChunkName: "ProjectSettings" */ "../pages/projectSettings")))
 const ProjectSettingsMembers = Loadable(lazy(() => import(/* webpackChunkName: "ProjectSettingsMembers" */ "../pages/projectSettingsMembers")))

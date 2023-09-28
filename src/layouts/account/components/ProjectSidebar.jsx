@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import Loading from "pages/shared/Loading"
 import { Navigate } from "react-router-dom"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import { getErrorMessage } from "utils/helper"
 import ProjectSidebarHeader from "./ProjectSidebarHeader"
 import ProjectSidebarLinks from "./ProjectSidebarLinks"
