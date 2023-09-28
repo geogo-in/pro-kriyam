@@ -1,4 +1,4 @@
-import { Attachment, Delete, DeleteOutline, Download, MoreVert } from "@mui/icons-material"
+import { Attachment, DeleteOutline, Download } from "@mui/icons-material"
 import AccountTreeIcon from "@mui/icons-material/AccountTreeOutlined"
 import { LoadingButton } from "@mui/lab"
 import {
@@ -22,6 +22,7 @@ import Box from "@mui/material/Box"
 import CardMedia from "@mui/material/CardMedia"
 import { getCurrentUserKey } from "@redux/reducerSlices/user/userAuthSlice"
 import { useDeleteIssueMutation, useGetIssueQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import { useDeleteAttachmentMutation } from "@redux/services/redmineApi"
 import { useSnackbar } from "notistack"
 import { SleekSelectWithIcon } from "pages/shared/CustomTextField"
@@ -61,8 +62,8 @@ export const StyledListItemText = styled(ListItemText)(({ theme }) => ({ ".MuiTy
 export default function IssueDetails({ project_id, issue_id, referrer = "issues", onClose }) {
   const { data: issue, isLoading, isError } = useGetIssueQuery(issue_id, { refetchOnMountOrArgChange: true })
   const { data: statuses } = useGetProjectIssuesStatusesQuery(project_id)
+  const { data: project } = useGetProjectByIdQuery(project_id)
   const currentUserKey = useSelector(getCurrentUserKey)
-
   const [deleteIssue, { isLoading: isDeletingIssue }] = useDeleteIssueMutation()
   const [deleteAttachment, { isLoading: isDeletingAttachment }] = useDeleteAttachmentMutation()
   const [updateTask] = useUpdateIssuesMutation()
@@ -71,31 +72,26 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   const [isUploading, setIsUploading] = useState(false)
   const [newSubtask, setNewSubtask] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
-
   const inputFile = useRef()
-  const subtaskRef = useRef(null)
+  const subtaskRef = useRef()
 
-  const handleClick = event => {
-    setAnchorEl(event.currentTarget)
-  }
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleMenu = type => event => {
+    setAnchorEl({ [type]: event.currentTarget })
   }
   const handleTabChange = (e, newValue) => {
     setTab(newValue)
   }
-
   const handleCreateSubtask = async () => {
     await setNewSubtask(true)
     await subtaskRef.current.scrollIntoView({ behavior: "smooth" })
   }
-
   const handleUpdate = async data => {
     await updateTask({ id: issue_id, ...data }).unwrap()
   }
   const handleIssueUpdate = data => async () => {
     try {
       await updateTask({ id: issue_id, ...data }).unwrap()
+      onClose()
     } catch (r) {
       const { message } = getErrorMessage(r)
       enqueueSnackbar(message, { variant: "error" })
@@ -149,7 +145,9 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
           </Typography>
         )}
         <StyledTooltip title={issue.tracker?.name}>
-          <IssueTypeIcon type_name={issue.tracker?.name} />
+          <IconButton size="small" onClick={handleMenu("tracker")}>
+            <IssueTypeIcon type_name={issue.tracker?.name} />
+          </IconButton>
         </StyledTooltip>
         <StyledTooltip title="Copy issue URL to clipboard" placement="right">
           <Typography
@@ -160,18 +158,15 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
             #{issue.id}
           </Typography>
         </StyledTooltip>
-
-        <Box flex={1} />
-        <IconButton onClick={handleClick}>
-          <MoreVert />
-        </IconButton>
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-          <MenuItem onClick={handleIssueDelete}>
-            <ListItemIcon>
-              <Delete fontSize="small" />
-            </ListItemIcon>
-            Delete
-          </MenuItem>
+        <Menu anchorEl={anchorEl?.tracker} open={Boolean(anchorEl?.tracker)} onClose={onClose}>
+          {project?.tracker?.map(item => (
+            <MenuItem key={item.id} onClick={handleIssueUpdate({ tracker_id: item.id })}>
+              <ListItemIcon>
+                <IssueTypeIcon type_name={item.name} type_id={item.id} />
+              </ListItemIcon>
+              <ListItemText>{item.name}</ListItemText>
+            </MenuItem>
+          ))}
         </Menu>
       </Stack>
       <Box sx={{ minHeight: "44px" }}>
@@ -283,7 +278,6 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
         Details
       </Typography>
       <IssueAbout {...issue} project_id={project_id} />
-
       <Box sx={{ borderTop: "1px solid rgba(229,231,235, 0.5)", pb: 2, mt: 3 }}>
         <StyledTabs value={tab} onChange={handleTabChange}>
           <StyledTab label="Comments" value={0} />
