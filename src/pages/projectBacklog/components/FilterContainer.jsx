@@ -35,7 +35,6 @@ export default function FilterContainer({ filter, setFilter, project_id }) {
   const { data: priorities } = useGetIssuePriorityQuery()
   const { data: statuses } = useGetProjectIssuesStatusesQuery(project_id)
   const { data: project } = useGetProjectByIdQuery(project_id)
-
   const { data: members } = useGetProjectMembershipsQuery(project_id)
   const [state, setState] = useState({ search: "", assigned_to_id: null })
   const [filterOpen, setFilterOpen] = useState()
@@ -61,7 +60,6 @@ export default function FilterContainer({ filter, setFilter, project_id }) {
   const handleUnassigned = () => {
     setFilter(f => ({ ...f, unassigned_issues: f.unassigned_issues ? undefined : true }))
   }
-
   const handleDialogClose = e => {
     setFilterOpen()
   }

@@ -12,7 +12,11 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
   const { data: sprints } = useListSprintsQuery({ project_id })
   const [move_sprint_id, setMoveSprintId] = useState("backlog")
   const { enqueueSnackbar } = useSnackbar()
-  const completeIssue = sprint.issues?.filter(issue => issue.closed_on) || []
+  const completeIssue = sprint.issues?.filter(issue => issue.closed_on) || sprint.issue_status?.find(status => status.is_closed)?.issues || []
+  const openIssueCount = sprint.issues?.length
+    ? sprint.issues?.length - completeIssue.length
+    : sprint.issue_status?.filter(status => !status.is_closed).reduce((acc, v) => [...acc, ...v.issues], []).length || 0
+
   const isDelete = type === "Delete Sprint"
   const loading = isDeleting || isLoading
 
@@ -37,7 +41,7 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
       enqueueSnackbar(message, { variant: "error" })
     }
   }
-
+  console.log({ sprint }, openIssueCount)
   return (
     <Box component="form" onSubmit={handleUpdateSprint} minWidth={500}>
       <CustomDialogTitle onClose={onClose}>Complete sprint: {sprint.name}</CustomDialogTitle>
@@ -49,7 +53,7 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
           {completeIssue.length} Completed issue(s)
         </Typography>
         <Typography component={"li"} variant="body2" color={theme => theme.palette.primary.defaultText}>
-          {sprint.issues?.length - completeIssue.length || 0} Open issue(s)
+          {openIssueCount} Open issue(s)
         </Typography>
         <br />
         <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText, fontWeight: 500 }}>
@@ -58,10 +62,10 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
         <TextField value={move_sprint_id} onChange={handleChange} select sx={{ width: 300, mt: 1 }}>
           <MenuItem value={"backlog"}>Backlog</MenuItem>
           {sprints
-            ?.filter(sprint => sprint.id != sprint_id)
-            .map(sprint => (
-              <MenuItem key={sprint.id} value={sprint.id}>
-                {sprint.name}
+            ?.filter(_sprint => _sprint.id != sprint_id)
+            .map(_sprint => (
+              <MenuItem key={_sprint.id} value={_sprint.id}>
+                {_sprint.name}
               </MenuItem>
             ))}
         </TextField>
