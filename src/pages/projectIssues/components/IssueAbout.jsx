@@ -110,7 +110,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
             <TableCell>Story Point</TableCell>
             <TableCell align="left">
               <Box sx={{ minHeight: 50, display: "flex", alignItems: "center", width: "300px" }}>
-                <TypoTextField type="number" placeholder="" my={0.8} maxWidth={300} bgcolor="#f1f5f9" p={0.8} value={issue.story_point} name="story_point" onSubmit={handleUpdate} />
+                <TypoTextField type="number" placeholder="&nbsp;" my={0.8} maxWidth={300} bgcolor="#f1f5f9" p={0.8} value={issue.story_point} name="story_point" onSubmit={handleUpdate} />
               </Box>
             </TableCell>
           </TableRow>

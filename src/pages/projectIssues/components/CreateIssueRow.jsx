@@ -70,8 +70,10 @@ export default function CreateIssueRow({ isEditable, sprint_id, parent_issue_id,
       console.error(r)
     }
   }
-  const handleEnter = e => {
-    if (e.keyCode === 13 && e.target.value !== "") handleCreateIssue()
+  const handleKeyDown = e => {
+    e.stopPropagation()
+    if (e.keyCode === 27) handleEditable()
+    else if (e.keyCode === 13 && e.target.value !== "") handleCreateIssue()
   }
   const handleTrackerMenu = event => {
     setAnchorEl(event.currentTarget)
@@ -111,7 +113,7 @@ export default function CreateIssueRow({ isEditable, sprint_id, parent_issue_id,
                 </Menu>
                 <InputBase
                   disabled={isLoading}
-                  onKeyDown={handleEnter}
+                  onKeyDown={handleKeyDown}
                   autoFocus
                   placeholder="Start typing about the task ..."
                   sx={{ p: 0.5, width: 1, color: theme => theme.palette.primary.defaultText }}

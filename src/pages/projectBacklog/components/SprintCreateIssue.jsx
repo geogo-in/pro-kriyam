@@ -70,8 +70,10 @@ export default function SprintCreateIssue({ sprint_id, parent_issue_id, project_
       console.error(r)
     }
   }
-  const handleEnter = e => {
-    if (e.keyCode === 13 && e.target.value !== "") handleCreateIssue()
+  const handleKeyDown = e => {
+    e.stopPropagation()
+    if (e.keyCode === 27) handleEditable()
+    else if (e.keyCode === 13 && e.target.value !== "") handleCreateIssue()
   }
   const handleTrackerMenu = event => {
     setAnchorEl(event.currentTarget)
@@ -115,7 +117,7 @@ export default function SprintCreateIssue({ sprint_id, parent_issue_id, project_
                 </Menu>
                 <InputBase
                   disabled={isLoading}
-                  onKeyDown={handleEnter}
+                  onKeyDown={handleKeyDown}
                   autoFocus
                   placeholder="Start typing about the task ..."
                   sx={{ p: 0.5, width: 1, color: theme => theme.palette.primary.defaultText }}
@@ -130,8 +132,8 @@ export default function SprintCreateIssue({ sprint_id, parent_issue_id, project_
                     </Box>
                   ) : (
                     <>
-                      <SmallButton variant="outlined" onClick={handleCreateIssue} loading={isLoading}>
-                        Save
+                      <SmallButton variant="outlined" onClick={handleCreateIssue} disabled={isLoading}>
+                        {isLoading && <CircularProgress size={20} />} Save
                       </SmallButton>
                       <IconButton size="small" onClick={handleEditable} sx={{ color: "#8d97a8", background: "#f7f7f9" }}>
                         <Clear />
