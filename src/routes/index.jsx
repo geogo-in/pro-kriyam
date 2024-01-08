@@ -1,3 +1,4 @@
+import ProjectSprintReport from "pages/projectSprintReport"
 import { lazy, Suspense } from "react"
 import { Navigate, useRoutes } from "react-router-dom"
 import AuthGuard from "../guards/AuthGuard"
@@ -71,6 +72,7 @@ export default function Router() {
                 { index: true, element: <Project /> },
                 { path: "backlog", element: <ProjectBacklog />, children: issueRoutes },
                 { path: "sprint", element: <ProjectActiveSprint />, children: issueRoutes },
+                { path: "report", element: <ProjectSprintReport /> },
                 { path: "board", element: <ProjectActiveSprint />, children: issueRoutes },
                 { path: "roadmap", element: <ProjectRoadmap /> },
                 { path: "reports", element: <ProjectReports /> },
