@@ -6,7 +6,7 @@ import SprintIssueListHeader from "./SprintIssueListHeader"
 import SprintIssueListItem from "./SprintIssueListItem"
 
 export default function SprintIssues({ projectId, storypoint }) {
-  const { issue_completed, total_issue_incomplete, tota_issue_count: total_issue_count, total_issue_count_done } = storypoint
+  const { issue_completed, total_issue_incomplete, total_issue_count, total_issue_count_done } = storypoint
   const { data: priorities } = useGetIssuePriorityQuery()
   const { data: statuses } = useGetProjectIssuesStatusesQuery(projectId)
 

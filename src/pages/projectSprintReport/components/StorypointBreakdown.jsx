@@ -35,7 +35,7 @@ export default function StorypointBreakdown({ projectId, sprintId }) {
                 Issues Completed
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: "light" }}>
-                {storypoint.total_issue_count_done}/{storypoint.tota_issue_count}
+                {storypoint.total_issue_count_done}/{storypoint.total_issue_count}
               </Typography>
             </Box>
           </Box>
