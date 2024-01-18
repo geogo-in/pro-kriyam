@@ -1,0 +1,79 @@
+{
+  "total_story_points": 0,
+  "total_incompleted_story_points": 0,
+  "total_completed_story_points": 0,
+  "tota_issue_count": 2,
+  "total_issue_count_done": 1,
+  "issue_completed": [
+    {
+      "id": 488,
+      "tracker_id": 1,
+      "project_id": 19,
+      "subject": "Bid Open time not showing properly due to time zone issue.",
+      "description": null,
+      "due_date": null,
+      "category_id": 40,
+      "status_id": 7,
+      "assigned_to_id": null,
+      "priority_id": 2,
+      "fixed_version_id": null,
+      "author_id": 1,
+      "lock_version": 3,
+      "created_on": "2022-09-21T15:35:13.331Z",
+      "updated_on": "2023-04-17T15:32:17.487Z",
+      "start_date": "2022-09-21",
+      "done_ratio": 0,
+      "estimated_hours": null,
+      "parent_id": null,
+      "root_id": 488,
+      "lft": 1,
+      "rgt": 2,
+      "is_private": false,
+      "closed_on": "2023-04-17T15:32:17.487Z",
+      "position": 11,
+      "story_point": null,
+      "deleted_at": null
+    }
+  ],
+  "total_issue_incomplete": [
+    {
+      "id": 487,
+      "tracker_id": 1,
+      "project_id": 19,
+      "subject": "Filter profile by Vendor Name in APP.",
+      "description": null,
+      "due_date": null,
+      "category_id": null,
+      "status_id": 1,
+      "assigned_to_id": null,
+      "priority_id": 2,
+      "fixed_version_id": null,
+      "author_id": 1,
+      "lock_version": 0,
+      "created_on": "2022-09-21T15:35:03.550Z",
+      "updated_on": "2023-04-10T07:34:25.782Z",
+      "start_date": "2022-09-21",
+      "done_ratio": 0,
+      "estimated_hours": null,
+      "parent_id": null,
+      "root_id": 487,
+      "lft": 1,
+      "rgt": 2,
+      "is_private": false,
+      "closed_on": null,
+      "position": 7,
+      "story_point": null,
+      "deleted_at": null
+    }
+  ],
+  "member": [
+    {
+      "id": null,
+      "name": "Unassigned",
+      "total_story_points_assigned": 0,
+      "total_story_points_assigned_completed": 0,
+      "tota_issue_count": 2,
+      "total_issue_count_done": 1
+    }
+  ]
+}

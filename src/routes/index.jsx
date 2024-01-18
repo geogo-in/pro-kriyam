@@ -72,7 +72,17 @@ export default function Router() {
                 { index: true, element: <Project /> },
                 { path: "backlog", element: <ProjectBacklog />, children: issueRoutes },
                 { path: "sprint", element: <ProjectActiveSprint />, children: issueRoutes },
-                { path: "report", element: <ProjectSprintReport /> },
+                {
+                  path: "report",
+                  element: <ProjectSprintReport />,
+                  children: [
+                    {
+                      path: ":sprint_id",
+                      element: <></>,
+                      children: [{ path: ":issue_id", element: <ProjectIssueDetails /> }],
+                    },
+                  ],
+                },
                 { path: "board", element: <ProjectActiveSprint />, children: issueRoutes },
                 { path: "roadmap", element: <ProjectRoadmap /> },
                 { path: "reports", element: <ProjectReports /> },
