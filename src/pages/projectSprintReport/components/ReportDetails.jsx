@@ -1,8 +1,8 @@
 import { Box, Grid, Typography } from "@mui/material"
 import { useGetStoryPointQuery } from "@redux/services/redmineApi"
-import { format, parseISO } from "date-fns"
+import moment from "moment"
 
-const getFormattedDate = date => format(parseISO(date), "do MMM, yyyy")
+const getFormattedDate = date => moment(date).format("do MMM, yyyy")
 
 export default function ReportDetails({ sprint }) {
   return (
