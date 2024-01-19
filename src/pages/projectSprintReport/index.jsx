@@ -20,21 +20,10 @@ export default function ProjectSprintReport() {
 
   useEffect(() => {
     if (closedSprints) {
-      // Load report for sprint with corresponding sprint_id if sprint_id is not undefined or null
-      // Else load first sprint in the fetched list
-      let sp
-      if (sprint_id) {
-        sp = closedSprints.find(sp => sp.id == sprint_id) // not using `strict equality` !important
-        // sp maybe undefined if wrong `sprint_id` is passed
-      }
-      // got a sprint
-      if (sp) {
-        setSprint(sp)
-        navigate(`${PATH_DASHBOARD.projects.root}/${project_id}/report/${sprint_id}`, { replace: true })
-      } else {
-        setSprint(closedSprints[0])
-        navigate(`${PATH_DASHBOARD.projects.root}/${project_id}/report/${closedSprints[0].id}`, { replace: true })
-      }
+      const sprint = (sprint_id && closedSprints.find(sp => sp.id == sprint_id)) || closedSprints[0]
+
+      setSprint(sprint)
+      navigate(`${PATH_DASHBOARD.projects.root}/${project_id}/report/${sprint.id}`, { replace: true })
     }
   }, [closedSprints, sprint_id])
 
