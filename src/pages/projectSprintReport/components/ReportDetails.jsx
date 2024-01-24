@@ -1,8 +1,5 @@
 import { Box, Grid, Typography } from "@mui/material"
-import { useGetStoryPointQuery } from "@redux/services/redmineApi"
-import moment from "moment"
-
-const getFormattedDate = date => moment(date).format("do MMM, yyyy")
+import { fDate } from "utils/formatDate"
 
 export default function ReportDetails({ sprint }) {
   return (
@@ -21,10 +18,10 @@ export default function ReportDetails({ sprint }) {
               </Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography variant="body2">{sprint?.started_at ? getFormattedDate(sprint?.started_at) : "-"}</Typography>
+              <Typography variant="body2">{sprint?.started_at ? fDate(sprint.started_at) : "-"}</Typography>
             </Grid>
             <Grid item>
-              <Typography variant="body2">(Planned {sprint?.start_date ? getFormattedDate(sprint?.start_date) : "-"})</Typography>
+              <Typography variant="body2">(Planned {sprint?.start_date ? fDate(sprint.start_date) : "-"})</Typography>
             </Grid>
           </>
         </Grid>
@@ -36,10 +33,10 @@ export default function ReportDetails({ sprint }) {
               </Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography variant="body2">{sprint?.ended_at ? getFormattedDate(sprint?.ended_at) : "-"}</Typography>
+              <Typography variant="body2">{sprint?.ended_at ? fDate(sprint.ended_at) : "-"}</Typography>
             </Grid>
             <Grid item>
-              <Typography variant="body2">(Planned {sprint?.end_date ? getFormattedDate(sprint?.end_date) : "-"})</Typography>
+              <Typography variant="body2">(Planned {sprint?.end_date ? fDate(sprint.end_date) : "-"})</Typography>
             </Grid>
           </>
         </Grid>
