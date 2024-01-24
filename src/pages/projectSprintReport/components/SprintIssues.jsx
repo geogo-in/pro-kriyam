@@ -11,10 +11,10 @@ export default function SprintIssues({ projectId, storypoint }) {
   const { data: statuses } = useGetProjectIssuesStatusesQuery(projectId)
 
   const getPriority = priorityId => {
-    return priorities?.find(p => p.id === priorityId).name
+    return priorities?.find(p => p.id === priorityId)?.name
   }
   const getStatus = statusId => {
-    return statuses?.find(p => p.id === statusId).name
+    return statuses?.find(p => p.id === statusId)?.name
   }
 
   return (
