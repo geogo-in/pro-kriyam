@@ -41,7 +41,6 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
       enqueueSnackbar(message, { variant: "error" })
     }
   }
-
   return (
     <Box component="form" onSubmit={handleUpdateSprint} minWidth={500}>
       <CustomDialogTitle onClose={onClose}>Complete sprint: {sprint.name}</CustomDialogTitle>
