@@ -11,7 +11,7 @@ import CustomDialogTitle from "pages/shared/CustomDialogTitle"
 import { useEffect, useState } from "react"
 import { getErrorMessage } from "utils/helper"
 
-const initialState = { start_date: moment(), due_date: "", subject: "", done_ratio: 0 }
+const initialState = { start_date: moment(), due_date: null, subject: "", done_ratio: 0 }
 
 function TaskDetail({ onClose, project_id, editable, task }) {
   const [state, setState] = useState(initialState)
