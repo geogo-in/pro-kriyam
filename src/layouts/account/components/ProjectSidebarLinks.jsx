@@ -1,3 +1,4 @@
+import SprintDetailsIcon from "@mui/icons-material/AssessmentOutlined"
 import SettingsIcon from "@mui/icons-material/SettingsOutlined"
 import BacklogIcon from "@mui/icons-material/TornadoOutlined"
 import RoadmapIcon from "@mui/icons-material/ViewTimelineOutlined"
@@ -8,9 +9,9 @@ import MuiListItem from "@mui/material/ListItem"
 import MuiListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
 import { styled } from "@mui/material/styles"
+import { isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
 import { useSelector } from "react-redux"
 import { Link, useLocation } from "react-router-dom"
-import { isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
 import { PATH_DASHBOARD } from "routes/paths"
 
 const activeLinkMixin = theme => ({
@@ -73,6 +74,7 @@ const ProjectSidebarLinks = ({ project }) => {
   if (project.project_type.name === "Scrum") {
     primaryLinks.unshift({ icon: <SprintIcon />, label: "Active Sprint", to: `${projectBaseUrl}/sprint` })
     primaryLinks.unshift({ icon: <BacklogIcon />, label: "Backlog", to: `${projectBaseUrl}/backlog` })
+    primaryLinks.push({ icon: <SprintDetailsIcon />, label: "Sprint Report", to: `${projectBaseUrl}/report` })
   } else if (project.project_type.name === "Kanban") {
     primaryLinks.unshift({ icon: <RoadmapIcon />, label: "Roadmap", to: `${projectBaseUrl}/roadmap` })
     primaryLinks.unshift({ icon: <SprintIcon />, label: "Board", to: `${projectBaseUrl}/board` })

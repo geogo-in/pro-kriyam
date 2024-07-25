@@ -29,7 +29,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
     tracker_id: "",
     priority_id: "",
     start_date: moment(),
-    due_date: "",
+    due_date: null,
     subject: "",
     done_ratio: 0,
     project_id: project_id || project_id_params,

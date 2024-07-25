@@ -70,6 +70,10 @@ export const redmineApi = createApi({
       }),
       providesTags: ["ActiveSprint"],
     }),
+    getClosedSprints: builder.query({
+      query: ({ project_id }) => ({ url: `/api/projects/${project_id}/sprints` }),
+      transformResponse: result => result.closed_sprints,
+    }),
     createSprint: builder.mutation({
       query: ({ project_id, ...body }) => ({ url: `/api/projects/${project_id}/sprints`, method: "POST", body }),
       invalidatesTags: result => (result ? ["Backlog", "Sprints"] : []),
@@ -91,7 +95,9 @@ export const redmineApi = createApi({
       query: ({ project_id, sprint_id, ...params }) => ({ url: `/api/projects/${project_id}/sprints/${sprint_id}`, method: "DELETE", params }),
       invalidatesTags: (_, error) => (error ? [] : ["Backlog"]),
     }),
-
+    getStoryPoint: builder.query({
+      query: ({ project_id, sprint_id }) => ({ url: `/api/projects/${project_id}/sprints/${sprint_id}/story_points` }),
+    }),
     addTaskToSprintOrBacklog: builder.mutation({
       query: ({ project_id, sprint_id, issue_id }) => ({
         // /api/projects/<project_id/project_short_url>/sprints/<sprint_id/backlog>/add_task
@@ -122,6 +128,8 @@ export const {
   useUpdateSprintStateMutation,
   useGetActiveSprintQuery,
   useGetActiveSprintsQuery,
+  useGetClosedSprintsQuery,
+  useGetStoryPointQuery,
   useGetDashboardQuery,
   useSearchQuery,
   useLazySearchQuery,
