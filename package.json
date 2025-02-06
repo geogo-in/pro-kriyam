@@ -23,7 +23,7 @@
     "echarts-for-react": "^3.0.2",
     "firebase": "^9.21.0",
     "hotkeys-js": "^3.10.2",
-    "moment": "2.29.4",
+    "moment": "^2.30.1",
     "notistack": "^3.0.1",
     "query-string": "^8.1.0",
     "quill-mention": "^3.1.0",
