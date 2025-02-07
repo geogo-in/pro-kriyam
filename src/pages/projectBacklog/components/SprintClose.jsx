@@ -31,7 +31,7 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
         await deleteSprint({ project_id, sprint_id, move_sprint_id }).unwrap()
         enqueueSnackbar("This sprint is deleted successfully", { variant: "success" })
       } else {
-        await updateSprintState({ project_id, sprint_id, state: "close", move_sprint_id }).unwrap()
+        await updateSprintState({ project_id, sprint_id: sprint.id, state: "close", move_sprint_id }).unwrap()
         enqueueSnackbar(`This sprint is closed successfully.`, { variant: "success" })
       }
 
