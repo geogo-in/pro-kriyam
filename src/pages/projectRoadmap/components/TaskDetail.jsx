@@ -3,7 +3,7 @@ import { Box, DialogActions, DialogContent, Divider, MenuItem, TextField, Typogr
 import Slider from "@mui/material/Slider"
 // import Autocomplete from "@mui/material/Autocomplete"
 import { DatePicker } from "@mui/x-date-pickers"
-import { useCreateIssuesMutation, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useCreateIssuesMutation, useGetIssuePriorityQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import moment from "moment"
 import { enqueueSnackbar } from "notistack"
@@ -18,6 +18,7 @@ function TaskDetail({ onClose, project_id, editable, task }) {
   const { data: project } = useGetProjectByIdQuery(project_id)
   const [createTask, { isLoading }] = useCreateIssuesMutation()
   const [updateTask, { isLoading: isUpdating }] = useUpdateIssuesMutation()
+  const { data: priorities } = useGetIssuePriorityQuery()
 
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value })
@@ -34,6 +35,7 @@ function TaskDetail({ onClose, project_id, editable, task }) {
           project_id,
           start_date: state.start_date.format("YYYY-MM-DD"),
           due_date: moment(state.due_date).format("YYYY-MM-DD"),
+          priority_id: priorities.find(p => p.name.toLowerCase() === "normal")?.id,
         }).unwrap()
       }
       onClose()
@@ -64,7 +66,7 @@ function TaskDetail({ onClose, project_id, editable, task }) {
         />
         <DatePicker
           label="End Date"
-          format="DD/MM/yyyy"
+          format="DD/MM/YYYY"
           value={state.due_date}
           onChange={e => setState({ ...state, due_date: e })}
           slotProps={{ textField: { required: true, sx: { my: 2 }, fullWidth: true } }}
