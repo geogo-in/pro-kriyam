@@ -28,7 +28,7 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
       e.preventDefault()
       if (isDelete) {
         if (!window.confirm("Are you sure? You want to delete this sprint.")) return
-        await deleteSprint({ project_id, sprint_id, move_sprint_id }).unwrap()
+        await deleteSprint({ project_id, sprint_id: sprint.id, move_sprint_id }).unwrap()
         enqueueSnackbar("This sprint is deleted successfully", { variant: "success" })
       } else {
         await updateSprintState({ project_id, sprint_id, state: "close", move_sprint_id }).unwrap()
