@@ -19,7 +19,7 @@ export default function ProjectSprintReport() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (closedSprints) {
+    if (closedSprints && closedSprints.length > 0) {
       const sprint = (sprint_id && closedSprints.find(sp => sp.id == sprint_id)) || closedSprints[0]
 
       setSprint(sprint)
@@ -63,7 +63,7 @@ export default function ProjectSprintReport() {
 
                 <Stack direction="column">
                   <ReportDetails sprint={sprint} />
-                  <StorypointBreakdown projectId={project_id} sprintId={sprint.id} />
+                  <StorypointBreakdown projectId={project_id} sprintId={sprint_id} />
                 </Stack>
               </>
             )
