@@ -2,7 +2,7 @@ import { LoadingButton } from "@mui/lab"
 import { Box, DialogActions, DialogContent, Divider, MenuItem, TextField, Typography } from "@mui/material"
 import Slider from "@mui/material/Slider"
 // import Autocomplete from "@mui/material/Autocomplete"
-import { useCreateIssuesMutation, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useCreateIssuesMutation, useGetIssuePriorityQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import moment from "moment"
 import { enqueueSnackbar } from "notistack"
@@ -17,6 +17,7 @@ function TaskDetail({ onClose, project_id, editable, task }) {
   const { data: project } = useGetProjectByIdQuery(project_id)
   const [createTask, { isLoading }] = useCreateIssuesMutation()
   const [updateTask, { isLoading: isUpdating }] = useUpdateIssuesMutation()
+  const { data: priorities } = useGetIssuePriorityQuery()
 
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value })
@@ -33,6 +34,7 @@ function TaskDetail({ onClose, project_id, editable, task }) {
           project_id,
           start_date: moment(state.start_date).format("YYYY-MM-DD"),
           due_date: moment(state.due_date).format("YYYY-MM-DD"),
+          priority_id: priorities.find(p => p.name.toLowerCase() === "normal")?.id,
         }).unwrap()
       }
       onClose()
@@ -49,7 +51,7 @@ function TaskDetail({ onClose, project_id, editable, task }) {
 
   return (
     <Box maxWidth={300} component="form" onSubmit={handleSubmit}>
-      <CustomDialogTitle onClose={onClose}>Issue</CustomDialogTitle>
+      <CustomDialogTitle onClose={onClose}>Issue details</CustomDialogTitle>
       <DialogContent>
         <TextField sx={{ mb: 2 }} fullWidth label="Summary*" value={state.subject} name="subject" onChange={handleChange} />
         <TextField
