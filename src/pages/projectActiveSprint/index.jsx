@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from "@mui/material"
 import { styled } from "@mui/system"
+import { useGetProjectIssuesStatusesQuery } from "@redux/services/issueApi"
 import { useGetActiveSprintQuery } from "@redux/services/redmineApi"
 import NoTaskImg from "assets/images/no-task.png"
 import { omitBy } from "lodash"
@@ -32,13 +33,14 @@ const ProjectSprint = () => {
   const [columns, setColumns] = useState()
   const [filter, setFilter] = useState({ search: "", status_id: "", priority_id: "", category_id: "", assigned_to_ids: [], author_id: "", tracker_id: "", unassigned_issues: undefined })
   const { data: sprint, isLoading, error } = useGetActiveSprintQuery({ project_id, filter: omitBy(filter, i => !i) })
+  const {data: sprintColumns} = useGetProjectIssuesStatusesQuery(project_id)
 
   useEffect(() => {
-    if (sprint?.status === "Success") {
-      const tasks = sprint.issue_status?.map(status => ({ [status.id]: { id: `${status.id}`, title: status.name, list: [...status.issues] } }))
+    if (sprint?.status === "Success" && sprintColumns?.length) {
+      const tasks = sprint.issue_status?.map(status => ({ [status.id]: { id: `${status.id}`, title: status.name, list: [...status.issues], position: sprintColumns?.find(col => col.id === status.id)?.position } }))
       setColumns(Object.assign({}, ...tasks))
     }
-  }, [sprint])
+  }, [sprint,sprintColumns])
 
   return (
     <PageContainer>
