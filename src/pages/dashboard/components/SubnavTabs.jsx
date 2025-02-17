@@ -24,7 +24,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
 }))
 
 const StyledTab = styled(Tab)(({ theme }) => ({
-  backgroundColor: "white",
+  // backgroundColor: "white",
+  backgroundColor: theme => theme.palette.background.paper,
   color: "#64727f",
   paddingLeft: 2,
   paddingRight: 2,

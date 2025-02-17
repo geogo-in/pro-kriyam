@@ -39,7 +39,7 @@ const TeamsList = () => {
               <Card sx={{ ":hover": { cursor: "pointer" } }}>
                 <Box sx={{ display: "flex", alignItems: "center", py: 1.5, px: 2 }}>
                   <MemberAvatar name={`${team.name}`} height={34} width={34} />
-                  <Typography variant="subtitle1" sx={{ ml: 2, color: theme => theme.palette.primary.secondaryText }}>
+                  <Typography variant="subtitle1" sx={{ ml: 2, color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
                     {team.name}
                   </Typography>
                 </Box>

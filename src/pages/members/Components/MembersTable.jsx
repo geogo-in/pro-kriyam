@@ -17,7 +17,8 @@ import { getErrorMessage } from "utils/helper"
 const MembersTable = ({ users, lockedUsers, registeredUsers }) => (
   <TableContainer sx={{ borderRadius: 0 }}>
     <Table aria-label="simple table">
-      <TableHead sx={{ backgroundColor: "white", borderRadius: 0, borderBottom: "none" }}>
+      <TableHead sx={{ backgroundColor: theme => theme.palette.background.paper, borderRadius: 0, borderBottom: "none" }}>
+      {/* <TableHead sx={{ backgroundColor: "white", borderRadius: 0, borderBottom: "none" }}> */}
         <TableRow>
           <TableHeadCell sx={{ width: 20 }}></TableHeadCell>
           <TableHeadCell></TableHeadCell>
@@ -63,7 +64,7 @@ function ProjectItem({ locked, registered, ...row }) {
         <MemberAvatar name={`${row.firstname} ${row.lastname}`} height={34} width={34} />
       </TableCell>
       <TableCell component="th">
-        <Typography sx={{ lineHeight: "1.1rem", "& span": { color: theme => theme.palette.primary.defaultText }, "& :hover": { color: theme => theme.palette.primary.main } }}>
+        <Typography sx={{ lineHeight: "1.1rem", "& span": { color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.default }, "& :hover": { color: theme => theme.palette.primary.main } }}>
           <Link component={RouterLink} to={`${PATH_DASHBOARD.members}/${row.id}`}>
             <span style={{ fontSize: "0.9rem", fontWeight: 500, display: "block" }}>
               {row.firstname} {row.lastname}

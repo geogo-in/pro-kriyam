@@ -6,7 +6,7 @@ import SprintSetup from "assets/images/sprint-setup.png"
 const AboutTemplate = ({ template }) => {
   return (
     <Box px={3} py={1}>
-      <Typography variant="body2" gutterBottom sx={{ color: theme => theme.palette.primary.defaultText }}>
+      <Typography variant="body2" gutterBottom sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.default }}>
         Teams can use the Scrum framework to collaborate and divide complex projects into manageable sprints that deliver incremental value. It's important to encourage your team to
         self-organize, learn as they go, and regularly reflect on their successes and failures to keep improving.
       </Typography>
@@ -18,7 +18,7 @@ const AboutTemplate = ({ template }) => {
           <Typography variant="h6" sx={{ py: 1, fontSize: "0.9rem", fontWeight: 500, marginBottom: 0 }}>
             Plan your tasks in a backlog
           </Typography>
-          <Typography variant="body2" sx={{ color: theme => theme.palette.primary.secondaryText }}>
+          <Typography variant="body2" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
             It is essential to prioritize and plan your team's work by organizing the backlog. Break down the work items from the project roadmap and order them in a way that enables your
             team to understand which work items to deliver first.
           </Typography>
@@ -27,7 +27,7 @@ const AboutTemplate = ({ template }) => {
           <Typography variant="h6" sx={{ py: 1, fontSize: "0.9rem", fontWeight: 500, marginBottom: 0 }}>
             Arrange work cycles into sprints
           </Typography>
-          <Typography variant="body2" sx={{ color: theme => theme.palette.primary.secondaryText }}>
+          <Typography variant="body2" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
             Use sprints to collaborate on completing customer value in short time periods, delivering value faster with high-quality work.
           </Typography>
         </Grid>
@@ -41,7 +41,7 @@ const AboutTemplate = ({ template }) => {
           <Typography variant="h6" sx={{ py: 1, fontSize: "0.9rem", fontWeight: 500, marginBottom: 0 }}>
             Analyze your team’s performance
           </Typography>
-          <Typography variant="body2" sx={{ color: theme => theme.palette.primary.secondaryText }}>
+          <Typography variant="body2" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
             Enhance the predictability of planning and delivery by utilizing the ready-to-use reports such as the sprint report and velocity chart. These reports can empower your team to
             comprehend their capacity and continually improve their processes.
           </Typography>

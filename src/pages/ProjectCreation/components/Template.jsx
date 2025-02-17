@@ -1,6 +1,6 @@
 import { Box, Button, Container, LinearProgress, Stack, Typography } from "@mui/material"
-import { useNavigate } from "react-router-dom"
 import { useGetProjectTypesQuery } from "@redux/services/projectApi"
+import { useNavigate } from "react-router-dom"
 import TemplateItem from "./TemplateItem"
 
 const Template = ({ setTemplate }) => {
@@ -13,14 +13,16 @@ const Template = ({ setTemplate }) => {
     <Container maxWidth="md">
       <Typography my={2.5}>New project</Typography>
       <Box sx={{ display: "flex" }}>
-        <Typography variant="h5" fontWeight={500} sx={{ color: theme => theme.palette.primary.secondaryText }}>
+        <Typography variant="h5" fontWeight={500} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
+        {/* <Typography variant="h5" fontWeight={500} sx={{ color: theme => theme.palette.primary.secondaryText }}> */}
           Step 1 :
         </Typography>
-        <Typography variant="h6" fontWeight={500} sx={{ color: theme => theme.palette.primary.defaultText }}>
+        {/* <Typography variant="h6" fontWeight={500} sx={{ color: theme => theme.palette.primary.defaultText }}> */}
+        <Typography variant="h6" fontWeight={500} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.default }}>
           &nbsp; Select a project template
         </Typography>
       </Box>
-      <Typography my={1} sx={{ color: theme => theme.palette.primary.defaultText }}>
+      <Typography my={1} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.default }}>
         Get up and running quickly with templates that suit the way your team works. Plan, track and release great product.
       </Typography>
       {isLoading ? (
@@ -33,7 +35,7 @@ const Template = ({ setTemplate }) => {
             ))}
           </Box>
           <Stack direction="row" justifyContent="flex-start">
-            <Button variant="text" onClick={handleClose} sx={{ color: theme => theme.palette.primary.defaultText, mr: 2 }}>
+            <Button variant="text" onClick={handleClose} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.default, mr: 2 }}>
               Cancel
             </Button>
           </Stack>

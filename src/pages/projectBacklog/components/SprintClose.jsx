@@ -31,7 +31,7 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
         await deleteSprint({ project_id, sprint_id: sprint.id, move_sprint_id }).unwrap()
         enqueueSnackbar("This sprint is deleted successfully", { variant: "success" })
       } else {
-        await updateSprintState({ project_id, sprint_id, state: "close", move_sprint_id }).unwrap()
+        await updateSprintState({ project_id, sprint_id: sprint.id, state: "close", move_sprint_id }).unwrap()
         enqueueSnackbar(`This sprint is closed successfully.`, { variant: "success" })
       }
 
@@ -43,20 +43,21 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
   }
   console.log({ sprint }, openIssueCount)
   return (
-    <Box component="form" onSubmit={handleUpdateSprint} minWidth={500}>
+    <Box sx={{background: theme => theme.palette.mode === "light" ? "" : theme.palette.background.paper }} component="form" onSubmit={handleUpdateSprint} minWidth={500}>
+    {/* <Box component="form" onSubmit={handleUpdateSprint} minWidth={500}> */}
       <CustomDialogTitle onClose={onClose}>Complete sprint: {sprint.name}</CustomDialogTitle>
       <DialogContent sx={{ px: 4, mt: 2 }}>
-        <Typography variant="h6" fontWeight="bold" fontSize={16} color={theme => theme.palette.primary.defaultText}>
+        <Typography variant="h6" fontWeight="bold" fontSize={16} color={theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.default }>
           This sprint contains:
         </Typography>
-        <Typography component={"li"} variant="body2" color={theme => theme.palette.primary.defaultText}>
+        <Typography component={"li"} variant="body2" color={theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText: theme.palette.text.default}>
           {completeIssue.length} Completed issue(s)
         </Typography>
-        <Typography component={"li"} variant="body2" color={theme => theme.palette.primary.defaultText}>
+        <Typography component={"li"} variant="body2" color={theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText: theme.palette.text.default}>
           {openIssueCount} Open issue(s)
         </Typography>
         <br />
-        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText, fontWeight: 500 }}>
+        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.default, fontWeight: 500 }}>
           Move open issues to
         </Typography>
         <TextField value={move_sprint_id} onChange={handleChange} select sx={{ width: 300, mt: 1 }}>
@@ -71,7 +72,7 @@ export default function SprintClose({ project_id, sprint_id, onClose, type, ...s
         </TextField>
       </DialogContent>
       <DialogActions sx={{ px: 2, py: 1.6, mt: 2, borderTop: "1px solid #E5E7EB" }}>
-        <Button disabled={loading} onClick={onClose}>
+        <Button sx={{ color: theme => theme.palette.mode === "light" ? "" : theme.palette.text.default }} disabled={loading} onClick={onClose}>
           Cancel
         </Button>
         <LoadingButton loading={loading} variant="contained" color={isDelete ? "error" : "primary"} type="submit">

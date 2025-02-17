@@ -11,7 +11,8 @@ export const StyledTabs = styled(Tabs)(({ theme }) => ({
     marginRight: 8,
     padding: "10px 20px",
     fontWeight: "500",
-    color: theme.palette.primary.secondaryText,
+    // color: theme.palette.primary.secondaryText,
+    color: theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary,
     borderRadius: 30,
     fontSize: "0.9rem",
   },
@@ -25,7 +26,8 @@ export const StyledTabs = styled(Tabs)(({ theme }) => ({
 }))
 
 export const StyledTab = styled(Tab)(({ theme }) => ({
-  backgroundColor: "white",
+  // backgroundColor: "white",
+  backgroundColor: theme.palette.background.paper,
   color: "#64727f",
   paddingLeft: 2,
   paddingRight: 2,

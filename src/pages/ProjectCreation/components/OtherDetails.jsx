@@ -8,14 +8,14 @@ const OtherDetails = ({ template }) => {
 
   return (
     <Box p={3}>
-      <Typography gutterBottom sx={{ fontWeight: 500, fontSize: "0.7rem", color: theme => theme.palette.primary.secondaryText }}>
+      <Typography gutterBottom sx={{ fontWeight: 500, fontSize: "0.7rem", color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
         RECOMENDED FOR
       </Typography>
-      <Typography variant="body2" gutterBottom sx={{ color: theme => theme.palette.primary.defaultText }}>
+      <Typography variant="body2" gutterBottom sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText :  theme.palette.text.default }}>
         {template.name === "Scrum" && <span>Teams that deliver work at a consistent pace</span>}
         {template.name === "Kanban" && <span>Teams that control work volume from a backlog</span>}
       </Typography>
-      <Typography gutterBottom sx={{ mt: 4, fontWeight: 500, fontSize: "0.7rem", color: theme => theme.palette.primary.secondaryText }}>
+      <Typography gutterBottom sx={{ mt: 4, fontWeight: 500, fontSize: "0.7rem", color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
         ISSUE TYPES
       </Typography>
       <List sx={{ mb: 2 }}>

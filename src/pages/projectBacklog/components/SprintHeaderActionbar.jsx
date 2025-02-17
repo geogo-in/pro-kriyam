@@ -59,7 +59,7 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
               <Typography variant="h6" sx={{ fontSize: "1.09rem" }}>
                 {name}
               </Typography>
-              <Typography variant="body2" sx={{ padding: "0 10px", color: "#54637c", flexGrow: 1 }}>
+              <Typography variant="body2" sx={{ padding: "0 10px", color: theme => theme.palette.mode === "light" ? "#54637c" : theme.palette.text.secondary, flexGrow: 1 }}>
                 {sprint.issues.length} issues
               </Typography>
 
@@ -77,7 +77,7 @@ export default function SprintHeaderActionbar({ project_id, activeSprint, epicCo
                       Start Sprint
                     </PrimaryRoundButton>
                   )}
-                  <IconButton size="small" onClick={handleSprintOption} sx={{ background: "#f1f5f9", ml: 1, mr: 1, p: 0.8 }}>
+                  <IconButton size="small" onClick={handleSprintOption} sx={{ background: theme => theme.palette.mode === "light" ? "#f1f5f9" :  theme.palette.background.paper, ml: 1, mr: 1, p: 0.8 }}>
                     <MoreHorizIcon />
                   </IconButton>
                   <Menu open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={handleClose}>

@@ -17,8 +17,10 @@ export default function MembersListToolbar({ handleChangePage, handleChangeRowsP
       <Paper
         sx={{
           boxShadow: "none",
-          background: "#f1f5f9",
+          // background: "#f1f5f9",
+          background: theme => theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.secondary,
           color: "#1E293B",
+          // color: theme => theme.palette.background.secondary,
           borderRadius: "30px",
           p: "2px 4px",
           margin: "8px 0",

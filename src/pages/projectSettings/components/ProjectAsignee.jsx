@@ -1,6 +1,6 @@
 import { Grid, ListItemText, MenuItem, Typography } from "@mui/material"
-import { SelectWithIcon } from "pages/shared/CustomTextField"
 import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
+import { SelectWithIcon } from "pages/shared/CustomTextField"
 
 const ProjectAsignee = ({ project_id, state, setState }) => {
   const { data: membership } = useGetProjectMembershipsQuery(project_id, { skip: false })
@@ -11,7 +11,7 @@ const ProjectAsignee = ({ project_id, state, setState }) => {
   return (
     <Grid container spacing={2} sx={{ mt: 0 }}>
       <Grid item lg={6}>
-        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
           Default Assignee
         </Typography>
         <SelectWithIcon fullWidth value={state.default_assigned_to_id || ""} onChange={e => changeAssignee(e, "default_assigned_to_id")}>
@@ -29,7 +29,7 @@ const ProjectAsignee = ({ project_id, state, setState }) => {
         </SelectWithIcon>
       </Grid>
       <Grid item lg={6}>
-        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
           Project Lead
         </Typography>
         <SelectWithIcon fullWidth value={state.lead_id || ""} onChange={e => changeAssignee(e, "lead_id")}>

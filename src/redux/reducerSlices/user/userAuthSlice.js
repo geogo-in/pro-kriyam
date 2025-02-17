@@ -19,7 +19,12 @@ export const authUserForToken = createAsyncThunk("user/authUserForToken", async 
 // Unauth user
 export const unauthUser = createAsyncThunk("user/unauthUser", async (_, { dispatch }) => {
   console.debug("un auth user...")
-  localStorage.clear()
+  const userTheme = localStorage.getItem("user_last_app_theme");
+  localStorage.clear(); // Clear everything
+  if (userTheme) {
+    localStorage.setItem("user_last_app_theme", userTheme); // Restore the theme
+  }
+  // localStorage.clear()
   dispatch(redmineApi.util.resetApiState())
   removeFirebaseToken()
 })

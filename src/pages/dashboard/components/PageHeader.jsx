@@ -84,7 +84,8 @@ const PageHeader = () => {
     handleClose()
   }
   return (
-    <Box sx={{ backgroundColor: "white", boxShadow: "0 20px 20px -20px rgb(0 0 0 / 15%)" }}>
+    // <Box sx={{ backgroundColor: "white", boxShadow: "0 20px 20px -20px rgb(0 0 0 / 15%)" }}>
+    <Box sx={{ backgroundColor: theme => theme.palette.background.paper, boxShadow: "0 20px 20px -20px rgb(0 0 0 / 15%)" }}>
       <Container>
         <Box pt={2.5} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <StyledHeading variant="h5" gutterBottom>

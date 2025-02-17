@@ -5,17 +5,18 @@ import TableBody from "@mui/material/TableBody"
 import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
+import { useUpdateFavoriteMutation } from "@redux/services/projectApi"
 import { AvatarWithName } from "pages/shared/AvatarWithName"
 import MemberAvatars from "pages/shared/MemberAvatars"
 import { StyledTableRow, TableCell, TableHeadCell } from "pages/shared/StyledTable"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useUpdateFavoriteMutation } from "@redux/services/projectApi"
 import { PATH_DASHBOARD } from "routes/paths"
 
 const ProjectsTable = ({ projects }) => (
   <TableContainer sx={{ borderRadius: 0 }}>
     <Table aria-label="simple table">
-      <TableHead sx={{ backgroundColor: "white", borderRadius: 0, borderBottom: "none" }}>
+      {/* <TableHead sx={{ backgroundColor: "white", borderRadius: 0, borderBottom: "none" }}> */}
+      <TableHead sx={{ backgroundColor: theme => theme.palette.background.paper, borderRadius: 0, borderBottom: "none" }}>
         <TableRow>
           <TableHeadCell sx={{ width: 20 }}></TableHeadCell>
           <TableHeadCell>Project</TableHeadCell>
@@ -65,7 +66,8 @@ function ProjectItem(row) {
         onClick={handleDetails}
         component="th"
         scope="row"
-        sx={{ "&:hover": { cursor: "pointer" }, "& span": { color: theme => theme.palette.primary.defaultText }, "& :hover": { color: theme => theme.palette.primary.main } }}>
+        // sx={{ "&:hover": { cursor: "pointer" }, "& span": { color: theme => theme.palette.primary.defaultText }, "& :hover": { color: theme => theme.palette.primary.main } }}>
+        sx={{ "&:hover": { cursor: "pointer" }, "& span": { color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.default }, "& :hover": { color: theme => theme.palette.mode === "light" ? theme.palette.primary.main : "#FFFFFF" } }}>
         {/* <Link component={RouterLink} to={`${PATH_DASHBOARD.projects.root}/${row.identifier}`}> */}
         <span style={{ fontSize: "0.9rem", fontWeight: 500 }}>{row.name}</span>
         {/* </Link> */}

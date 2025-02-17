@@ -55,6 +55,12 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   marginRight: 8,
   marginTop: 4,
   minWidth: 20,
+  ...(theme.palette.mode === "dark" && {
+    "&:hover": {
+      backgroundColor: "#F1F5F9",
+      color: "#000",
+    },
+  }),
 }))
 export const StyledListItemText = styled(ListItemText)(({ theme }) => ({ ".MuiTypography-root": { fontSize: "0.80rem" } }))
 
@@ -144,7 +150,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
     <Box p={3}>
       <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
         {issue.parent?.id && (
-          <Typography variant="body2" pl={1} sx={{ fontWeight: 500, mr: 1, color: theme => theme.palette.primary.defaultText }}>
+          <Typography variant="body2" pl={1} sx={{ fontWeight: 500, mr: 1, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
             # {issue.parent?.id} /
           </Typography>
         )}
@@ -157,7 +163,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
           <Typography
             variant="body2"
             pl={1}
-            sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText, cursor: "pointer" }}
+            sx={{ fontWeight: 500, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary , cursor: "pointer" }}
             onClick={() => copyTextToClipboard(`${window.location.origin}${PATH_DASHBOARD.projects.root}/${project_id}/issues/${issue.id}`)}>
             #{issue.id}
           </Typography>
@@ -206,7 +212,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
           ))}
         </SleekSelectWithIcon>
       </Stack>
-      <Typography variant="body1" gutterBottom sx={{ mt: 2, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
+      <Typography variant="body1" gutterBottom sx={{ mt: 2, fontWeight: 500, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
         Description
       </Typography>
       <TypoTextField
@@ -215,7 +221,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
         editor
         value={issue.description}
         placeholder="Add a more detailed description..."
-        placeholderColor={theme => theme.palette.primary.defaultText}
+        placeholderColor={theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }
         name="description"
         onSubmit={handleUpdate}
       />
@@ -224,7 +230,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
           <Typography
             variant="body1"
             gutterBottom
-            sx={{ display: "block", borderBottom: "1px solid rgba(229,231,235, 0.5)", pt: 1, pb: 0.5, mt: 2, mb: 1, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
+            sx={{ display: "block", borderBottom: "1px solid rgba(229,231,235, 0.5)", pt: 1, pb: 0.5, mt: 2, mb: 1, fontWeight: 500, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
             Attachments
           </Typography>
           <Grid container spacing={1}>
@@ -271,7 +277,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
             variant="body1"
             gutterBottom
             ref={subtaskRef}
-            sx={{ display: "block", borderBottom: "1px solid rgba(229,231,235, 0.5)", pt: 1, pb: 0.5, mt: 2, mb: 1, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
+            sx={{ display: "block", borderBottom: "1px solid rgba(229,231,235, 0.5)", pt: 1, pb: 0.5, mt: 2, mb: 1, fontWeight: 500, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
             Subtasks
           </Typography>
           <IssueSubTasks {...issue} project_id={project_id} referrer={referrer} />
@@ -281,7 +287,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
       <Typography
         variant="body1"
         gutterBottom
-        sx={{ display: "block", borderBottom: "1px solid rgba(229,231,235, 0.5)", pt: 1, pb: 0.5, mt: 2, mb: 1, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
+        sx={{ display: "block", borderBottom: "1px solid rgba(229,231,235, 0.5)", pt: 1, pb: 0.5, mt: 2, mb: 1, fontWeight: 500, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
         Details
       </Typography>
       <IssueAbout {...issue} project_id={project_id} />

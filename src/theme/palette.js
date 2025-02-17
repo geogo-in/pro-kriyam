@@ -37,14 +37,36 @@ const COMMON = {
   secondary: { ...SECONDARY },
 }
 
+// const palette = {
+//   light: {
+//     ...COMMON,
+//     // background: { default: "#F8FAFF" },
+//   },
+//   dark: {
+//     ...COMMON,
+//   },
+// }
+
 const palette = {
   light: {
     ...COMMON,
-    // background: { default: "#F8FAFF" },
   },
   dark: {
     ...COMMON,
+    background: {
+      // default: "#292F4C",
+      // default: "#2F324E",
+      default: "#181B34",
+      // paper: "#242A46",
+      paper: "#2F324E",
+      secondary: "#181B34",
+    },
+    text: {
+      primary: "#FFFFFF",
+      default: "#e2e8f0",
+      secondary: "#BBBEC7",
+    },
   },
-}
+};
 
 export default palette

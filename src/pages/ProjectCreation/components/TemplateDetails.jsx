@@ -13,7 +13,7 @@ const BackButton = styled(Button)(({ theme }) => ({
   padding: 0,
   justifyContent: "flex-start",
   borderRadius: 4,
-  color: theme.palette.primary.defaultText,
+  color: theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.default,
 }))
 
 const TemplateDetails = ({ template, setTemplate, setTemplateDetail }) => {
@@ -30,16 +30,16 @@ const TemplateDetails = ({ template, setTemplate, setTemplateDetail }) => {
           Back to templates
         </BackButton>
         <Box sx={{ display: "flex" }}>
-          <Typography variant="h5" fontWeight={500} sx={{ color: theme => theme.palette.primary.secondaryText }}>
+          <Typography variant="h5" fontWeight={500} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
             Step 2 :
           </Typography>
-          <Typography variant="h6" fontWeight={500} sx={{ color: theme => theme.palette.primary.defaultText }}>
+          <Typography variant="h6" fontWeight={500} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText: theme.palette.text.primary }}>
             &nbsp; Review project template
           </Typography>
         </Box>
       </Box>
       <Card sx={{ mt: 2, mb: 4 }}>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 24px", bgcolor: "rgba(241,245,249, 0.6)" }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 24px", bgcolor: theme => theme.palette.mode === "light" ? "rgba(241,245,249, 0.6)" : theme.palette.background.paper }}>
           <Typography variant="h5" fontWeight={500}>
             {template.name}
           </Typography>
@@ -57,7 +57,7 @@ const TemplateDetails = ({ template, setTemplate, setTemplateDetail }) => {
             </Grid>
           </Grid>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", padding: "16px 24px", bgcolor: "rgba(241,245,249, 0.6)" }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", padding: "16px 24px", bgcolor: theme => theme.palette.mode === "light" ? "rgba(241,245,249, 0.6)" : theme.palette.background.paper }}>
           <Typography variant="body1">This project template fits well with your requirements?</Typography>
           <Button variant="contained" onClick={handleType} sx={{ ml: 2 }}>
             Use template

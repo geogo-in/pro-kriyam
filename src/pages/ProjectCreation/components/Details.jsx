@@ -2,12 +2,12 @@ import BackIcon from "@mui/icons-material/KeyboardBackspace"
 import { LoadingButton } from "@mui/lab"
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material"
 import { styled } from "@mui/material/styles"
+import { useCreateProjectMutation } from "@redux/services/projectApi"
 import { DEFAULT_ERROR_MSG } from "config/constants"
 import { useSnackbar } from "notistack"
 import { LineCard as Card } from "pages/shared/StyledCard"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useCreateProjectMutation } from "@redux/services/projectApi"
 import AddProjectDetails from "./AddProjectDetails"
 import ChangeTemplate from "./ChangeTemplate"
 
@@ -17,7 +17,7 @@ const BackButton = styled(Button)(({ theme }) => ({
   padding: 0,
   justifyContent: "flex-start",
   borderRadius: 4,
-  color: theme.palette.primary.defaultText,
+  color: theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.default,
 }))
 
 export default function Details({ template, setTemplateDetail, setTemplate }) {
@@ -49,15 +49,15 @@ export default function Details({ template, setTemplateDetail, setTemplate }) {
           Back to templates
         </BackButton>
         <Box sx={{ display: "flex" }}>
-          <Typography variant="h5" fontWeight={500} sx={{ color: theme => theme.palette.primary.secondaryText }}>
+          <Typography variant="h5" fontWeight={500} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
             Step 3 :
           </Typography>
-          <Typography variant="h6" fontWeight={500} sx={{ color: theme => theme.palette.primary.defaultText }}>
+          <Typography variant="h6" fontWeight={500} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.primary }}>
             &nbsp; Fill project details
           </Typography>
         </Box>
       </Box>
-      <Typography my={1} sx={{ color: theme => theme.palette.primary.defaultText }}>
+      <Typography my={1} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.primary }}>
         You can change these details anytime in your project settings.
       </Typography>
       <Box component="form" onSubmit={handleSubmit} container maxWidth="md" sx={{ mx: "auto", mt: 3 }}>
@@ -69,7 +69,7 @@ export default function Details({ template, setTemplateDetail, setTemplate }) {
                 <LoadingButton variant="contained" loading={isLoading} type="submit">
                   Create project
                 </LoadingButton>
-                <Button onClick={handleClose} sx={{ color: "grey", ml: 2 }}>
+                <Button onClick={handleClose} sx={{ color: theme => theme.palette.mode === "light" ? "grey" : theme.palette.text.default, ml: 2 }}>
                   Cancel
                 </Button>
               </Stack>

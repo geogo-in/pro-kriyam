@@ -104,7 +104,7 @@ export default function EpicContainer({ project_id, category_id, onFilter }) {
   return (
     <Box sx={{ margin: "0 4px" }}>
       <Box width={30}>
-        <VerticalButton sx={{ color: "#54637C" }} size="small" onClick={handelEpicContainer} disableRipple>
+        <VerticalButton sx={{ color: theme => theme.palette.mode === "light" ? "#54637C" : theme.palette.text.secondary }} size="small" onClick={handelEpicContainer} disableRipple>
           EPICS
         </VerticalButton>
       </Box>

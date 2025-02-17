@@ -52,33 +52,33 @@ const StyledMaterialDesignContent = styled(
     padding: 12,
   },
   "&.notistack-MuiContent-success": {
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.getContrastText(theme.palette.background.default),
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.getContrastText(theme.palette.background.paper),
     "& #notistack-snackbar svg": {
       fill: `${theme.palette.success.main} !important`,
     },
   },
   "&.notistack-MuiContent-error": {
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.getContrastText(theme.palette.background.default),
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.getContrastText(theme.palette.background.paper),
     "& #notistack-snackbar svg": {
       fill: `${theme.palette.error.main} !important`,
     },
   },
   "&.notistack-MuiContent-default": {
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.getContrastText(theme.palette.background.default),
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.getContrastText(theme.palette.background.paper),
   },
   "&.notistack-MuiContent-info": {
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.getContrastText(theme.palette.background.default),
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.getContrastText(theme.palette.background.paper),
     "& #notistack-snackbar svg": {
       fill: `${theme.palette.info.main} !important`,
     },
   },
   "&.notistack-MuiContent-warning": {
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.getContrastText(theme.palette.background.default),
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.getContrastText(theme.palette.background.paper),
     "& #notistack-snackbar svg": {
       fill: `${theme.palette.warning.main} !important`,
     },

@@ -1,6 +1,6 @@
 import { Add, Clear } from "@mui/icons-material"
 import { Box, Button, CircularProgress, IconButton, InputBase, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Tooltip } from "@mui/material"
-import { useCreateIssuesMutation, useGetIssueTypeQuery } from "@redux/services/issueApi"
+import { useCreateIssuesMutation, useGetIssuePriorityQuery, useGetIssueTypeQuery } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import { useEffect, useState } from "react"
@@ -38,6 +38,7 @@ export default function CreateIssueRow({ isEditable, sprint_id, parent_issue_id,
   const [state, setState] = useState({ subject: "", tracker_id: "", tracker_name: "" })
   const [anchorEl, setAnchorEl] = useState()
   const { data: project } = useGetProjectByIdQuery(project_id)
+  const { data: priorities } = useGetIssuePriorityQuery()
 
   useEffect(() => {
     setEditable(isEditable)
@@ -64,6 +65,7 @@ export default function CreateIssueRow({ isEditable, sprint_id, parent_issue_id,
         sprint_id: sprint_id !== "backlog" ? sprint_id : undefined,
         subject: state.subject,
         tracker_id: state.tracker_id,
+        priority_id: priorities.find(p => p.name.toLowerCase() === "normal")?.id,
       }).unwrap()
       handleEditable()
     } catch (r) {
@@ -116,7 +118,7 @@ export default function CreateIssueRow({ isEditable, sprint_id, parent_issue_id,
                   onKeyDown={handleKeyDown}
                   autoFocus
                   placeholder="Start typing about the task ..."
-                  sx={{ p: 0.5, width: 1, color: theme => theme.palette.primary.defaultText }}
+                  sx={{ p: 0.5, width: 1, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}
                   value={state.subject}
                   name="subject"
                   onChange={handleChange}
@@ -140,7 +142,7 @@ export default function CreateIssueRow({ isEditable, sprint_id, parent_issue_id,
               </FormPaper>
             </>
           ) : (
-            <Button onClick={handleEditable} sx={{ mt: 0.5, mb: "4.5px", justifyContent: "flex-start", position: "sticky", color: "#54637C" }} startIcon={<Add />}>
+            <Button onClick={handleEditable} sx={{ mt: 0.5, mb: "4.5px", justifyContent: "flex-start", position: "sticky", color: theme => theme.palette.mode === "light" ? "#54637C" : theme.palette.text.secondary }} startIcon={<Add />}>
               Add new subtask
             </Button>
           )}
