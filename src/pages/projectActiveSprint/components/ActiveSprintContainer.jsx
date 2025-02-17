@@ -88,11 +88,16 @@ export default function ActiveSprintContainer({ columns, setColumns, filter, set
       <ScrollableGrid>
         <DragDropContext onDragEnd={onDragEnd}>
           <Box sx={{ display: "flex" }}>
-            {Object.values(columns).map(column => (
+          {Object.values(columns).sort((a, b) => a.position - b.position).map(column => (
               <Box display="flex" key={column.id}>
                 <Column column={column} project_id={project_id} sprint_id={sprint.id} />
               </Box>
             ))}
+            {/* {Object.values(columns).map(column => (
+              <Box display="flex" key={column.id}>
+                <Column column={column} project_id={project_id} sprint_id={sprint.id} />
+              </Box>
+            ))} */}
           </Box>
         </DragDropContext>
       </ScrollableGrid>
