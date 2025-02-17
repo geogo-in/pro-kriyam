@@ -1,5 +1,7 @@
 import Button from "@mui/material/Button"
 import LinearProgress from "@mui/material/LinearProgress"
+import { useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import "devexpress-gantt/dist/dx-gantt.min.css"
 import Gantt, { Column, ContextMenu, Editing, Item, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
 import "devextreme/dist/css/dx.common.css"
@@ -7,8 +9,6 @@ import "devextreme/dist/css/dx.light.css"
 import moment from "moment"
 import CustomMenu from "pages/shared/CustomMenu"
 import { useEffect, useRef, useState } from "react"
-import { useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import TaskDetail from "./TaskDetail"
 
 const currentDate = new Date()
@@ -78,6 +78,7 @@ export default function GanttChart({ projectId: project_id }) {
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
 
+  console.log(tasks)
   return (
     <>
       <Gantt
@@ -87,7 +88,7 @@ export default function GanttChart({ projectId: project_id }) {
         scaleType={scaleType}
         ref={ganttRef}
         taskListWidth={450}
-        height={"calc(100vh - 90px)"}>
+        height={"calc(100vh - 128px)"}>
         <Tasks dataSource={tasks} />
         <StripLine start={currentDate} title="Today" />
         <ContextMenu enabled={false} />
