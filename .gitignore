@@ -40,3 +40,5 @@ src/config/firebase.js
 dev-dist
 
 yarn.lock
+
+package-lock.json
