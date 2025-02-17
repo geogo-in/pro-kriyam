@@ -1,6 +1,5 @@
 import { LoadingButton } from "@mui/lab"
 import { Box, Button, DialogActions, DialogContent, Stack, TextField, Typography } from "@mui/material"
-import { DatePicker } from "@mui/x-date-pickers"
 import { useUpdateSprintMutation, useUpdateSprintStateMutation } from "@redux/services/redmineApi"
 import moment from "moment"
 import { useSnackbar } from "notistack"
@@ -49,25 +48,31 @@ export default function SprintDetails({ project_id, sprint_id, editable, onClose
           Sprint Name*
         </Typography>
         <TextField value={state.name} name="name" onChange={handleChange} fullWidth required sx={{ mb: 3 }} />
-        {/* <TextField multiline minRows={3} fullWidth maxRows={5} label="Description" required name="description" value={state.description} onChange={handleChange} /> */}
         <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} flexWrap={"wrap"} sx={{ mb: 2 }}>
           <Box>
             <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
               Start Date*
             </Typography>
-            <DatePicker
-              disablePast
-              format="DD/MM/YYYY"
-              value={state.start_date}
-              onChange={date => setState({ ...state, start_date: date })}
-              slotProps={{ textField: { required: true, style: { marginRight: 12 } } }}
+            <TextField
+              type="date"
+              value={state.start_date.format("YYYY-MM-DD")}
+              onChange={e => setState({ ...state, start_date: moment(e.target.value) })}
+              required
+              sx={{ marginRight: 2 }}
+              inputProps={{ min: moment().format("YYYY-MM-DD") }}
             />
           </Box>
           <Box>
             <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
               End Date*
             </Typography>
-            <DatePicker disablePast format="DD/MM/YYYY" value={state.end_date} onChange={date => setState({ ...state, end_date: date })} slotProps={{ textField: { required: true } }} />
+            <TextField
+              type="date"
+              value={state.end_date.format("YYYY-MM-DD")}
+              onChange={e => setState({ ...state, end_date: moment(e.target.value) })}
+              required
+              inputProps={{ min: moment().format("YYYY-MM-DD") }}
+            />
           </Box>
         </Stack>
         <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>

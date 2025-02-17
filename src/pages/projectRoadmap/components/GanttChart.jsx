@@ -97,7 +97,7 @@ export default function GanttChart({ projectId: project_id }) {
             widget="dxButton"
             render={() => (
               <Button size="small" aria-haspopup="true" aria-expanded={openAddDialog ? "true" : undefined} disableElevation variant="contained" color="primary" onClick={handleAddDialogOpen}>
-                Add Task
+                New Issue
               </Button>
             )}
           />

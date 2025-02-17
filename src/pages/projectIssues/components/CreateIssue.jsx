@@ -2,7 +2,6 @@ import { LoadingButton } from "@mui/lab"
 import { Box, Divider, Grid, LinearProgress, ListItemIcon, ListItemText, TextField } from "@mui/material"
 import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
-import { DatePicker } from "@mui/x-date-pickers"
 import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
 import { useCreateIssuesMutation, useGetEpicQuery, useGetIssuePriorityQuery, useGetProjectIssuesStatusesQuery } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery, useGetProjectMembershipsQuery, useGetProjectsQuery } from "@redux/services/projectApi"
@@ -219,26 +218,42 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
             <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
               Start Date
             </Typography>
-            <DatePicker
+            <TextField
+              type="date"
+              value={state.start_date.format("YYYY-MM-DD")}
+              onChange={start_date => setState(x => ({ ...x, start_date }))}
+              required
+              sx={{ marginRight: 2 }}
+              inputProps={{ min: moment().format("YYYY-MM-DD") }}
+            />
+            {/* <DatePicker
               disableCloseOnSelect={false}
               value={state.start_date}
               disablePast
               inputFormat="DD/MM/YYYY"
               onChange={start_date => setState(x => ({ ...x, start_date }))}
               slotProps={{ textField: { required: true } }}
-            />
+            /> */}
           </Box>
           <Box sx={{ ml: 1 }}>
             <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
               Due Date
             </Typography>
-            <DatePicker
+            {/* <DatePicker
               disableCloseOnSelect={false}
               value={state.due_date}
               disablePast
               inputFormat="DD/MM/YYYY"
               onChange={due_date => setState(x => ({ ...x, due_date }))}
               slotProps={{ textField: params => ({ required: true, error: state.due_date ? params.error : false }) }}
+            /> */}
+            <TextField
+              type="date"
+              value={state.due_date ? state.due_date.format("YYYY-MM-DD") : ""}
+              onChange={due_date => setState(x => ({ ...x, due_date }))}
+              required
+              sx={{ marginRight: 2 }}
+              inputProps={{ min: moment().format("YYYY-MM-DD") }}
             />
           </Box>
         </Box>

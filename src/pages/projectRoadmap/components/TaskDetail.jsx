@@ -2,7 +2,6 @@ import { LoadingButton } from "@mui/lab"
 import { Box, DialogActions, DialogContent, Divider, MenuItem, TextField, Typography } from "@mui/material"
 import Slider from "@mui/material/Slider"
 // import Autocomplete from "@mui/material/Autocomplete"
-import { DatePicker } from "@mui/x-date-pickers"
 import { useCreateIssuesMutation, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import moment from "moment"
@@ -26,13 +25,13 @@ function TaskDetail({ onClose, project_id, editable, task }) {
     try {
       e.preventDefault()
       if (editable) {
-        await updateTask({ ...state, id: task.id, start_date: state.start_date.format("YYYY-MM-DD"), due_date: moment(state.due_date).format("YYYY-MM-DD") }).unwrap()
+        await updateTask({ ...state, id: task.id, start_date: moment(state.start_date).format("YYYY-MM-DD"), due_date: moment(state.due_date).format("YYYY-MM-DD") }).unwrap()
       } else {
         await createTask({
           ...state,
           sprint_id: project.project_type.name === "Kanban" ? project.active_sprint?.id : undefined,
           project_id,
-          start_date: state.start_date.format("YYYY-MM-DD"),
+          start_date: moment(state.start_date).format("YYYY-MM-DD"),
           due_date: moment(state.due_date).format("YYYY-MM-DD"),
         }).unwrap()
       }
@@ -50,24 +49,27 @@ function TaskDetail({ onClose, project_id, editable, task }) {
 
   return (
     <Box maxWidth={300} component="form" onSubmit={handleSubmit}>
-      <CustomDialogTitle onClose={onClose}>Task Details</CustomDialogTitle>
+      <CustomDialogTitle onClose={onClose}>Issue</CustomDialogTitle>
       <DialogContent>
-        <TextField sx={{ mb: 2 }} fullWidth label="Task Title" value={state.subject} name="subject" onChange={handleChange} />
-
-        <DatePicker
-          format="DD/MM/YYYY"
+        <TextField sx={{ mb: 2 }} fullWidth label="Summary*" value={state.subject} name="subject" onChange={handleChange} />
+        <TextField
+          type="date"
           required
           label="Start date"
-          value={state.start_date}
-          onChange={e => setState({ ...state, start_date: e })}
-          slotProps={{ textField: { required: true, sx: { my: 2 }, fullWidth: true } }}
+          value={state.start_date ? moment(state.start_date).format("YYYY-MM-DD") : ""}
+          onChange={e => setState({ ...state, start_date: moment(e.target.value) })}
+          InputLabelProps={{ shrink: true }}
+          fullWidth
+          sx={{ my: 2 }}
         />
-        <DatePicker
+        <TextField
+          type="date"
           label="End Date"
-          format="DD/MM/yyyy"
-          value={state.due_date}
-          onChange={e => setState({ ...state, due_date: e })}
-          slotProps={{ textField: { required: true, sx: { my: 2 }, fullWidth: true } }}
+          value={state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : ""}
+          onChange={e => setState({ ...state, due_date: moment(e.target.value) })}
+          InputLabelProps={{ shrink: true }}
+          fullWidth
+          sx={{ my: 2 }}
         />
         <Box display="flex" alignItems="center">
           <Typography sx={{ flex: "none" }} pr={1} variant="caption" noWrap>
@@ -88,14 +90,6 @@ function TaskDetail({ onClose, project_id, editable, task }) {
             </MenuItem>
           ))}
         </TextField>
-
-        {/* <Autocomplete
-            multiple
-            id="tags-standard"
-            options={top100Films}
-            getOptionLabel={option => option.title} 
-            renderInput={params => <TextField {...params} variant="standard" label="Multiple values" placeholder="Favorites" />}
-          /> */}
       </DialogContent>
 
       <DialogActions>
