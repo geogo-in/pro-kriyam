@@ -1,6 +1,6 @@
 import { Add, Clear } from "@mui/icons-material"
 import { Box, Button, CircularProgress, IconButton, InputBase, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Tooltip } from "@mui/material"
-import { useCreateIssuesMutation, useGetIssueTypeQuery } from "@redux/services/issueApi"
+import { useCreateIssuesMutation, useGetIssuePriorityQuery, useGetIssueTypeQuery } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import { useEffect, useState } from "react"
@@ -42,6 +42,7 @@ export default function SprintCreateIssue({ sprint_id, parent_issue_id, project_
   const backlogContainerWidth = useSelector(state => state.projectUi.backlogContainerWidth)
   const backlogTableWidth = useSelector(state => state.projectUi.backlogTableWidth)
   const { data: project } = useGetProjectByIdQuery(project_id)
+  const { data: priorities } = useGetIssuePriorityQuery()
 
   useEffect(() => {
     const tracker = trackers?.[0]
@@ -64,6 +65,7 @@ export default function SprintCreateIssue({ sprint_id, parent_issue_id, project_
         sprint_id: sprint_id !== "backlog" ? sprint_id : undefined,
         subject: state.subject,
         tracker_id: state.tracker_id,
+        priority_id: priorities.find(p => p.name.toLowerCase() === "normal")?.id,
       }).unwrap()
       handleEditable()
     } catch (r) {
@@ -144,7 +146,7 @@ export default function SprintCreateIssue({ sprint_id, parent_issue_id, project_
               </FormPaper>
             </>
           ) : (
-            <Button onClick={handleEditable} sx={{ my: 0.5, justifyContent: "flex-start", position: "sticky", color: "#54637C" }} startIcon={<Add />}>
+            <Button onClick={handleEditable} sx={{ my: 0.5, justifyContent: "flex-start", position: "sticky", color: theme => theme.palette.mode === "light" ? "#54637C" : theme.palette.text.secondary }} startIcon={<Add />}>
               New issue
             </Button>
           )}

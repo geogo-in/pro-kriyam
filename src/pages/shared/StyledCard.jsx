@@ -9,6 +9,7 @@ export const Card = styled(MuiCard)(({ theme }) => ({
 }))
 export const LineCard = styled(MuiCard)(({ theme }) => ({
   boxShadow: "none",
+  background:theme.palette.mode === "light" ? "" : theme.palette.background.paper,
   border: "1px solid rgba(229,231,235,0.95)",
 }))
 export const CardHeader = styled("div")(({ theme }) => ({

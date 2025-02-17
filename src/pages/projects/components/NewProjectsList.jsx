@@ -21,6 +21,11 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   paddingRight: 24,
   lineHeight: 2.0,
   color: "#000",
+  ...(theme.palette.mode === "dark") && {
+    ":hover": {
+      backgroundColor: "#F1F5F9",
+    },
+  }
 }))
 
 const NewProjectsList = () => {

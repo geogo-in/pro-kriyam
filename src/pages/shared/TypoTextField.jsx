@@ -34,10 +34,10 @@ export default function TypoTextField({ value: defaultValue, maxWidth, bgcolor =
           <TextField sx={{ my: 0 }} {...{ required }} autoFocus value={value || ""} onChange={e => setValue(e.target.value)} fullWidth {...textFieldProps} />
         )}
         <Box position={"absolute"} bottom={-40} right={0} zIndex={100000}>
-          <Button onClick={handleClick} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: "#f1f5f9", ml: 1 }}>
+          <Button onClick={handleClick} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: "#f1f5f9", ml: 1, "&:hover": theme => theme.palette.mode === "dark" ? { background: theme.palette.text.default } : {}, }}>
             <Done />
           </Button>
-          <Button onClick={handleClose} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: "#f1f5f9", ml: 1 }}>
+          <Button onClick={handleClose} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: "#f1f5f9", ml: 1, "&:hover": theme => theme.palette.mode === "dark" ? { background: theme.palette.text.default } : {}, }}>
             <Close />
           </Button>
         </Box>
@@ -50,13 +50,13 @@ export default function TypoTextField({ value: defaultValue, maxWidth, bgcolor =
       {...props}
       {...(editor ? { className: "ql-editor ql-snow", dangerouslySetInnerHTML: { __html: value || props.placeholder } } : { children: value || props.placeholder })}
       sx={{
-        ":hover": { background: "#f1f5f9", borderRadius: "4px", cursor: "text" },
+        ":hover": { background: theme => theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.secondary , borderRadius: "4px", cursor: "text" },
         minHeight: "1.76rem",
         width: "100%",
-        backgroundColor: bgcolor,
+        backgroundColor: theme => theme.palette.mode === "light" ? bgcolor : theme.palette.background.secondary ,
         color: placeholderColor,
         maxWidth,
-        px: 0.5,
+        px: 1,
         py: 0.8,
         whiteSpace: "pre-line",
         borderRadius: "4px",

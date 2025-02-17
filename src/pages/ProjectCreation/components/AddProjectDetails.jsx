@@ -11,11 +11,11 @@ const AddProjectDetails = ({ state, setState }) => {
   }
   return (
     <Box p={0}>
-      <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+      <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.primary }}>
         Project name
       </Typography>
       <TextField required autoFocus value={state.name} onChange={handleNameChange} fullWidth placeholder="Try a team name, project goal, milestone..." sx={{ mb: 2 }} />
-      <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+      <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.primary }}>
         Project key
       </Typography>
       <TextField placeholder="Try new-project" required id="filled-basic" value={state.identifier} onChange={handleIdentifierChange} sx={{ mb: 2 }} />

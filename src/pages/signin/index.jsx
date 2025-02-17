@@ -58,7 +58,7 @@ export default function SignIn() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} edge="end">
+                  <IconButton sx={{color: theme => theme.palette.mode === "light" ? "" : "#64748B"}} aria-label="toggle password visibility" onClick={handleClickShowPassword} edge="end">
                     {formData.showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
@@ -77,7 +77,7 @@ export default function SignIn() {
               value="top"
               control={<Checkbox checked={formData.rememberMe} onChange={handleChange} name="rememberMe" size="small" />}
               label={
-                <Typography variant="body2" component="p" color="text.secondary">
+                <Typography variant="body2" component="p" sx={{color: theme => theme.palette.mode === "light" ? theme.palette.text.secondary : "#64748B"}} >
                   Remember Me
                 </Typography>
               }

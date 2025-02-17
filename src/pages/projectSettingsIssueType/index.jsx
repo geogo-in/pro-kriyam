@@ -1,12 +1,12 @@
 import { LoadingButton } from "@mui/lab"
 import { Checkbox, FormControlLabel, FormGroup, Grid, Stack, Typography } from "@mui/material"
+import { useGetIssueTypeQuery } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery, useUpdateProjectDetailsMutation } from "@redux/services/projectApi"
 import { useSnackbar } from "notistack"
 import Loading from "pages/shared/Loading"
 import { LineCard as Card } from "pages/shared/StyledCard"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { useGetIssueTypeQuery } from "@redux/services/issueApi"
-import { useGetProjectByIdQuery, useUpdateProjectDetailsMutation } from "@redux/services/projectApi"
 import { getErrorMessage } from "utils/helper"
 const ProjectSettingsIssueType = () => {
   const { project_id } = useParams()
@@ -43,10 +43,10 @@ const ProjectSettingsIssueType = () => {
     <Grid component={"form"} onSubmit={handleSubmit} container spacing={2} sx={{ mt: 0 }}>
       <Grid item lg={6}>
         <Card sx={{ px: 3, py: 2, my: 0 }}>
-          <Typography variant="h6" gutterBottom sx={{ fontSize: "1rem", color: theme => theme.palette.primary.defaultText }}>
+          <Typography variant="h6" gutterBottom sx={{ fontSize: "1rem", color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
             Project issue types
           </Typography>
-          <Typography variant="body2" sx={{ color: "primary.defaultText", mb: 1 }}>
+          <Typography variant="body2" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary, mb: 1 }}>
             Select the issue types or trackers that you want in this project.
           </Typography>
           <FormGroup column>

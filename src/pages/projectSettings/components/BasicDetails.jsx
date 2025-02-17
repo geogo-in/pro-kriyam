@@ -1,12 +1,12 @@
 import { LoadingButton } from "@mui/lab"
 import { Grid, Stack, TextField, Typography } from "@mui/material"
+import { useGetProjectByIdQuery, useUpdateProjectDetailsMutation } from "@redux/services/projectApi"
+import { DEFAULT_ERROR_MSG } from "config/constants"
 import { useSnackbar } from "notistack"
 import Loading from "pages/shared/Loading"
 import { LineCard as Card } from "pages/shared/StyledCard"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { DEFAULT_ERROR_MSG } from "config/constants"
-import { useGetProjectByIdQuery, useUpdateProjectDetailsMutation } from "@redux/services/projectApi"
 import ProjectAsignee from "./ProjectAsignee"
 
 const BasicDetails = () => {
@@ -48,7 +48,7 @@ const BasicDetails = () => {
     <Grid component={"form"} onSubmit={handleSave} container spacing={2} sx={{ mt: 0 }}>
       <Grid item lg={6}>
         <Card sx={{ p: 3 }}>
-          <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+          <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
             Project name
           </Typography>
           <TextField fullWidth placeholder="Enter project name" value={state.name} onChange={e => handleStateChange(e)} name="name"></TextField>

@@ -20,6 +20,11 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   color: "#000",
   marginRight: 12,
   marginLeft: 8,
+  ...(theme.palette.mode === "dark") && {
+    ":hover": {
+      backgroundColor: "#F1F5F9",
+    },
+  }
 }))
 
 const ProjectSprint = () => {
@@ -45,10 +50,11 @@ const ProjectSprint = () => {
               <>
                 <Box sx={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center", height: "420px", justifyContent: "center" }}>
                   <img src={NoTaskImg} alt="There are no active sprints" width={180} />
-                  <Typography variant="h6" sx={{ color: theme => theme.palette.primary.secondaryText }}>
+                  <Typography variant="h6" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
+                  {/* <Typography variant="h6" sx={{ color: theme => theme.palette.primary.secondaryText }}> */}
                     {sprint.message}
                   </Typography>
-                  <Typography variant="body1" gutterBottom sx={{ color: theme => theme.palette.primary.secondaryText }}>
+                  <Typography variant="body1" gutterBottom sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
                     Start sprints in the Backlog
                   </Typography>
                 </Box>

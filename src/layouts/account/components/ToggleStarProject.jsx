@@ -1,7 +1,7 @@
 import { Star, StarBorderOutlined } from "@mui/icons-material"
 import { Box, CircularProgress, IconButton } from "@mui/material"
-import React from "react"
 import { useUpdateFavoriteMutation } from "@redux/services/projectApi"
+import React from "react"
 
 const ToggleStarProject = ({ project }) => {
   const [fav, setFav] = React.useState(project.is_favourite)
@@ -18,7 +18,7 @@ const ToggleStarProject = ({ project }) => {
           <CircularProgress size={20} />
         </Box>
       ) : (
-        <IconButton size="small" onClick={handleClick}>
+        <IconButton sx={{color: theme => theme.palette.mode === "light" ? theme.palette.text.secondary : "black"}} size="small" onClick={handleClick}>
           {fav ? <Star color="warning" /> : <StarBorderOutlined />}
         </IconButton>
       )}

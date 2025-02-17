@@ -11,8 +11,9 @@ import { getErrorMessage } from "utils/helper"
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: "8px 16px",
-  border: "1px solid #E4EEF5",
-  background: "#f1f5f9",
+  border: theme.palette.mode === "light" ? "1px solid #E4EEF5" : theme.palette.background.paper ,
+  // background: "#f1f5f9",
+  background: theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.secondary,
   fontSize: "0.85rem",
   width: "100%",
   wordBreak: "break-word",
@@ -63,7 +64,7 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
         ))}
       </Box>
       <Stack spacing={1}>
-        <Typography variant="body1" gutterBottom sx={{ color: theme => theme.palette.primary.defaultText, fontWeight: 500 }}>
+        <Typography variant="body1" gutterBottom sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary , fontWeight: 500 }}>
           Add a comment
         </Typography>
         <Box>

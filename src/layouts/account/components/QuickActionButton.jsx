@@ -1,4 +1,4 @@
-import { Add, NotificationsNoneSharp, Settings } from "@mui/icons-material"
+import { Add, DarkModeOutlined, NotificationsNoneSharp, Settings } from "@mui/icons-material"
 import ProfileIcon from "@mui/icons-material/AccountBoxOutlined"
 import AddIcon from "@mui/icons-material/Add"
 import AddIssueIcon from "@mui/icons-material/AddTask"
@@ -9,6 +9,7 @@ import { IconButton, ListItem, ListItemText, Stack, Typography, useMediaQuery, u
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import { alpha, styled } from "@mui/material/styles"
+import { toggleTheme } from "@redux/reducerSlices/theme/themeSlice"
 import { getCurrentUser, isAdmin, unauthUser } from "@redux/reducerSlices/user/userAuthSlice"
 import CreateMember from "pages/members/Components/CreateMember"
 import CreateIssue from "pages/projectIssues/components/CreateIssue"
@@ -125,7 +126,7 @@ const QuickActionButton = () => {
         </ListItem>
 
         <Typography component="li" align="center">
-          <NavLink to={PATH_DASHBOARD.notifications}>See more</NavLink>
+          <NavLink style={{color: "#24a0ed"}} to={PATH_DASHBOARD.notifications}>See more</NavLink>
         </Typography>
       </StyledMenu>
 
@@ -140,6 +141,10 @@ const QuickActionButton = () => {
         <MenuItem disableRipple component={Link} to={PATH_DASHBOARD.settings}>
           <Settings />
           Settings
+        </MenuItem>
+        <MenuItem disableRipple onClick={() => dispatch(toggleTheme())}>
+          <DarkModeOutlined />
+          Change Theme
         </MenuItem>
         <MenuItem onClick={onLogoutClick} disableRipple>
           <LogoutIcon />

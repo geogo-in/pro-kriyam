@@ -77,6 +77,10 @@ const StyledEditorBox = styled(Box)(({ theme }) => ({
     borderRadius: 15,
     padding: 3,
   },
+  "& .ql-editor::before": {
+    color: theme.palette.mode === "dark" ? "#e2e8f0 !important" : "#64748B",
+    opacity: 0.6,
+  },
 }))
 
 // Formats objects for setting up the Quill editor

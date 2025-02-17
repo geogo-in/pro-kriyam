@@ -18,7 +18,8 @@ const BackButton = styled(Button)(({ theme }) => ({
   display: "flex",
   justifyContent: "flex-start",
   borderRadius: 4,
-  color: theme.palette.primary.defaultText,
+  // color: theme.palette.primary.defaultText,
+  color: theme.palette.mode === "light"? theme.palette.primary.defaultText : theme.palette.text.secondary,
 }))
 
 const ProjectSidebarHeader = ({ project }) => {

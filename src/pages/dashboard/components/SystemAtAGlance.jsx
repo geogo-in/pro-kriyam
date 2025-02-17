@@ -4,10 +4,10 @@ import CardContent from "@mui/material/CardContent"
 import Grid from "@mui/material/Grid"
 import { styled } from "@mui/material/styles"
 import Typography from "@mui/material/Typography"
+import { useGetDashboardQuery } from "@redux/services/redmineApi"
 import LineCard from "pages/shared/LineCard"
 import Loading from "pages/shared/Loading"
 import ActiveMembers from "pages/shared/MemberAvatars"
-import { useGetDashboardQuery } from "@redux/services/redmineApi"
 
 const DeepBlueCard = styled(Card)(({ theme }) => ({
   background: `linear-gradient(to right bottom, ${theme.palette.primary.main}, ${theme.palette.primary.dark} 120%)`,

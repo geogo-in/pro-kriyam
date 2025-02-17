@@ -13,7 +13,8 @@ export default function ReportDetails({ sprint }) {
         <Grid container item spacing={3}>
           <>
             <Grid item xs={2}>
-              <Typography variant="body2" color="grey">
+              {/* <Typography variant="body2" color="grey"> */}
+              <Typography sx={{color: theme => theme.palette.mode === "light" ? "grey" : theme.palette.text.secondary}} variant="body2" color="grey">
                 Started
               </Typography>
             </Grid>
@@ -28,7 +29,8 @@ export default function ReportDetails({ sprint }) {
         <Grid container item spacing={3}>
           <>
             <Grid item xs={2}>
-              <Typography variant="body2" color="grey">
+              {/* <Typography variant="body2" color="grey"> */}
+              <Typography sx={{color: theme => theme.palette.mode === "light" ? "grey" : theme.palette.text.secondary}} variant="body2" color="grey">
                 Ended
               </Typography>
             </Grid>

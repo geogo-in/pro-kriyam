@@ -115,9 +115,10 @@ export default function Search({ open, setOpen }) {
 const SearchWrapper = styled("div")(({ theme, popupOpen }) => ({
   position: "relative",
   borderRadius: 21,
-  backgroundColor: "#f1f5f9",
+  // backgroundColor: "#f1f5f9",
+  backgroundColor: theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.secondary,
   // "&:hover": { backgroundColor: "#f1f5f9" },
-  ...(popupOpen && { borderEndEndRadius: 0, borderEndStartRadius: 0, boxShadow: theme.shadows[11], backgroundColor: theme.palette.common.white }),
+  ...(popupOpen && { borderEndEndRadius: 0, borderEndStartRadius: 0, boxShadow: theme.shadows[11], backgroundColor: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.background.secondary }),
   marginRight: theme.spacing(12),
   marginLeft: theme.spacing(3),
   width: "auto",
@@ -141,7 +142,8 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }))
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "#1E293B",
+  // color: "#1E293B",
+  color: theme.palette.mode === "light" ? "#1E293B" : theme.palette.text.secondary,
   width: "100%",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
@@ -167,8 +169,11 @@ const Listbox = styled("ul")(({ theme, popupOpen }) => ({
   listStyle: "none",
   overflow: "auto",
   maxHeight: "80vh",
-  backgroundColor: theme.palette.common.white,
-  color: theme.palette.text.primary,
+  // backgroundColor: theme.palette.common.white,
+  backgroundColor: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.background.secondary,
+  // color: theme.palette.text.primary,
+  color: theme.palette.mode === "light" ? theme.palette.text.primary : theme.palette.text.secondary,
   clipPath: "inset(0px -10px -10px -10px)",
-  "& li.Mui-focused": { backgroundColor: theme.palette.primary.lightest },
+  // "& li.Mui-focused": { backgroundColor: theme.palette.primary.lightest },
+  "& li.Mui-focused": { backgroundColor: theme.palette.mode === "light" ? theme.palette.primary.lightest : theme.palette.background.paper },
 }))

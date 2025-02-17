@@ -1,7 +1,7 @@
 import { Box, ButtonBase, Typography } from "@mui/material"
+import { useDeleteGroupMutation } from "@redux/services/userApi"
 import { useSnackbar } from "notistack"
 import { useNavigate, useParams } from "react-router-dom"
-import { useDeleteGroupMutation } from "@redux/services/userApi"
 import { PATH_DASHBOARD } from "routes/paths"
 import { getErrorMessage } from "utils/helper"
 

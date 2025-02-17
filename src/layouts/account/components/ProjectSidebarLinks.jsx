@@ -33,7 +33,7 @@ const ListItem = styled(MuiListItem)(({ theme, active }) => ({
   marginBottom: 4,
   borderRadius: "4px",
   position: "relative",
-  color: theme.palette.primary.defaultText,
+  color: theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary,
   "& .MuiSvgIcon-root": {
     height: "1.6em",
   },
@@ -44,6 +44,11 @@ const ListItem = styled(MuiListItem)(({ theme, active }) => ({
   },
   ...(active === "true" && {
     ...activeLinkMixin(theme),
+    ...(theme.palette.mode === "dark" && {
+      "&:hover": {
+        backgroundColor: "#f1f5f9 !important",
+      },
+    }),
   }),
 }))
 
@@ -52,7 +57,7 @@ const activeLinkIconMixin = theme => ({
 })
 
 const ListItemIcon = styled(MuiListItemIcon)(({ theme, active }) => ({
-  color: "#5F6368",
+  color: theme.palette.mode === "light" ? "#5F6368" : theme.palette.text.secondary,
   minWidth: 48,
   ...(active === "true" && {
     ...activeLinkIconMixin(theme),

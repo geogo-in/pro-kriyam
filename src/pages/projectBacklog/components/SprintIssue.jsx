@@ -93,7 +93,7 @@ export default function SprintIssue({
     <>
       <Stack
         component={Paper}
-        sx={{ borderRadius: 0, boxShadow: "none", border: ".1px solid #edeff1", borderLeft: "none" }}
+        sx={{ borderRadius: 0, boxShadow: "none", border: theme => theme.palette.mode === "light" ? ".1px solid #edeff1" : `.1px solid ${theme.palette.text.secondary}`, borderLeft: "none" }}
         direction="row"
         alignItems="center"
         pb={open.collapse ? 0 : ""}
@@ -102,7 +102,7 @@ export default function SprintIssue({
           disabledChildren={disabledChildren}
           draggableProps={draggableProps}
           {...dragHandleProps}
-          sx={{ display: "flex", cursor: "pointer", borderBottomLeftRadius: open.collapse ? 0 : "" }}>
+          sx={{ display: "flex", cursor: "pointer", borderBottomLeftRadius: open.collapse ? 0 : "" , backgroundColor: "transparent" }}>
           <Box minWidth={10} sx={{ marginLeft: 1, marginRight: 1, position: "sticky", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <StyledTooltip title={`Issue type: ${tracker?.name}`} placement="left">
               <IconButton size="small" onClick={handleMenu("tracker")}>
@@ -112,12 +112,13 @@ export default function SprintIssue({
           </Box>
           {subject.length > 50 ? (
             <StyledTooltip title={subject} enterDelay={500}>
-              <Typography sx={{ alignSelf: "center", width: 350, fontSize: "0.88rem", fontWeight: 500, color: theme => theme.palette.primary.defaultText }} onClick={handleDetails} noWrap>
+              {/* <Typography sx={{ alignSelf: "center", width: 350, fontSize: "0.88rem", fontWeight: 500, color: theme => theme.palette.primary.defaultText }} onClick={handleDetails} noWrap> */}
+              <Typography sx={{ alignSelf: "center", width: 350, fontSize: "0.88rem", fontWeight: 500, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.primary }} onClick={handleDetails} noWrap>
                 {subject}
               </Typography>
             </StyledTooltip>
           ) : (
-            <Typography sx={{ alignSelf: "center", width: 350, fontSize: "0.88rem", fontWeight: 500, color: theme => theme.palette.primary.defaultText }} onClick={handleDetails} noWrap>
+            <Typography sx={{ alignSelf: "center", width: 350, fontSize: "0.88rem", fontWeight: 500, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.primary }} onClick={handleDetails} noWrap>
               {subject}
             </Typography>
           )}
@@ -130,7 +131,7 @@ export default function SprintIssue({
         ) : (
           <SprintBlankSubIssueItem />
         )}
-        <SprintIssueItem sx={{ color: "#42526E" }}>{id}</SprintIssueItem>
+        <SprintIssueItem sx={{ color: theme => theme.palette.mode === "light" ? "#42526E" : theme.palette.text.secondary}}>{id}</SprintIssueItem>
 
         <SprintIssueItem>
           <IconButton size="small" onClick={handleMenu("membership")}>
@@ -144,7 +145,7 @@ export default function SprintIssue({
             {status?.name}
           </ButtonBase>
         </SprintIssueItem>
-        <SprintIssueItem component={ButtonBase} onClick={handleMenu("priority")} sx={{ justifyContent: "flex-start", color: "#42526E" }}>
+        <SprintIssueItem component={ButtonBase} onClick={handleMenu("priority")} sx={{ justifyContent: "flex-start", color: theme => theme.palette.mode === "light" ? "#42526E" : theme.palette.text.secondary }}>
           <Box sx={{ margin: "0 4px" }}>
             <IssuePriorityIcon type_name={priority?.name} />
           </Box>
@@ -177,9 +178,9 @@ export default function SprintIssue({
           value={state.story_point || ""}
           onChange={e => setState({ ...state, story_point: e.target.value })}
           onBlur={handleStoryPoint}
-          sx={{ width: 100, px: 1, color: "#42526E" }}
+          sx={{ width: 100, px: 1, color: theme => theme.palette.mode === "light" ? "#42526E" : theme.palette.text.secondary }}
         />
-        <SprintIssueItem sx={{ color: "#42526E" }}>{issue.author?.name}</SprintIssueItem>
+        <SprintIssueItem sx={{ color: theme => theme.palette.mode === "light" ? "#42526E" : theme.palette.text.secondary }}>{issue.author?.name}</SprintIssueItem>
         {/* <SprintIssueItem sx={{ width: 100, px: 1 }}>
           <MobileDatePicker
             label="Due Date"
@@ -201,7 +202,7 @@ export default function SprintIssue({
         <SprintSubIssue {...{ children }} />
       </Collapse>
       <Menu anchorEl={anchorEl?.membership} open={Boolean(anchorEl?.membership)} onClose={handleClose}>
-        <Typography variant="body2" sx={{ padding: "6px 12px", color: "#64748b" }}>
+        <Typography variant="body2" sx={{ padding: "6px 12px", color: theme => theme.palette.mode === "light" ? "#64748b" : theme.palette.text.default }}>
           Change assignee to:{" "}
         </Typography>
         <MenuItem value="" onClick={handleIssueUpdate({ assigned_to_id: "" })} sx={{ margin: "1px 10px", borderRadius: "4px" }}>
@@ -223,20 +224,20 @@ export default function SprintIssue({
         })}
       </Menu>
       <Menu anchorEl={anchorEl?.status} open={Boolean(anchorEl?.status)} onClose={handleClose}>
-        <Typography variant="body2" sx={{ padding: "6px 12px", color: "#64748b" }}>
+        <Typography variant="body2" sx={{ padding: "6px 12px", color: theme => theme.palette.mode === "light" ? "#64748b" : theme.palette.text.default }}>
           Change status to:{" "}
         </Typography>
         {project_statuses?.map(item => (
           <MenuItem
             key={item.id}
             onClick={handleIssueUpdate({ status_id: item.id })}
-            sx={{ margin: "6px 12px", borderRadius: "4px", background: getIssueStatusColor(item), minWidth: "140px" }}>
+            sx={{ margin: "6px 12px", borderRadius: "4px", background: getIssueStatusColor(item), minWidth: "140px", color:"black" }}>
             <StyledListItemText>{item.name}</StyledListItemText>
           </MenuItem>
         ))}
       </Menu>
       <Menu anchorEl={anchorEl?.priority} open={Boolean(anchorEl?.priority)} onClose={handleClose}>
-        <Typography variant="body2" sx={{ padding: "6px 12px", color: "#64748b" }}>
+        <Typography variant="body2" sx={{ padding: "6px 12px", color: theme => theme.palette.mode === "light" ? "#64748b" : theme.palette.text.default }}>
           Change priority to:{" "}
         </Typography>
         {priorities?.map(item => (
@@ -259,7 +260,7 @@ export default function SprintIssue({
         ))}
       </Menu>
       <Menu anchorEl={anchorEl?.epic} open={Boolean(anchorEl?.epic)} onClose={handleClose}>
-        <Typography variant="body2" sx={{ padding: "6px 12px", color: "#64748b" }}>
+        <Typography variant="body2" sx={{ padding: "6px 12px", color: theme => theme.palette.mode === "light" ? "#64748b" : theme.palette.text.default }}>
           Change Epic to:{" "}
         </Typography>
         {epics?.length ? (

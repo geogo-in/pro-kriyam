@@ -16,7 +16,8 @@ import MembershipFilter from "./MembershipFilter"
 const SmallButton = styled(Button)(({ theme, variant }) => ({
   borderRadius: 20,
   border: `1px solid rgba(229,231,235, 1)`,
-  color: variant === "contained" ? "#fff" : theme.palette.primary.defaultText,
+  // color: variant === "contained" ? "#fff" : theme.palette.primary.defaultText,
+  color: variant === "contained" ? "#fff" : theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary,
   paddingLeft: 12,
   paddingRight: 12,
   lineHeight: 2.1,
@@ -74,7 +75,7 @@ export default function FilterContainer({ filter, setFilter, project_id }) {
 
   return (
     <Stack direction="row" spacing={0.8} sx={{ alignItems: "center" }}>
-      <Paper sx={{ boxShadow: "none", background: "#f1f5f9", color: "#1E293B", borderRadius: "30px", p: "2px 4px", margin: "8px 0", display: "flex", alignItems: "center", width: 280 }}>
+      <Paper sx={{ boxShadow: "none", background: theme => theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.paper, color: "#1E293B", borderRadius: "30px", p: "2px 4px", margin: "8px 0", display: "flex", alignItems: "center", width: 280 }}>
         <IconButton sx={{ p: "6px" }} aria-label="menu">
           <SearchIcon />
         </IconButton>

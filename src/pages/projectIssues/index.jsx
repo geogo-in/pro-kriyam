@@ -24,6 +24,11 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   lineHeight: 2.0,
   color: "#000",
   marginRight: 12,
+  ...(theme.palette.mode === "dark") && {
+    "&:hover": {
+      backgroundColor: "#F1F5F9",
+    },
+  },
 }))
 
 export default function ProjectIssues() {

@@ -6,7 +6,8 @@ const PageContainer = styled(Container)(({ theme }) => ({
   height: "calc( 100vh - 64px)",
   overflowY: "auto",
   padding: "0 !important",
-  backgroundColor: "#f7fafc",
+  backgroundColor: theme.palette.background.secondary,
+  // backgroundColor: "#f7fafc",
 }))
 
 export default PageContainer

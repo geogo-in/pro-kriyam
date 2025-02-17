@@ -115,7 +115,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
       <DialogContent>
         <Grid container spacing={1} sx={{ mb: 1 }}>
           <Grid item lg={4}>
-            <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+            <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
               Issue type*
             </Typography>
             <SelectWithIcon required name="tracker_id" value={state.tracker_id} onChange={handleChange} minWidth={175}>
@@ -128,7 +128,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
             </SelectWithIcon>
           </Grid>
           <Grid item lg={4}>
-            <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+            <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
               Status*
             </Typography>
             <SelectWithIcon required name="status_id" value={state.status_id} onChange={handleChange} minWidth={175}>
@@ -141,7 +141,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
             </SelectWithIcon>
           </Grid>
           <Grid item lg={4}>
-            <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+            <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
               Priority*
             </Typography>
             <SelectWithIcon required name="priority_id" value={state.priority_id} onChange={handleChange} minWidth={175}>
@@ -156,11 +156,11 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
         </Grid>
 
         <Divider sx={{ mb: 2 }} />
-        <Typography variant="body2" display="block" sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
+        <Typography variant="body2" display="block" sx={{ fontWeight: 500, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
           Summary*
         </Typography>
         <TextField fullWidth autoFocus placeholder="Start typing about the task..." value={state.name} onChange={handleChange} name="subject"></TextField>
-        <Typography variant="body2" display="block" sx={{ mt: 3, mb: 1, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
+        <Typography variant="body2" display="block" sx={{ mt: 3, mb: 1, fontWeight: 500, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
           Description
         </Typography>
 
@@ -171,7 +171,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
             setState(s => ({ ...s, description: data }))
           }}
         />
-        <Typography variant="body2" display="block" sx={{ mt: 3, mb: 0, color: theme => theme.palette.primary.defaultText }}>
+        <Typography variant="body2" display="block" sx={{ mt: 3, mb: 0, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
           Assignee
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -195,7 +195,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
             })}
           </SelectWithIcon>
           {!state.assigned_to_id && (
-            <Typography variant="caption" sx={{ mt: 0, ml: 1, color: theme => theme.palette.primary.defaultText }}>
+            <Typography variant="caption" sx={{ mt: 0, ml: 1, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
               Note: The issue will be automatically assigned to the default assignee (if it's configured for this project).
             </Typography>
           )}
@@ -203,7 +203,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
         <Typography gutterBottom variant="caption" color="primary" sx={{ fontWeight: 500, cursor: "pointer" }} onClick={handleAssign}>
           Assign To me
         </Typography>
-        <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
+        <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
           Epic
         </Typography>
         <SelectWithIcon name="category_id" value={state.category_id} onChange={handleChange} minWidth={250}>
@@ -216,27 +216,27 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
         </SelectWithIcon>
         <Box sx={{ flexDirection: "row", display: "flex" }}>
           <Box sx={{ mr: 1 }}>
-            <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
+            <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
               Start Date
             </Typography>
             <DatePicker
               disableCloseOnSelect={false}
               value={state.start_date}
               disablePast
-              inputFormat="DD/MM/YYYY"
+              inputFormat="MM/DD/YYYY"
               onChange={start_date => setState(x => ({ ...x, start_date }))}
               slotProps={{ textField: { required: true } }}
             />
           </Box>
           <Box sx={{ ml: 1 }}>
-            <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
+            <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
               Due Date
             </Typography>
             <DatePicker
               disableCloseOnSelect={false}
               value={state.due_date}
               disablePast
-              inputFormat="DD/MM/YYYY"
+              inputFormat="MM/DD/YYYY"
               onChange={due_date => setState(x => ({ ...x, due_date }))}
               slotProps={{ textField: params => ({ required: true, error: state.due_date ? params.error : false }) }}
             />

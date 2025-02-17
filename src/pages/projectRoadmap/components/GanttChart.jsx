@@ -1,14 +1,17 @@
 import Button from "@mui/material/Button"
 import LinearProgress from "@mui/material/LinearProgress"
+import { useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import "devexpress-gantt/dist/dx-gantt.min.css"
 import Gantt, { Column, ContextMenu, Editing, Item, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
-import "devextreme/dist/css/dx.common.css"
-import "devextreme/dist/css/dx.light.css"
+// import "devextreme/dist/css/dx.common.css"
+// import "devextreme/dist/css/dx.dark.css"
+// import "devextreme/dist/css/dx.light.css"
+import { useTheme } from "@mui/material/styles"
 import moment from "moment"
 import CustomMenu from "pages/shared/CustomMenu"
 import { useEffect, useRef, useState } from "react"
-import { useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
+import "../../../assets/styles/ganttChart.css"
 import TaskDetail from "./TaskDetail"
 
 const currentDate = new Date()
@@ -19,6 +22,16 @@ export default function GanttChart({ projectId: project_id }) {
   const [updateTask] = useUpdateIssuesMutation()
   const [tasks, setTasks] = useState()
   const ganttRef = useRef()
+  const theme = useTheme()
+
+  const isDarkMode = theme.palette.mode === "light" ? "dx.light.css" : "dx.material.blue.dark.css";
+
+  useEffect(() => {
+    const themeLink = document.getElementById("theme-link");
+    if (themeLink) {
+      themeLink.href = `https://cdn3.devexpress.com/jslib/23.1.3/css/${isDarkMode}`;
+    }
+  }, [isDarkMode]);
 
   const [scaleType, setScaleType] = useState("weeks")
   // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"

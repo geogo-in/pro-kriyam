@@ -7,7 +7,7 @@ const ProjectRoadmap = () => {
   const { project_id } = useParams()
 
   return (
-    <Container>
+    <Container sx={{backgroundColor: theme => theme.palette.background.secondary}}>
       <GanttChartWrapper>
         <GanttChart projectId={project_id} />
       </GanttChartWrapper>

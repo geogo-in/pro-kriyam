@@ -38,7 +38,8 @@ export const SprintBlankSubIssueItem = styled(Box)(({ theme }) => ({
 
 export const StickyTitle = styled("div", { shouldForwardProp: prop => !["draggableProps", "header", "disabledChildren"].includes(prop) })(
   ({ theme, header, disabledChildren, draggableProps, ...props }) => ({
-    backgroundColor: alpha(header ? theme.palette.background.default : theme.palette.common.white, 0.95),
+    backgroundColor: alpha(header ? theme.palette.background.paper : theme.palette.common.white, 0.95),
+    // backgroundColor: alpha(header ? theme.palette.background.default : theme.palette.common.white, 0.95),
     borderRight: header || disabledChildren ? "none" : "0.1px solid #ebebeb",
     borderRadius: 0, //TO-DO: use only for header
     position: draggableProps?.style?.position === "fixed" ? "" : "sticky",

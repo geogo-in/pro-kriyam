@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material"
+import { setBacklogTableWidth } from "@redux/reducerSlices/ui/projectUiSlice"
 import { useLayoutEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setBacklogTableWidth } from "@redux/reducerSlices/ui/projectUiSlice"
 import { ITEM_HEIGHT } from "utils/Backlog"
 import SprintHeaderActionbar from "./SprintHeaderActionbar"
 import { StickyTitle } from "./SprintIssueComponents"
@@ -26,9 +26,9 @@ export default function SprintHeader({ project_id, activeSprint, epicContainerWi
       <SprintHeaderActionbar {...sprint} {...{ activeSprint, project_id, epicContainerWidth }} />
       {sprint.issues.length > 0 && (
         <Stack direction="row" alignItems="end" py={0}>
-          <Stack direction="row" sx={{ background: "rgba(255,255,255,0.6)" }} ref={tableRef}>
-            <StickyTitle sx={{ display: "flex", alignItems: "center", cursor: "pointer", border: "0.1px solid #ebebeb", borderLeft: "none" }}>
-              <Typography sx={{ width: 432, paddingLeft: "44px", fontSize: "0.85rem", color: theme => theme.palette.primary.secondaryText }}>Issue summary</Typography>
+          <Stack direction="row" sx={{ background: theme => theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : theme.palette.background.paper }} ref={tableRef}>
+            <StickyTitle sx={{ display: "flex", alignItems: "center", cursor: "pointer", border: "0.1px solid #ebebeb", borderLeft: "none", background: theme => theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : theme.palette.background.paper }}>
+              <Typography sx={{ width: 432, paddingLeft: "44px", fontSize: "0.85rem", color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>Issue summary</Typography>
             </StickyTitle>
             {SPRINT_ISSUE_HEADERS.map(d => (
               <Typography
@@ -40,7 +40,7 @@ export default function SprintHeader({ project_id, activeSprint, epicContainerWi
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                sx={{ border: "0.1px solid #ebebeb", fontSize: "0.75rem", color: theme => theme.palette.primary.secondaryText }}>
+                sx={{ border: "0.1px solid #ebebeb", fontSize: "0.75rem", color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary }}>
                 {d}
               </Typography>
             ))}

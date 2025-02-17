@@ -5,8 +5,8 @@ import InputBase from "@mui/material/InputBase"
 import MenuItem from "@mui/material/MenuItem"
 import Paper from "@mui/material/Paper"
 import TextField from "@mui/material/TextField"
-import { useState } from "react"
 import { useGetIssuePriorityQuery, useGetIssueTypeQuery, useGetProjectIssuesStatusesQuery } from "@redux/services/issueApi"
+import { useState } from "react"
 
 export default function IssueListToolbar({ project_id, onSearch, onFilter, filter, limit, offset, total_count }) {
   const { data: priorities } = useGetIssuePriorityQuery()
@@ -22,14 +22,16 @@ export default function IssueListToolbar({ project_id, onSearch, onFilter, filte
   return (
     <Box spacing={2} pb={0} display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" sx={{ margin: "0 2px", borderBottom: "1px solid rgba(229,231,235, 0.5)" }}>
       <Box spacing={0.8} sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-        <Paper sx={{ boxShadow: "none", background: "#f1f5f9", color: "#1E293B", borderRadius: "30px", p: "2px 4px", margin: "8px 0px", display: "flex", alignItems: "center", width: 280 }}>
+        {/* <Paper sx={{ boxShadow: "none", background: "#f1f5f9", color: "#1E293B", borderRadius: "30px", p: "2px 4px", margin: "8px 0px", display: "flex", alignItems: "center", width: 280 }}> */}
+        <Paper sx={{ boxShadow: "none", background: theme => theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.paper, color: "#1E293B", borderRadius: "30px", p: "2px 4px", margin: "8px 0px", display: "flex", alignItems: "center", width: 280 }}>
           <IconButton sx={{ p: "6px" }} aria-label="menu">
             <SearchIcon />
           </IconButton>
           <InputBase sx={{ ml: 1, flex: 1 }} name="search" onKeyDown={onSearch} placeholder="Search issues" />
         </Paper>
         <Select
-          sx={{ "& .MuiFormLabel-root": { fontSize: "0.8rem", color: theme => theme.palette.primary.defaultText } }}
+          // sx={{ "& .MuiFormLabel-root": { fontSize: "0.8rem", color: theme => theme.palette.primary.defaultText } }}
+          sx={{ "& .MuiFormLabel-root": { fontSize: "0.8rem", color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary } }}
           label="Issue type"
           name="tracker_id"
           value={filter.tracker_id}
@@ -42,7 +44,8 @@ export default function IssueListToolbar({ project_id, onSearch, onFilter, filte
           ))}
         </Select>
         <Select
-          sx={{ "& .MuiFormLabel-root": { fontSize: "0.8rem", color: theme => theme.palette.primary.defaultText } }}
+          // sx={{ "& .MuiFormLabel-root": { fontSize: "0.8rem", color: theme => theme.palette.primary.defaultText } }}
+          sx={{ "& .MuiFormLabel-root": { fontSize: "0.8rem", color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary } }}
           label="Status"
           name="status_id"
           value={filter.status_id}
@@ -55,7 +58,8 @@ export default function IssueListToolbar({ project_id, onSearch, onFilter, filte
           ))}
         </Select>
         <Select
-          sx={{ "& .MuiFormLabel-root": { fontSize: "0.8rem", color: theme => theme.palette.primary.defaultText } }}
+          // sx={{ "& .MuiFormLabel-root": { fontSize: "0.8rem", color: theme => theme.palette.primary.defaultText } }}
+          sx={{ "& .MuiFormLabel-root": { fontSize: "0.8rem", color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary } }}
           label="Priority"
           name="priority_id"
           value={filter.priority_id}
@@ -69,7 +73,7 @@ export default function IssueListToolbar({ project_id, onSearch, onFilter, filte
         </Select>
       </Box>
       <Box>
-        <Pagination count={Math.ceil(total_count / limit)} page={page} onChange={handleChange} />
+        <Pagination sx={{color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary}} count={Math.ceil(total_count / limit)} page={page} onChange={handleChange} />
       </Box>
     </Box>
   )
@@ -80,7 +84,8 @@ const Select = styled(props => <TextField select {...props} />)(() => ({
   marginLeft: 8,
   marginBottom: 8,
   minWidth: 120,
-  backgroundColor: "white",
+  // backgroundColor: "white",
+  backgroundColor: theme => theme.palette.mode === "light" ? "white" : theme.palette.background.secondary,
   "& .MuiInputBase-root": {
     borderRadius: 30,
   },

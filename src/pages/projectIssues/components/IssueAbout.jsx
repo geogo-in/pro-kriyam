@@ -20,7 +20,7 @@ export const StyledListItemText = styled(ListItemText)(({ theme }) => ({
 const TableCell = styled(MuiTableCell)(({ theme }) => ({
   padding: "4px 8px",
   // borderBottom: "1px solid #EEE",
-  color: theme.palette.primary.secondaryText,
+  color: theme.palette.mode === "light" ? theme.palette.primary.secondaryText : theme.palette.text.secondary,
   "&:first-of-child": { paddingLeft: "4px", fontWeight: 500 },
   "&:last-child": { paddingRight: "32px" },
 }))

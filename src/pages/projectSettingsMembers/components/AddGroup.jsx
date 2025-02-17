@@ -1,11 +1,11 @@
 import { LoadingButton } from "@mui/lab"
 import { Grid, ListItem, ListItemText, MenuItem, Typography } from "@mui/material"
+import { useCreateProjectMembershipMutation } from "@redux/services/projectApi"
+import { useGetGroupsQuery, useGetRolesQuery } from "@redux/services/userApi"
 import { useSnackbar } from "notistack"
 import { SelectWithIcon } from "pages/shared/CustomTextField"
 import { LineCard as Card } from "pages/shared/StyledCard"
 import { useState } from "react"
-import { useCreateProjectMembershipMutation } from "@redux/services/projectApi"
-import { useGetGroupsQuery, useGetRolesQuery } from "@redux/services/userApi"
 import { getErrorMessage } from "utils/helper"
 
 const initialState = { user_id: "", role_ids: [] }
@@ -38,7 +38,7 @@ const AddGroup = ({ project_id, setShow }) => {
 
   return (
     <Card sx={{ px: 3, py: 2, mb: 2 }}>
-      <Typography variant="h6" gutterBottom sx={{ fontSize: "1rem", color: theme => theme.palette.primary.defaultText }}>
+      <Typography variant="h6" gutterBottom sx={{ fontSize: "1rem", color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}>
         Add a team to project
       </Typography>
       <Grid container spacing={2}>
