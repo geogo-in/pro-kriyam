@@ -1,4 +1,4 @@
-import { Attachment, Delete, DeleteOutline, Download, MoreVert } from "@mui/icons-material"
+import { Attachment, Close, Delete, DeleteOutline, Done, Download, MoreVert } from "@mui/icons-material"
 import AccountTreeIcon from "@mui/icons-material/AccountTreeOutlined"
 import { LoadingButton } from "@mui/lab"
 import {
@@ -20,9 +20,11 @@ import {
 } from "@mui/material"
 import Box from "@mui/material/Box"
 import CardMedia from "@mui/material/CardMedia"
+import { DatePicker } from "@mui/x-date-pickers"
 import { getCurrentUserKey } from "@redux/reducerSlices/user/userAuthSlice"
 import { useDeleteIssueMutation, useGetIssueQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useDeleteAttachmentMutation } from "@redux/services/redmineApi"
+import moment from "moment"
 import { useSnackbar } from "notistack"
 import { SleekSelectWithIcon } from "pages/shared/CustomTextField"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
@@ -31,7 +33,7 @@ import { StyledTab, StyledTabs } from "pages/shared/StyledTabs"
 import { StyledTooltip } from "pages/shared/StyledTooltip"
 import TabPanel from "pages/shared/TabPanel"
 import TypoTextField from "pages/shared/TypoTextField"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { PATH_DASHBOARD } from "routes/paths"
 import { copyTextToClipboard } from "utils/Copy"
@@ -44,6 +46,70 @@ import IssueAbout from "./IssueAbout"
 import IssueActivity from "./IssueActivity"
 import IssueComments from "./IssueComments"
 import IssueSubTasks from "./IssueSubTasks"
+
+const EditableDatePicker = ({ label, date, onUpdate, minDate, maxDate }) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(date ? moment(date) : null)
+  const { enqueueSnackbar } = useSnackbar()
+
+  useEffect(() => {
+    setSelectedDate(date ? moment(date) : null)
+  },[isEditing])
+
+  const handleSubmit = async e => {
+    try{
+      console.log(selectedDate)
+      if (minDate && selectedDate.isBefore(moment(minDate))) {
+        enqueueSnackbar(`${label} cannot be before Start Date.`, { variant: "error" })
+        return;
+      }
+      if (maxDate && selectedDate.isAfter(moment(maxDate))) {
+        enqueueSnackbar(`${label} cannot be after Due Date.`, { variant: "error" })
+        return;
+      }
+      onUpdate(selectedDate.format("YYYY-MM-DD"))
+      setIsEditing(false);
+    } catch (error) {}
+  };
+
+  return (
+    <Box sx={{display: "flex", flexDirection:"row", alignItems: "center", mt: 2 }}>
+      <Typography 
+        variant="body2" 
+        display="block" 
+        sx={{width: "120px",color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.text.secondary }}
+      >
+        {label}
+      </Typography>
+
+      {isEditing ? (
+        <Box sx={{ display: "flex", alignItems: "center" }} >
+          <DatePicker
+            value={selectedDate}
+            inputFormat="MM/DD/YYYY"
+            onChange={(newDate) => setSelectedDate(newDate)}
+            minDate={minDate ? moment(minDate) : undefined}
+            maxDate={maxDate ? moment(maxDate) : undefined}
+          />
+          <Box sx={{display: "flex"}}>
+            <Button onClick={handleSubmit} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: "#f1f5f9", ml: 1 }}>
+              <Done />
+            </Button>
+            <Button onClick={() => setIsEditing(false)} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: "#f1f5f9", ml: 1 }}>
+              <Close />
+            </Button>
+          </Box>
+        </Box>
+      ) : (
+        <Box onClick={() => setIsEditing(true)} sx={{ cursor: "pointer" }}>
+          <Typography variant="body2">
+            {date ? moment(date).format("MM/DD/YYYY") : "Select Date"}
+          </Typography>
+        </Box>
+      )}
+    </Box>
+  );
+};
 
 export const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: 4,
@@ -285,6 +351,21 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
         Details
       </Typography>
       <IssueAbout {...issue} project_id={project_id} />
+
+      <Box sx={{ padding: "4px 8px"}}>
+        <EditableDatePicker
+          label="Start Date"
+          date={issue.start_date}
+          onUpdate={(newDate) => handleUpdate({ start_date: newDate })}
+          maxDate={issue.due_date} 
+        />
+        <EditableDatePicker
+          label="Due Date"
+          date={issue.due_date}
+          onUpdate={(newDate) => handleUpdate({ due_date: newDate })}
+          minDate={issue.start_date} 
+        />
+      </Box>
 
       <Box sx={{ borderTop: "1px solid rgba(229,231,235, 0.5)", pb: 2, mt: 3 }}>
         <StyledTabs value={tab} onChange={handleTabChange}>
