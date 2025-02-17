@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab"
-import { Box, Button, DialogActions, DialogContent, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, DialogActions, DialogContent, TextField, Typography } from "@mui/material"
 import { useUpdateSprintMutation, useUpdateSprintStateMutation } from "@redux/services/redmineApi"
 import moment from "moment"
 import { useSnackbar } from "notistack"
@@ -45,46 +45,45 @@ export default function SprintDetails({ project_id, sprint_id, editable, onClose
       </CustomDialogTitle>
       <DialogContent sx={{ px: 2, mt: 2 }}>
         <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
-          Sprint Name*
+          Sprint name*
         </Typography>
         <TextField value={state.name} name="name" onChange={handleChange} fullWidth required sx={{ mb: 3 }} />
-        <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} flexWrap={"wrap"} sx={{ mb: 2 }}>
-          <Box>
-            <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
-              Start Date*
-            </Typography>
-            <TextField
-              type="date"
-              value={state.start_date.format("YYYY-MM-DD")}
-              onChange={e => setState({ ...state, start_date: moment(e.target.value) })}
-              required
-              sx={{ marginRight: 2 }}
-              inputProps={{ min: moment().format("YYYY-MM-DD") }}
-            />
-          </Box>
-          <Box>
-            <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
-              End Date*
-            </Typography>
-            <TextField
-              type="date"
-              value={state.end_date.format("YYYY-MM-DD")}
-              onChange={e => setState({ ...state, end_date: moment(e.target.value) })}
-              required
-              inputProps={{ min: moment().format("YYYY-MM-DD") }}
-            />
-          </Box>
-        </Stack>
+
         <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
-          Sprint Goal*
+          Start date*
         </Typography>
-        <TextField required value={state.goals} name="goals" onChange={handleChange} fullWidth sx={{ mb: 3 }} />
+        <TextField
+          type="date"
+          value={state.start_date.format("YYYY-MM-DD")}
+          onChange={e => setState({ ...state, start_date: moment(e.target.value) })}
+          required
+          fullWidth
+          sx={{ marginBottom: 3 }}
+          inputProps={{ min: moment().format("YYYY-MM-DD") }}
+        />
+
+        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+          End date*
+        </Typography>
+        <TextField
+          type="date"
+          value={state.end_date.format("YYYY-MM-DD")}
+          onChange={e => setState({ ...state, end_date: moment(e.target.value) })}
+          sx={{ marginBottom: 3 }}
+          fullWidth
+          required
+          inputProps={{ min: moment().format("YYYY-MM-DD") }}
+        />
+        <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+          Sprint goal*
+        </Typography>
+        <TextField required value={state.goals} name="goals" onChange={handleChange} fullWidth multiline rows={2} />
       </DialogContent>
       <DialogActions sx={{ px: 2, py: 1.6, mt: 2, borderTop: "1px solid #E5E7EB" }}>
-        <Button disabled={loading} onClick={onClose}>
+        <Button disabled={loading} onClick={onClose} size="large" color="inherit">
           Cancel
         </Button>
-        <LoadingButton loading={loading} variant="contained" type="submit">
+        <LoadingButton loading={loading} variant="contained" type="submit" size="large">
           {type === "Edit Sprint" ? "Update" : type}
         </LoadingButton>
       </DialogActions>

@@ -293,7 +293,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
           /> */}
       </DialogContent>
       <DialogFooter>
-        <LoadingButton loading={isLoading} type="submit" variant="contained">
+        <LoadingButton loading={isLoading} type="submit" variant="contained" size="large">
           Create Issue
         </LoadingButton>
       </DialogFooter>

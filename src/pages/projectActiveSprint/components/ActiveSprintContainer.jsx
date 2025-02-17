@@ -82,17 +82,19 @@ export default function ActiveSprintContainer({ columns, setColumns, filter, set
   }
   return (
     <>
-      <Box sx={{ margin: "0 2px", borderBottom: "1px solid rgba(229,231,235, 0.5)" }}>
+      <Box sx={{ margin: "0 2px", padding: "4px 0", borderBottom: "1px solid rgba(229,231,235, 0.5)" }}>
         <FilterContainer {...{ filter, setFilter, project_id }} />
       </Box>
       <ScrollableGrid>
         <DragDropContext onDragEnd={onDragEnd}>
           <Box sx={{ display: "flex" }}>
-          {Object.values(columns).sort((a, b) => a.position - b.position).map(column => (
-              <Box display="flex" key={column.id}>
-                <Column column={column} project_id={project_id} sprint_id={sprint.id} />
-              </Box>
-            ))}
+            {Object.values(columns)
+              .sort((a, b) => a.position - b.position)
+              .map(column => (
+                <Box display="flex" key={column.id}>
+                  <Column column={column} project_id={project_id} sprint_id={sprint.id} />
+                </Box>
+              ))}
             {/* {Object.values(columns).map(column => (
               <Box display="flex" key={column.id}>
                 <Column column={column} project_id={project_id} sprint_id={sprint.id} />
