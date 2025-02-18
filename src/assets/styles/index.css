@@ -1,0 +1,93 @@
+/* #################################### */
+/* Gantt chart CSS overrides */
+/* #################################### */
+
+.dx-gantt .dx-gantt-altRow,
+.dx-gantt .dx-gantt-collapsable-row {
+  background-color: #edeff5 !important;
+}
+
+.dx-treelist .dx-row-lines > td,
+.dx-gantt .dx-gantt-tsa,
+.dx-gantt .dx-gantt-tsac,
+.dx-treelist-headers,
+.dx-treelist-headers .dx-treelist-table .dx-row > td {
+  border-bottom: 1px solid #edeff1 !important;
+}
+
+.dx-treelist .dx-column-lines > td {
+  border-left: 1px solid #edeff1 !important;
+  border-right: 1px solid #edeff1 !important;
+}
+
+/* Column header color */
+.dx-gantt .dx-gantt-header {
+  color: #646d76 !important;
+  font-size: 0.75rem !important;
+}
+
+.dx-treelist-headers .dx-treelist-table .dx-row > td {
+  color: #646d76 !important;
+  font-size: 0.85rem !important;
+  padding: 12px 10px;
+  /* display: flex; */
+  /* flex-direction: row; */
+  /* align-items: center; */
+}
+
+.dx-gantt .dx-gantt-header .dx-gantt-hb,
+.dx-gantt .dx-gantt-header .dx-gantt-tsa,
+.dx-gantt .dx-gantt-header .dx-gantt-tsac,
+.dx-gantt .dx-gantt-header .dx-gantt-vb {
+  border-color: #edeff1 !important;
+}
+
+.dx-gantt .dx-gantt-vb {
+  border-left: 1px solid #edeff1 !important;
+}
+.dx-gantt .dx-gantt-hb {
+  border-top: 1px solid #edeff1 !important;
+}
+.dx-treelist .dx-row > td {
+  /* padding: 7px; */
+  font-size: 0.8rem !important;
+}
+
+/* First title */
+.dx-treelist-rowsview.dx-treelist-nowrap .dx-treelist-table .dx-treelist-cell-expandable .dx-treelist-text-content {
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+}
+
+.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task .dx-gantt-tPrg {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task {
+  background-color: #ffcf37 !important;
+}
+.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task .dx-gantt-titleIn {
+  color: #865e17 !important;
+}
+.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent {
+  background-color: #42ccff !important;
+}
+.dx-gantt .dx-gantt-view .dx-gantt-parent::before {
+  /* background-color: #42ccff !important; */
+  border-left-color: #42ccff !important;
+  border-top-color: #42ccff !important;
+}
+.dx-gantt .dx-gantt-view .dx-gantt-parent::after {
+  /* background-color: #42ccff !important; */
+  border-right-color: #42ccff !important;
+  border-top-color: #42ccff !important;
+}
+.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent .dx-gantt-titleIn {
+  color: #21667f !important;
+  /* background-color: #0b6ffc !important; */
+}
+
+.dx-gantt .dx-gantt-tm {
+  border-left: 1.5px dashed #0b6ffc !important;
+}

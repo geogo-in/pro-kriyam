@@ -6,9 +6,11 @@ import "devexpress-gantt/dist/dx-gantt.min.css"
 import Gantt, { Column, ContextMenu, Editing, Item, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
 import "devextreme/dist/css/dx.common.css"
 import "devextreme/dist/css/dx.light.css"
+// import "gantt-theme-overrides.css"
 import moment from "moment"
 import CustomMenu from "pages/shared/CustomMenu"
 import { useEffect, useRef, useState } from "react"
+// import "./gantt-theme-overrides.css"
 import TaskDetail from "./TaskDetail"
 
 const currentDate = new Date()
@@ -96,7 +98,7 @@ export default function GanttChart({ projectId: project_id }) {
           <Item
             widget="dxButton"
             render={() => (
-              <Button size="small" aria-haspopup="true" aria-expanded={openAddDialog ? "true" : undefined} disableElevation variant="contained" color="primary" onClick={handleAddDialogOpen}>
+              <Button size="small" aria-haspopup="true" aria-expanded={openAddDialog ? "true" : undefined} disableElevation variant="contained" onClick={handleAddDialogOpen}>
                 New Issue
               </Button>
             )}
@@ -137,7 +139,6 @@ export default function GanttChart({ projectId: project_id }) {
           />
         </Toolbar>
         <Column dataField="title" caption="Subject" width={250} />
-        {/* <Column dataField="start" caption="Start Date" /> */}
         <Column dataField="start" caption="Start Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} />
         <Column dataField="end" caption="End Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} />
         <Validation autoUpdateParentTasks={true} />

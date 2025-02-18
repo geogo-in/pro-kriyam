@@ -58,6 +58,7 @@ function TaskDetail({ onClose, project_id, editable, task }) {
           type="date"
           required
           label="Start date"
+          // inputProps={{ min: moment().format("YYYY-MM-DD") }}
           value={state.start_date ? moment(state.start_date).format("YYYY-MM-DD") : ""}
           onChange={e => setState({ ...state, start_date: moment(e.target.value) })}
           InputLabelProps={{ shrink: true }}
@@ -67,6 +68,7 @@ function TaskDetail({ onClose, project_id, editable, task }) {
         <TextField
           type="date"
           label="End Date"
+          // inputProps={{ min: moment().format("YYYY-MM-DD") }}
           value={state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : ""}
           onChange={e => setState({ ...state, due_date: moment(e.target.value) })}
           InputLabelProps={{ shrink: true }}
@@ -95,8 +97,8 @@ function TaskDetail({ onClose, project_id, editable, task }) {
       </DialogContent>
 
       <DialogActions>
-        <LoadingButton size="small" fullWidth loading={isLoading || isUpdating} type="submit" variant="contained" color="primary">
-          Create or Update Task
+        <LoadingButton size="small" fullWidth loading={isLoading || isUpdating} type="submit" variant="contained" color="primary" size="normal">
+          Submit
         </LoadingButton>
       </DialogActions>
     </Box>
