@@ -11,9 +11,41 @@ import moment from "moment"
 import CustomMenu from "pages/shared/CustomMenu"
 import { useEffect, useRef, useState } from "react"
 // import "./gantt-theme-overrides.css"
+import AddIcon from "@mui/icons-material/Add"
+import { styled } from "@mui/material/styles"
 import TaskDetail from "./TaskDetail"
 
 const currentDate = new Date()
+
+export const StyledPrimaryButton = styled(Button)(({ theme }) => ({
+  borderRadius: 4,
+  // backgroundColor: "#F1F5F9",
+  paddingLeft: 20,
+  paddingRight: 24,
+  lineHeight: 2.0,
+  // color: "#000",
+  marginRight: 12,
+}))
+export const StyledSimpleButton = styled(Button)(({ theme }) => ({
+  borderRadius: 4,
+  backgroundColor: "#F1F5F9",
+  paddingLeft: 12,
+  paddingRight: 12,
+  lineHeight: 2.0,
+  color: "#000",
+  // marginRight: 12,
+  boxShadow: "none",
+}))
+export const StyledTextButton = styled(Button)(({ theme }) => ({
+  borderRadius: 4,
+  // backgroundColor: "#F1F5F9",
+  paddingLeft: 12,
+  paddingRight: 12,
+  lineHeight: 2.0,
+  color: "#757575",
+  // marginRight: 12,
+  boxShadow: "none",
+}))
 
 export default function GanttChart({ projectId: project_id }) {
   const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(project_id)
@@ -98,44 +130,69 @@ export default function GanttChart({ projectId: project_id }) {
           <Item
             widget="dxButton"
             render={() => (
-              <Button size="small" aria-haspopup="true" aria-expanded={openAddDialog ? "true" : undefined} disableElevation variant="contained" onClick={handleAddDialogOpen}>
+              <StyledPrimaryButton
+                startIcon={<AddIcon />}
+                size="small"
+                aria-haspopup="true"
+                aria-expanded={openAddDialog ? "true" : undefined}
+                disableElevation
+                variant="contained"
+                onClick={handleAddDialogOpen}>
                 New Issue
-              </Button>
+              </StyledPrimaryButton>
             )}
           />
 
           <Item name="separator" />
           <Item name="collapseAll" />
           <Item name="expandAll" />
-          <Item name="separator" />
-          <Item name="zoomIn" />
-          <Item name="zoomOut" />
+          <Item name="zoomIn" location={"after"} />
+          <Item name="zoomOut" location={"after"} />
+          <Item name="separator" location={"after"} />
           <Item
             widget="dxButton"
             location={"after"}
-            render={() => (
-              <Button size="small" variant={scaleType === "weeks" ? "contained" : "text"} style={{ boxShadow: "none" }} onClick={() => setScaleType("weeks")}>
-                Weeks
-              </Button>
-            )}
+            render={() =>
+              scaleType === "weeks" ? (
+                <StyledSimpleButton size="small" onClick={() => setScaleType("weeks")}>
+                  Weeks
+                </StyledSimpleButton>
+              ) : (
+                <StyledTextButton size="small" onClick={() => setScaleType("weeks")}>
+                  Weeks
+                </StyledTextButton>
+              )
+            }
           />
           <Item
             widget="dxButton"
             location={"after"}
-            render={() => (
-              <Button size="small" variant={scaleType === "months" ? "contained" : "text"} style={{ boxShadow: "none" }} onClick={() => setScaleType("months")}>
-                Months
-              </Button>
-            )}
+            render={() =>
+              scaleType === "months" ? (
+                <StyledSimpleButton size="small" onClick={() => setScaleType("months")}>
+                  Months
+                </StyledSimpleButton>
+              ) : (
+                <StyledTextButton size="small" onClick={() => setScaleType("months")}>
+                  Months
+                </StyledTextButton>
+              )
+            }
           />
           <Item
             widget="dxButton"
             location={"after"}
-            render={() => (
-              <Button size="small" variant={scaleType === "years" ? "contained" : "text"} style={{ boxShadow: "none" }} onClick={() => setScaleType("years")}>
-                Years
-              </Button>
-            )}
+            render={() =>
+              scaleType === "years" ? (
+                <StyledSimpleButton size="small" onClick={() => setScaleType("years")}>
+                  Years
+                </StyledSimpleButton>
+              ) : (
+                <StyledTextButton size="small" onClick={() => setScaleType("years")}>
+                  Years
+                </StyledTextButton>
+              )
+            }
           />
         </Toolbar>
         <Column dataField="title" caption="Issue Summary" width={250} />

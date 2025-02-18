@@ -1,7 +1,9 @@
 /* #################################### */
 /* Gantt chart CSS overrides */
 /* #################################### */
-
+.dx-gantt {
+  border: none !important;
+}
 .dx-gantt .dx-gantt-altRow,
 .dx-gantt .dx-gantt-collapsable-row {
   background-color: #edeff5 !important;
