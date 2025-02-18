@@ -54,13 +54,30 @@
 }
 
 /* First title */
-.dx-treelist-rowsview.dx-treelist-nowrap .dx-treelist-table .dx-treelist-cell-expandable .dx-treelist-text-content {
+.dx-data-row .dx-treelist-text-content {
   font-size: 0.8rem !important;
   font-weight: 500 !important;
+  color: #657289 !important;
+}
+.dx-data-row.dx-gantt-collapsable-row .dx-treelist-text-content {
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  color: #3e4954 !important;
+  /* color: rgb(62, 73, 84) !important; */
 }
 
+/* .dx-treelist-rowsview.dx-treelist-nowrap .dx-treelist-table .dx-treelist-cell-expandable .dx-treelist-text-content {
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+} */
+.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent {
+  border-radius: 10px 10px 0 0 !important;
+}
+.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task {
+  border-radius: 10px !important;
+}
 .dx-gantt .dx-gantt-taskWrapper .dx-gantt-task .dx-gantt-tPrg {
-  border-radius: 4px;
+  border-radius: 10px !important;
   background-color: rgba(0, 0, 0, 0.1) !important;
 }
 

@@ -138,7 +138,7 @@ export default function GanttChart({ projectId: project_id }) {
             )}
           />
         </Toolbar>
-        <Column dataField="title" caption="Subject" width={250} />
+        <Column dataField="title" caption="Issue Summary" width={250} />
         <Column dataField="start" caption="Start Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} />
         <Column dataField="end" caption="End Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} />
         <Validation autoUpdateParentTasks={true} />
