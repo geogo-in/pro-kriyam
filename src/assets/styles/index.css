@@ -27,9 +27,10 @@
 }
 
 .dx-treelist-headers .dx-treelist-table .dx-row > td {
-  color: #646d76 !important;
-  font-size: 0.85rem !important;
+  color: #54637c !important;
+  font-size: 0.8rem !important;
   padding: 12px 10px;
+  /* font-weight: 500; */
   /* display: flex; */
   /* flex-direction: row; */
   /* align-items: center; */
@@ -41,6 +42,17 @@
 .dx-gantt .dx-gantt-header .dx-gantt-vb {
   border-color: #edeff1 !important;
 }
+.dx-gantt .dx-gantt-header .dx-gantt-tsa:first-child {
+  font-weight: 500 !important;
+}
+
+/* Header boder bottom */
+.dx-gantt .dx-gantt-header .dx-gantt-tsa:last-child {
+  border-bottom: 3px solid #edeff1 !important;
+}
+.dx-treelist-table.dx-treelist-table-fixed tr td.dx-treelist-action {
+  border-bottom: 3px solid #edeff1 !important;
+}
 
 .dx-gantt .dx-gantt-vb {
   border-left: 1px solid #edeff1 !important;
@@ -51,6 +63,7 @@
 .dx-treelist .dx-row > td {
   /* padding: 7px; */
   font-size: 0.8rem !important;
+  color: #42526e !important;
 }
 
 /* First title */
