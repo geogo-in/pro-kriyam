@@ -66,7 +66,7 @@ const ProjectSidebarLinks = ({ project }) => {
 
   const projectBaseUrl = `${PATH_DASHBOARD.projects.root}/${project.identifier}`
   const primaryLinks = [
-    { icon: <IssuesIcon />, label: "Issues", to: `${projectBaseUrl}/issues` },
+    // { icon: <IssuesIcon />, label: "Issues", to: `${projectBaseUrl}/issues` },
     // { icon: <ReportsIcon />, label: "Reports", to: `reports`, disabled: true },
     // { icon: <PokerIcon />, label: "Planning Poker", to: `planning-poker`, disabled: true },
     // { icon: <DocsIcon />, label: "Documents", to: `documents`, disabled: true },
@@ -74,10 +74,12 @@ const ProjectSidebarLinks = ({ project }) => {
   if (project.project_type.name === "Scrum") {
     primaryLinks.unshift({ icon: <SprintIcon />, label: "Active Sprint", to: `${projectBaseUrl}/sprint` })
     primaryLinks.unshift({ icon: <BacklogIcon />, label: "Backlog", to: `${projectBaseUrl}/backlog` })
+    primaryLinks.push({ icon: <IssuesIcon />, label: "Issues", to: `${projectBaseUrl}/issues` })
     primaryLinks.push({ icon: <SprintDetailsIcon />, label: "Sprint Report", to: `${projectBaseUrl}/report` })
   } else if (project.project_type.name === "Kanban") {
-    primaryLinks.unshift({ icon: <RoadmapIcon />, label: "Roadmap", to: `${projectBaseUrl}/roadmap` })
     primaryLinks.unshift({ icon: <SprintIcon />, label: "Board", to: `${projectBaseUrl}/board` })
+    primaryLinks.unshift({ icon: <RoadmapIcon />, label: "Roadmap", to: `${projectBaseUrl}/roadmap` })
+    // primaryLinks.push({ icon: <IssuesIcon />, label: "Tasks", to: `${projectBaseUrl}/issues` })
   }
   if (Admin) primaryLinks.push({ icon: <SettingsIcon />, label: "Settings", to: `${projectBaseUrl}/settings` })
 

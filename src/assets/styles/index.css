@@ -86,13 +86,15 @@
   font-weight: 500 !important;
 } */
 .dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent {
-  border-radius: 10px 10px 0 0 !important;
+  border-radius: 12px 12px 0 0 !important;
 }
 .dx-gantt .dx-gantt-taskWrapper .dx-gantt-task {
-  border-radius: 10px !important;
+  height: 22px !important;
+  line-height: 22px !important;
+  border-radius: 12px !important;
 }
 .dx-gantt .dx-gantt-taskWrapper .dx-gantt-task .dx-gantt-tPrg {
-  border-radius: 10px !important;
+  border-radius: 12px !important;
   background-color: rgba(0, 0, 0, 0.1) !important;
 }
 
@@ -123,3 +125,89 @@
 .dx-gantt .dx-gantt-tm {
   border-left: 1.5px dashed #0b6ffc !important;
 }
+
+.dx-gantt .dx-gantt-taskRes {
+  background-color: #8791a3 !important;
+  border-radius: 0 12px 12px 12px !important;
+  font-size: 0.75rem !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.dx-gantt-custom-task-color-0 {
+  background-color: #5c57c9;
+}
+
+.dx-gantt-custom-task-color-1 {
+  background-color: #35b86b;
+}
+
+.dx-gantt-custom-task-color-2 {
+  background-color: #4796ce;
+}
+
+.dx-gantt-custom-task-color-3 {
+  background-color: #ce4776;
+}
+
+.dx-gantt-custom-task-color-4 {
+  background-color: #ce5b47;
+}
+
+.dx-gantt-custom-task-color-5 {
+  background-color: #f78119;
+}
+
+.dx-gantt-custom-task-color-6 {
+  background-color: #9f47ce;
+}
+
+.dx-gantt-custom-task {
+  max-height: 38px;
+  /* height: 100%; */
+  display: block;
+  overflow: hidden;
+}
+
+.dx-gantt-custom-task-wrapper {
+  padding: 8px;
+  /* color: #fff; */
+}
+
+.dx-gantt-custom-task-wrapper > * {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dx-gantt-custom-task-img-wrapper {
+  float: left;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin: 8px;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.dx-gantt-custom-task-img {
+  width: 32px;
+}
+
+.dx-gantt-custom-task-title {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.dx-gantt-custom-task-row {
+  font-size: 11px;
+}
+
+/* .dx-gantt-custom-task-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.3);
+} */

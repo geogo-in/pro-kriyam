@@ -3,7 +3,7 @@ import LinearProgress from "@mui/material/LinearProgress"
 import { useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import "devexpress-gantt/dist/dx-gantt.min.css"
-import Gantt, { Column, ContextMenu, Editing, Item, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
+import Gantt, { Column, Editing, Item, ResourceAssignments, Resources, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
 import "devextreme/dist/css/dx.common.css"
 import "devextreme/dist/css/dx.light.css"
 // import "gantt-theme-overrides.css"
@@ -14,16 +14,15 @@ import { useEffect, useRef, useState } from "react"
 import AddIcon from "@mui/icons-material/Add"
 import { styled } from "@mui/material/styles"
 import TaskDetail from "./TaskDetail"
+// import TaskTemplate from "./TaskTemplate"
 
 const currentDate = new Date()
 
 export const StyledPrimaryButton = styled(Button)(({ theme }) => ({
   borderRadius: 4,
-  // backgroundColor: "#F1F5F9",
   paddingLeft: 20,
   paddingRight: 24,
   lineHeight: 2.0,
-  // color: "#000",
   marginRight: 12,
 }))
 export const StyledSimpleButton = styled(Button)(({ theme }) => ({
@@ -33,17 +32,14 @@ export const StyledSimpleButton = styled(Button)(({ theme }) => ({
   paddingRight: 12,
   lineHeight: 2.0,
   color: "#000",
-  // marginRight: 12,
   boxShadow: "none",
 }))
 export const StyledTextButton = styled(Button)(({ theme }) => ({
   borderRadius: 4,
-  // backgroundColor: "#F1F5F9",
   paddingLeft: 12,
   paddingRight: 12,
   lineHeight: 2.0,
   color: "#757575",
-  // marginRight: 12,
   boxShadow: "none",
 }))
 
@@ -52,6 +48,8 @@ export default function GanttChart({ projectId: project_id }) {
   const { data, isLoading, error } = useGetIssuesQuery({ project_id: project?.id }, { refetchOnMountOrArgChange: true, skip: !project?.id })
   const [updateTask] = useUpdateIssuesMutation()
   const [tasks, setTasks] = useState()
+  const [resources, setResources] = useState()
+  const [resourceAssignments, setResourceAssignments] = useState()
   const ganttRef = useRef()
 
   const [scaleType, setScaleType] = useState("weeks")
@@ -70,16 +68,33 @@ export default function GanttChart({ projectId: project_id }) {
 
   useEffect(() => {
     if (data?.issues) {
+      console.log(data.issues)
       const tasks = data.issues.map(issue => ({
         id: issue.id,
         status: issue.status.id,
         title: issue.subject,
         start: new Date(moment(issue.start_date).startOf("days")),
         end: new Date(moment(issue.due_date).endOf("days")),
+        assignee: issue.assigned_to?.name || "unassigned",
         progress: issue.done_ratio || 0,
         parentId: issue.parent?.id,
       }))
       setTasks(JSON.parse(JSON.stringify(tasks)))
+      const resources = data.issues
+        .map(issue => ({
+          id: issue.assigned_to?.id || "unassigned",
+          text: issue.assigned_to?.name || "Unassigned",
+          color: issue.status.color_code || issue.status.name,
+        }))
+        .filter((resource, index, self) => index === self.findIndex(r => r.id === resource.id))
+      setResources(JSON.parse(JSON.stringify(resources)))
+
+      const resourceAssignments = data.issues.map(issue => ({
+        id: issue.id,
+        taskId: issue.id,
+        resourceId: issue.assigned_to?.id || "unassigned",
+      }))
+      setResourceAssignments(JSON.parse(JSON.stringify(resourceAssignments)))
     }
   }, [data])
 
@@ -111,8 +126,7 @@ export default function GanttChart({ projectId: project_id }) {
   }
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
-
-  console.log(tasks)
+  // console.log(tasks)
   return (
     <>
       <Gantt
@@ -121,11 +135,14 @@ export default function GanttChart({ projectId: project_id }) {
         onContentReady={_scrollToToday}
         scaleType={scaleType}
         ref={ganttRef}
-        taskListWidth={450}
+        taskListWidth={350}
+        // taskContentRender={TaskTemplate}
         height={"calc(100vh - 128px)"}>
         <Tasks dataSource={tasks} />
         <StripLine start={currentDate} title="Today" />
-        <ContextMenu enabled={false} />
+        {/* <ContextMenu enabled={true} /> */}
+        <Resources dataSource={resources} />
+        <ResourceAssignments dataSource={resourceAssignments} />
         <Toolbar>
           <Item
             widget="dxButton"
@@ -138,7 +155,7 @@ export default function GanttChart({ projectId: project_id }) {
                 disableElevation
                 variant="contained"
                 onClick={handleAddDialogOpen}>
-                New Issue
+                New Task
               </StyledPrimaryButton>
             )}
           />
@@ -146,6 +163,8 @@ export default function GanttChart({ projectId: project_id }) {
           <Item name="separator" />
           <Item name="collapseAll" />
           <Item name="expandAll" />
+          <Item name="separator" />
+          <Item name="showResources" />
           <Item name="zoomIn" location={"after"} />
           <Item name="zoomOut" location={"after"} />
           <Item name="separator" location={"after"} />
@@ -195,9 +214,9 @@ export default function GanttChart({ projectId: project_id }) {
             }
           />
         </Toolbar>
-        <Column dataField="title" caption="Issue Summary" width={250} />
-        <Column dataField="start" caption="Start Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} />
-        <Column dataField="end" caption="End Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} />
+        <Column dataField="title" caption="Task Summary" width={340} />
+        {/* <Column dataField="start" caption="Start Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} /> */}
+        {/* <Column dataField="end" caption="End Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} /> */}
         <Validation autoUpdateParentTasks={true} />
         <Editing
           enabled={true}
