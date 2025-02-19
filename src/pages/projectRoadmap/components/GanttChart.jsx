@@ -65,7 +65,7 @@ export default function GanttChart({ projectId: project_id }) {
     setOpenEditDialog()
   }
   const handleAddDialogOpen = e => {
-    setOpenAddDialog(e.target)
+    setOpenNewTaskDialog(true)
   }
 
   useEffect(() => {
