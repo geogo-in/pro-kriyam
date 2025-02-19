@@ -15,7 +15,7 @@ export default function Project() {
         case "Scrum":
           return navigate(`${PATH_DASHBOARD.projects.root}/${project_id}/backlog`, { replace: true })
         case "Kanban":
-          return navigate(`${PATH_DASHBOARD.projects.root}/${project_id}/board`, { replace: true })
+          return navigate(`${PATH_DASHBOARD.projects.root}/${project_id}/roadmap`, { replace: true })
         default:
           return navigate(`${PATH_DASHBOARD.projects.root}/${project_id}/issues`, { replace: true })
       }

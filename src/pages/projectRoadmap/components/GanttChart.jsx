@@ -57,7 +57,7 @@ export default function GanttChart({ projectId: project_id }) {
 
   const [openAddDialog, setOpenAddDialog] = useState(null)
   const [openEditDialog, setOpenEditDialog] = useState()
-
+  const [parentIssueId, setParentIssueId] = useState(null)
   const handleDialogClose = () => {
     setOpenAddDialog(null)
     setOpenEditDialog()
@@ -68,7 +68,7 @@ export default function GanttChart({ projectId: project_id }) {
 
   useEffect(() => {
     if (data?.issues) {
-      console.log(data.issues)
+      // console.log(data.issues)
       const tasks = data.issues.map(issue => ({
         id: issue.id,
         status: issue.status.id,
@@ -111,6 +111,7 @@ export default function GanttChart({ projectId: project_id }) {
 
   const onTaskUpdating = async e => {
     // e.cancel = true
+    console.log("Task update triggered")
     if (e.newValues)
       await updateTask({
         id: e.key,
@@ -119,10 +120,17 @@ export default function GanttChart({ projectId: project_id }) {
         done_ratio: e.newValues?.progress,
       }).unwrap()
   }
+
   const onTaskDblClick = e => {
     e.cancel = true
     setOpenAddDialog(e.element)
     setOpenEditDialog(e.data)
+  }
+
+  const onTaskInserting = e => {
+    e.cancel = true
+    setParentIssueId(e.values.parentId)
+    setOpenAddDialog(e.element)
   }
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
@@ -132,6 +140,7 @@ export default function GanttChart({ projectId: project_id }) {
       <Gantt
         onTaskDblClick={onTaskDblClick}
         onTaskUpdating={onTaskUpdating}
+        onTaskInserting={onTaskInserting}
         onContentReady={_scrollToToday}
         scaleType={scaleType}
         ref={ganttRef}
@@ -224,15 +233,15 @@ export default function GanttChart({ projectId: project_id }) {
           allowDependencyDeleting={false}
           allowResourceAdding={false}
           allowResourceDeleting={false}
-          allowTaskAdding={false}
+          allowTaskAdding={true}
+          allowTaskUpdating={true}
           allowTaskDeleting={false}
           allowTaskResourceUpdating={false}
-          allowTaskUpdating={true}
         />
       </Gantt>
 
       <CustomMenu anchorEl={openAddDialog} open={Boolean(openAddDialog) || Boolean(openEditDialog)} onClose={handleDialogClose}>
-        <TaskDetail onClose={handleDialogClose} project_id={project_id} editable={Boolean(openEditDialog)} task={openEditDialog} />
+        <TaskDetail onClose={handleDialogClose} parentId={parentIssueId} project_id={project_id} editable={Boolean(openEditDialog)} task={openEditDialog} />
       </CustomMenu>
     </>
   )

@@ -12,7 +12,7 @@ import { getErrorMessage } from "utils/helper"
 
 const initialState = { start_date: moment(), due_date: null, subject: "", done_ratio: 0 }
 
-function TaskDetail({ onClose, project_id, editable, task }) {
+function TaskDetail({ onClose, project_id, parentId, editable, task }) {
   const [state, setState] = useState(initialState)
   const { data: project } = useGetProjectByIdQuery(project_id)
   const [createTask, { isLoading }] = useCreateIssuesMutation()
@@ -28,10 +28,12 @@ function TaskDetail({ onClose, project_id, editable, task }) {
       if (editable) {
         await updateTask({ ...state, id: task.id, start_date: moment(state.start_date).format("YYYY-MM-DD"), due_date: moment(state.due_date).format("YYYY-MM-DD") }).unwrap()
       } else {
+        console.log(parentId)
         await createTask({
           ...state,
           sprint_id: project.project_type.name === "Kanban" ? project.active_sprint?.id : undefined,
           project_id,
+          parent_issue_id: parentId,
           start_date: moment(state.start_date).format("YYYY-MM-DD"),
           due_date: moment(state.due_date).format("YYYY-MM-DD"),
           priority_id: priorities.find(p => p.name.toLowerCase() === "normal")?.id,
