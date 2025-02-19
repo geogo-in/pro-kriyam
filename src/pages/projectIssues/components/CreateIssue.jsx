@@ -106,7 +106,6 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
         </Box>
       )
   }
-  // console.log(project)
 
   // for Kanban Project
   if (project && project.project_type.name === "Kanban") {
@@ -210,7 +209,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
                 <Grid container spacing={1} sx={{ mb: 1 }}>
                   <Grid item lg={4}>
                     <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
-                      Issue type*
+                      Task type*
                     </Typography>
                     <SelectWithIcon required name="tracker_id" value={state.tracker_id} onChange={handleChange} minWidth={175}>
                       <MenuItem value="">--- Select ---</MenuItem>

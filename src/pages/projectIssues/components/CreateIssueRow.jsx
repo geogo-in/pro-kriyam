@@ -31,7 +31,7 @@ const SmallButton = styled(Button)(({ theme }) => ({
     opacity: 0.9,
   },
 }))
-export default function CreateIssueRow({ isEditable, sprint_id, parent_issue_id, project_id, category_id }) {
+export default function CreateIssueRow({ isEditable, sprint_id, parent_issue_id, project_id, parent_issue_priority, category_id }) {
   const [editable, setEditable] = useState(false)
   const [createTask, { isLoading }] = useCreateIssuesMutation()
   const { data: trackers } = useGetIssueTypeQuery()
@@ -60,6 +60,7 @@ export default function CreateIssueRow({ isEditable, sprint_id, parent_issue_id,
       await createTask({
         project_id,
         parent_issue_id,
+        priority_id: parent_issue_priority.id,
         category_id,
         sprint_id: sprint_id !== "backlog" ? sprint_id : undefined,
         subject: state.subject,

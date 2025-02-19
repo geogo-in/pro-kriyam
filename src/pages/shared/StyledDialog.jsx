@@ -29,6 +29,10 @@ export const DialogContent = styled(Box)(({ theme }) => ({
   },
 }))
 
+export const DialogContentFull = styled(DialogContent)(({ theme }) => ({
+  height: "calc( 100vh - 64px )",
+}))
+
 export const DialogFooter = styled(Box)(({ theme }) => ({
   height: "64px",
   display: "flex",

@@ -1,17 +1,21 @@
 import AddIcon from "@mui/icons-material/Add"
 import LinearProgress from "@mui/material/LinearProgress"
-import { useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { getCurrentUser, isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
+import { useDeleteIssueMutation, useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import "devexpress-gantt/dist/dx-gantt.min.css"
 import Gantt, { Column, Editing, Item, ResourceAssignments, Resources, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
 import "devextreme/dist/css/dx.common.css"
 import "devextreme/dist/css/dx.light.css"
 import moment from "moment"
+import { useSnackbar } from "notistack"
 import CreateIssue from "pages/projectIssues/components/CreateIssue"
 import CustomDialog from "pages/shared/CustomDialog"
 import { useEffect, useRef, useState } from "react"
+import { useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import { PATH_DASHBOARD } from "routes/paths"
+import { getErrorMessage, getRandomMessage, issueDeleteMessages } from "utils/helper"
 import { StyledPrimaryButton, StyledSimpleButton, StyledTextButton } from "./StyledButtons"
 
 const currentDate = new Date()
@@ -20,6 +24,11 @@ export default function GanttChart({ projectId: project_id }) {
   const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(project_id)
   const { data, isLoading, error } = useGetIssuesQuery({ project_id: project?.id }, { refetchOnMountOrArgChange: true, skip: !project?.id })
   const [updateTask] = useUpdateIssuesMutation()
+  const [deleteIssue, { isLoading: isDeletingIssue }] = useDeleteIssueMutation()
+  const { enqueueSnackbar } = useSnackbar()
+  const isSystemAdmin = useSelector(isAdmin)
+  const currentUser = useSelector(getCurrentUser)
+
   const [tasks, setTasks] = useState()
   const [resources, setResources] = useState()
   const [resourceAssignments, setResourceAssignments] = useState()
@@ -113,9 +122,25 @@ export default function GanttChart({ projectId: project_id }) {
       }).unwrap()
   }
 
+  const onTaskDeleting = async e => {
+    if (isSystemAdmin || project?.lead?.id === currentUser.id) {
+      try {
+        await deleteIssue(e.key).unwrap()
+        const message = getRandomMessage(issueDeleteMessages)
+        enqueueSnackbar(message, { variant: "success", title: "Success!" })
+      } catch (error) {
+        const { message } = getErrorMessage(error)
+        enqueueSnackbar(message, { variant: "error", title: "Oops!" })
+      }
+    } else {
+      enqueueSnackbar("Only admins and project lead can delete issues", { variant: "error", title: "Oops!" })
+      e.cancel = true
+    }
+  }
+
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
-
+  console.log(project)
   return (
     <>
       <Gantt
@@ -123,6 +148,7 @@ export default function GanttChart({ projectId: project_id }) {
         onTaskEditDialogShowing={onTaskEditDialogShowing}
         onTaskUpdating={onTaskUpdating}
         onTaskInserting={onTaskInserting}
+        onTaskDeleting={onTaskDeleting}
         onContentReady={_scrollToToday}
         scaleType={scaleType}
         ref={ganttRef}
@@ -217,7 +243,7 @@ export default function GanttChart({ projectId: project_id }) {
           allowResourceDeleting={false}
           allowTaskAdding={true}
           allowTaskUpdating={true}
-          allowTaskDeleting={false}
+          allowTaskDeleting={true}
           allowTaskResourceUpdating={false}
         />
       </Gantt>

@@ -140,6 +140,9 @@
 }
 
 /* Text editor */
+.ql-editor {
+  height: min-content;
+}
 .ql-editor.ql-blank::before {
   color: #657289;
   font-size: 0.8rem;
