@@ -1,7 +1,7 @@
 import { Box, styled } from "@mui/material"
 import "quill-mention"
 import "quill-mention/dist/quill.mention.css"
-import { useMemo } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import ReactQuill, { Quill } from "react-quill"
 import "react-quill/dist/quill.snow.css"
 
@@ -65,11 +65,15 @@ const StyledQlBox = styled(Box)(({ theme }) => ({
 const StyledEditorBox = styled(Box)(({ theme }) => ({
   "& .quill": {
     height: "150px !important",
-    // marginTop: 8,
   },
   "& .ql-container": {
     border: "1px solid #d2dae5 !important",
-    borderRadius: "0px 0px 4px 4px",
+    borderRadius: "4px",
+  },
+  "& .ql-container.on-focus": {
+    border: "1px solid #2563eb !important",
+    outline: "1px solid #2563eb !important",
+    borderRadius: "4px",
   },
   "& .mention": {
     background: theme.palette.primary.main,
@@ -166,7 +170,7 @@ export const QuillToolbar = () => {
   )
 }
 
-export default function Editor({ people, hash, ...props }) {
+export default function Editor({ people, autoFocus, hash, ...props }) {
   const module = useMemo(
     () => ({
       ...modules,
@@ -195,11 +199,44 @@ export default function Editor({ people, hash, ...props }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   )
+  const editorRef = useRef(null)
+
+  useEffect(() => {
+    if (editorRef.current && autoFocus) {
+      editorRef.current.focus()
+    }
+  }, [])
+
+  const handleFocus = () => {
+    if (editorRef.current) {
+      console.log("Focus", editorRef.current.getEditor().root.parentNode)
+      editorRef.current.getEditor().root.parentNode.classList.add("on-focus")
+    }
+  }
+
+  const handleBlur = () => {
+    if (editorRef.current) {
+      console.log("Bue")
+      editorRef.current.getEditor().root.parentNode.classList.remove("on-focus")
+      // editorRef.current.getEditor().root.parentNode.style.borderColor = "#d2dae5 !important"
+    }
+  }
+
   return (
     <>
       <QuillToolbar />
       <StyledEditorBox>
-        <ReactQuill theme="snow" modules={module} formats={formats} placeholder="Type @ to mention and notify other project members" {...props} />
+        <ReactQuill
+          ref={editorRef}
+          autoFocus
+          theme="snow"
+          modules={module}
+          formats={formats}
+          placeholder="Type @ to mention and notify other project members"
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          {...props}
+        />
       </StyledEditorBox>
     </>
   )

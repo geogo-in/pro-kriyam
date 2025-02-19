@@ -244,7 +244,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
               </>
             ) : (
               <Button onClick={() => setShowMoreOptions(true)} variant="text" sx={{ textDecoration: "underline", color: "#657289" }}>
-                Show more options like: Issue type, Status, Priority
+                Show more options like: Task type, Status, Priority etc.
               </Button>
             )}
           </Box>
