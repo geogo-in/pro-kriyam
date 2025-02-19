@@ -127,7 +127,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
           <Typography variant="body2" display="block" sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
             Summary*
           </Typography>
-          <TextField fullWidth autoFocus placeholder="Start typing about the task..." value={state.name} onChange={handleChange} name="subject"></TextField>
+          <TextField fullWidth inputRef={input => input && input.focus()} placeholder="Start typing about the task..." value={state.name} onChange={handleChange} name="subject"></TextField>
           <Typography variant="body2" display="block" sx={{ mt: 3, mb: 1, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
             Description
           </Typography>
