@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab"
-import { Box, Divider, Grid, LinearProgress, ListItemIcon, ListItemText, TextField } from "@mui/material"
+import { Box, Button, Divider, Grid, LinearProgress, ListItemIcon, ListItemText, TextField } from "@mui/material"
 import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
 import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
@@ -33,6 +33,8 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
     done_ratio: 0,
     project_id: project_id || project_id_params,
   })
+  const [showMoreOptions, setShowMoreOptions] = useState(false)
+  const [showDescriptionField, setShowDescriptionField] = useState(false)
   const { data, isLoading: isProjectsLoading } = useGetProjectsQuery(state.project_id ? skipToken : undefined)
   const { data: project } = useGetProjectByIdQuery(state.project_id || skipToken)
   const { data: statuses } = useGetProjectIssuesStatusesQuery(state.project_id || skipToken)
@@ -103,7 +105,158 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
         </Box>
       )
   }
+  // console.log(project)
 
+  // for Kanban Project
+  if (project && project.project_type.name === "Kanban") {
+    return (
+      <Box component="form" onSubmit={handleSubmit}>
+        <DialogHeader>
+          <Typography variant="h6">
+            Create new task in: <strong>{state.project_id}</strong>
+          </Typography>
+        </DialogHeader>
+        <DialogContent>
+          <Typography variant="body2" display="block" sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
+            Summary*
+          </Typography>
+          <TextField fullWidth autoFocus placeholder="Start typing about the task..." value={state.name} onChange={handleChange} name="subject"></TextField>
+          <Typography variant="body2" display="block" sx={{ mt: 3, mb: 1, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
+            Description
+          </Typography>
+          {showDescriptionField ? (
+            <Editor
+              placeholder="Add a more detailed description..."
+              value={state.description}
+              onChange={data => {
+                setState(s => ({ ...s, description: data }))
+              }}
+              autoFocus
+            />
+          ) : (
+            <Box
+              sx={{ px: 2, py: 6.6, borderRadius: 1, bgcolor: "#f6f9fb", fontStyle: "italic", color: "#657289", cursor: "text", fontSize: "0.8rem" }}
+              onClick={() => setShowDescriptionField(true)}>
+              Add a more detailed description...
+            </Box>
+          )}
+
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
+                Start Date*
+              </Typography>
+              <TextField
+                type="date"
+                value={state.start_date.format("YYYY-MM-DD")}
+                onChange={start_date => setState(x => ({ ...x, start_date }))}
+                required
+                fullWidth
+                inputProps={{ min: moment().format("YYYY-MM-DD") }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
+                Due Date*
+              </Typography>
+              <TextField
+                type="date"
+                value={state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : ""}
+                onChange={due_date => setState(x => ({ ...x, due_date }))}
+                fullWidth
+                required
+                inputProps={{ min: moment().format("YYYY-MM-DD") }}
+              />
+            </Grid>
+          </Grid>
+          <Typography variant="body2" display="block" sx={{ mt: 3, mb: 0, color: theme => theme.palette.primary.defaultText }}>
+            Assignee
+          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <SelectWithIcon sx={{ ".MuiOutlinedInput-root": { borderRadius: 0.5 } }} name="assigned_to_id" value={state.assigned_to_id} onChange={handleChange} minWidth={250}>
+              <MenuItem value="">
+                <ListItemIcon>
+                  <MemberAvatar name="Automatic" tooltipPosition="none" />
+                </ListItemIcon>
+                <ListItemText>Automatic</ListItemText>
+              </MenuItem>
+              {memberships?.map(({ user }) => {
+                if (!user) return ""
+                return (
+                  <MenuItem key={user.id} value={user.id}>
+                    <ListItemIcon>
+                      <MemberAvatar name={user.name} tooltipPosition="none" />
+                    </ListItemIcon>
+                    <ListItemText>{user.name}</ListItemText>
+                  </MenuItem>
+                )
+              })}
+            </SelectWithIcon>
+            <Button onClick={handleAssign} variant="text" sx={{ ml: 2 }}>
+              Assign to me
+            </Button>
+          </Box>
+          <Box sx={{ mt: 2 }}>
+            {showMoreOptions ? (
+              <>
+                <Divider sx={{ mb: 2 }} />
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item lg={4}>
+                    <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+                      Issue type*
+                    </Typography>
+                    <SelectWithIcon required name="tracker_id" value={state.tracker_id} onChange={handleChange} minWidth={175}>
+                      <MenuItem value="">--- Select ---</MenuItem>
+                      {project?.tracker?.map(({ name, id }) => (
+                        <MenuItem key={id} value={id}>
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </SelectWithIcon>
+                  </Grid>
+                  <Grid item lg={4}>
+                    <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+                      Status*
+                    </Typography>
+                    <SelectWithIcon required name="status_id" value={state.status_id} onChange={handleChange} minWidth={175}>
+                      <MenuItem value="">--- Select ---</MenuItem>
+                      {statuses?.map(({ name, id }) => (
+                        <MenuItem key={id} value={id}>
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </SelectWithIcon>
+                  </Grid>
+                  <Grid item lg={4}>
+                    <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
+                      Priority*
+                    </Typography>
+                    <SelectWithIcon required name="priority_id" value={state.priority_id} onChange={handleChange} minWidth={175}>
+                      <MenuItem value="">--- Select ---</MenuItem>
+                      {priorities?.map(({ name, id }) => (
+                        <MenuItem key={id} value={id}>
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </SelectWithIcon>
+                  </Grid>
+                </Grid>
+              </>
+            ) : (
+              <Button onClick={() => setShowMoreOptions(true)} variant="text" sx={{ textDecoration: "underline", color: "#657289" }}>
+                Show more options like: Issue type, Status, Priority
+              </Button>
+            )}
+          </Box>
+        </DialogContent>
+        <DialogFooter>
+          <LoadingButton loading={isLoading} type="submit" variant="contained" size="large" fullWidth>
+            Create Task
+          </LoadingButton>
+        </DialogFooter>
+      </Box>
+    )
+  }
   return (
     <Box component="form" onSubmit={handleSubmit}>
       <DialogHeader>
@@ -193,15 +346,10 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
               )
             })}
           </SelectWithIcon>
-          {!state.assigned_to_id && (
-            <Typography variant="caption" sx={{ mt: 0, ml: 1, color: theme => theme.palette.primary.defaultText }}>
-              Note: The issue will be automatically assigned to the default assignee (if it's configured for this project).
-            </Typography>
-          )}
+          <Button onClick={handleAssign} variant="text" sx={{ ml: 2 }}>
+            Assign to me
+          </Button>
         </Box>
-        <Typography gutterBottom variant="caption" color="primary" sx={{ fontWeight: 500, cursor: "pointer" }} onClick={handleAssign}>
-          Assign To me
-        </Typography>
         <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
           Epic
         </Typography>
@@ -213,87 +361,37 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
             </MenuItem>
           ))}
         </SelectWithIcon>
-        <Box sx={{ flexDirection: "row", display: "flex" }}>
-          <Box sx={{ mr: 1 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
             <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
-              Start Date
+              Start Date*
             </Typography>
             <TextField
               type="date"
               value={state.start_date.format("YYYY-MM-DD")}
               onChange={start_date => setState(x => ({ ...x, start_date }))}
               required
-              sx={{ marginRight: 2 }}
+              fullWidth
               inputProps={{ min: moment().format("YYYY-MM-DD") }}
             />
-            {/* <DatePicker
-              disableCloseOnSelect={false}
-              value={state.start_date}
-              disablePast
-              inputFormat="DD/MM/YYYY"
-              onChange={start_date => setState(x => ({ ...x, start_date }))}
-              slotProps={{ textField: { required: true } }}
-            /> */}
-          </Box>
-          <Box sx={{ ml: 1 }}>
+          </Grid>
+          <Grid item xs={6}>
             <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
-              Due Date
+              Due Date*
             </Typography>
-            {/* <DatePicker
-              disableCloseOnSelect={false}
-              value={state.due_date}
-              disablePast
-              inputFormat="DD/MM/YYYY"
-              onChange={due_date => setState(x => ({ ...x, due_date }))}
-              slotProps={{ textField: params => ({ required: true, error: state.due_date ? params.error : false }) }}
-            /> */}
             <TextField
               type="date"
               value={state.due_date ? state.due_date.format("YYYY-MM-DD") : ""}
               onChange={due_date => setState(x => ({ ...x, due_date }))}
+              fullWidth
               required
-              sx={{ marginRight: 2 }}
               inputProps={{ min: moment().format("YYYY-MM-DD") }}
             />
-          </Box>
-        </Box>
-        {/* <TextField
-            select
-            SelectProps={{ displayEmpty: true }}
-            InputLabelProps={{ shrink: true }}
-            size="small"
-            fullWidth
-            label="Epic Link"
-            name="category_id"
-            value={state.category_id}
-            onChange={handleChange}>
-            <MenuItem value="">--- Select ---</MenuItem>
-            {epic?.map(({ name, id }) => (
-              <MenuItem value={id} key={id}>
-                {name}
-              </MenuItem>
-            ))}
-          </TextField> */}
-        {/* <TextareaAutosize
-            minRows={3}
-            maxRows={5}
-            aria-label="maximum height"
-            placeholder="Start typing about the task..."
-            name="subject"
-            required
-            onChange={handleChange}
-            style={{
-              // maxWidth: 350,
-              width: "100%",
-              border: "1px solid #E1E4E8",
-              borderRadius: "4px",
-              backgroundColor: "#FAFBFC",
-              boxShadow: "inset 0px 2px 0px rgba(225, 228, 232, 0.2)",
-            }}
-          /> */}
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogFooter>
-        <LoadingButton loading={isLoading} type="submit" variant="contained" size="large">
+        <LoadingButton loading={isLoading} type="submit" variant="contained" size="large" fullWidth>
           Create Issue
         </LoadingButton>
       </DialogFooter>
