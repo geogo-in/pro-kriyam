@@ -143,14 +143,14 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
         if (!window.confirm("Are you sure, you want to delete this issue?")) return
         await deleteIssue(issue.id).unwrap()
         const message = getRandomMessage(issueDeleteMessages)
-        enqueueSnackbar(message, { variant: "success" })
+        enqueueSnackbar(message, { variant: "success", title: "Success!" })
         onClose()
       } catch (error) {
         const { message } = getErrorMessage(error)
-        enqueueSnackbar(message, { variant: "error" })
+        enqueueSnackbar(message, { variant: "error", title: "Oops!" })
       }
     } else {
-      enqueueSnackbar("Only admins and project lead can delete issues", { variant: "error" })
+      enqueueSnackbar("Only admins and project lead can delete issues", { variant: "error", title: "Oops!" })
     }
   }
 

@@ -7,8 +7,9 @@ import TableContainer from "@mui/material/TableContainer"
 import TableRow from "@mui/material/TableRow"
 import { useGetEpicQuery, useGetIssuePriorityQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
+import moment from "moment"
 import { useSnackbar } from "notistack"
-import { SleekSelectWithIcon } from "pages/shared/CustomTextField"
+import { SleekSelectWithIcon, SleekTextField } from "pages/shared/CustomTextField"
 import IssuePriorityIcon from "pages/shared/IssuePriorityIcon"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import TypoTextField from "pages/shared/TypoTextField"
@@ -86,6 +87,38 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
                   </MenuItem>
                 ))}
               </SleekSelectWithIcon>
+            </TableCell>
+          </TableRow>
+          <TableRow sx={{ "td, th": { border: 0 } }}>
+            <TableCell>Start date</TableCell>
+            <TableCell align="left">
+              <SleekTextField
+                type="date"
+                bgcolor="#f1f5f9"
+                minWidth={300}
+                fullWidth={false}
+                value={moment(issue?.start_date).format("YYYY-MM-DD")}
+                onChange={e => handleIssueUpdate({ start_date: e.target.value })()}
+                required
+                size="small"
+                inputProps={{ min: moment().format("YYYY-MM-DD") }}
+              />
+            </TableCell>
+          </TableRow>
+          <TableRow sx={{ "td, th": { border: 0 } }}>
+            <TableCell>End date</TableCell>
+            <TableCell align="left">
+              <SleekTextField
+                type="date"
+                value={moment(issue?.due_date).format("YYYY-MM-DD")}
+                onChange={e => handleIssueUpdate({ due_date: e.target.value })()}
+                required
+                bgcolor="#f1f5f9"
+                minWidth={300}
+                fullWidth={false}
+                size="small"
+                inputProps={{ min: moment().format("YYYY-MM-DD") }}
+              />
             </TableCell>
           </TableRow>
           <TableRow sx={{ "td, th": { border: 0 } }}>
