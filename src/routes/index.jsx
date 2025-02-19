@@ -84,7 +84,7 @@ export default function Router() {
                   ],
                 },
                 { path: "board", element: <ProjectActiveSprint />, children: issueRoutes },
-                { path: "roadmap", element: <ProjectRoadmap /> },
+                { path: "roadmap", element: <ProjectRoadmap />, children: issueRoutes },
                 { path: "reports", element: <ProjectReports /> },
                 {
                   path: "issues",

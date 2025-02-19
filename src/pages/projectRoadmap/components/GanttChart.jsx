@@ -1,4 +1,4 @@
-import Button from "@mui/material/Button"
+import AddIcon from "@mui/icons-material/Add"
 import LinearProgress from "@mui/material/LinearProgress"
 import { useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
@@ -6,44 +6,15 @@ import "devexpress-gantt/dist/dx-gantt.min.css"
 import Gantt, { Column, Editing, Item, ResourceAssignments, Resources, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
 import "devextreme/dist/css/dx.common.css"
 import "devextreme/dist/css/dx.light.css"
-// import "gantt-theme-overrides.css"
 import moment from "moment"
-import CustomMenu from "pages/shared/CustomMenu"
-import { useEffect, useRef, useState } from "react"
-// import "./gantt-theme-overrides.css"
-import AddIcon from "@mui/icons-material/Add"
-import { styled } from "@mui/material/styles"
 import CreateIssue from "pages/projectIssues/components/CreateIssue"
 import CustomDialog from "pages/shared/CustomDialog"
-import TaskDetail from "./TaskDetail"
-// import TaskTemplate from "./TaskTemplate"
+import { useEffect, useRef, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import { PATH_DASHBOARD } from "routes/paths"
+import { StyledPrimaryButton, StyledSimpleButton, StyledTextButton } from "./StyledButtons"
 
 const currentDate = new Date()
-
-export const StyledPrimaryButton = styled(Button)(({ theme }) => ({
-  borderRadius: 4,
-  paddingLeft: 20,
-  paddingRight: 24,
-  lineHeight: 2.0,
-  marginRight: 12,
-}))
-export const StyledSimpleButton = styled(Button)(({ theme }) => ({
-  borderRadius: 4,
-  backgroundColor: "#F1F5F9",
-  paddingLeft: 12,
-  paddingRight: 12,
-  lineHeight: 2.0,
-  color: "#000",
-  boxShadow: "none",
-}))
-export const StyledTextButton = styled(Button)(({ theme }) => ({
-  borderRadius: 4,
-  paddingLeft: 12,
-  paddingRight: 12,
-  lineHeight: 2.0,
-  color: "#757575",
-  boxShadow: "none",
-}))
 
 export default function GanttChart({ projectId: project_id }) {
   const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(project_id)
@@ -57,16 +28,9 @@ export default function GanttChart({ projectId: project_id }) {
   const [scaleType, setScaleType] = useState("weeks")
   // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"
   const [openNewTaskDialog, setOpenNewTaskDialog] = useState(false)
-  const [openAddDialog, setOpenAddDialog] = useState(null)
-  const [openEditDialog, setOpenEditDialog] = useState()
   const [parentIssueId, setParentIssueId] = useState(null)
-  const handleDialogClose = () => {
-    setOpenAddDialog(null)
-    setOpenEditDialog()
-  }
-  const handleAddDialogOpen = e => {
-    setOpenNewTaskDialog(true)
-  }
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (data?.issues) {
@@ -111,10 +75,30 @@ export default function GanttChart({ projectId: project_id }) {
     }
   }
 
-  const onTaskEditDialogShowing = async e => {
+  const handleNewTaskDialogOpen = e => {
+    setOpenNewTaskDialog(true)
+  }
+
+  const handleNewTaskDialogClose = () => {
+    setOpenNewTaskDialog(false)
+  }
+
+  const onTaskInserting = e => {
     e.cancel = true
-    setOpenAddDialog(e.element)
-    setOpenEditDialog(e.data)
+    setParentIssueId(e.values.parentId)
+    setOpenNewTaskDialog(true)
+  }
+
+  const onTaskDblClick = e => {
+    e.cancel = true
+    let issuePath = `${PATH_DASHBOARD.projects.root}/${project_id}/roadmap/issues/${e.data.id}?referrer=roadmap`
+    navigate(issuePath, { state: { background: location } })
+  }
+
+  const onTaskEditDialogShowing = e => {
+    e.cancel = true
+    let issuePath = `${PATH_DASHBOARD.projects.root}/${project_id}/roadmap/issues/${e.key}?referrer=roadmap`
+    navigate(issuePath, { state: { background: location } })
   }
 
   const onTaskUpdating = async e => {
@@ -129,25 +113,8 @@ export default function GanttChart({ projectId: project_id }) {
       }).unwrap()
   }
 
-  const onTaskDblClick = e => {
-    e.cancel = true
-    setOpenAddDialog(e.element)
-    setOpenEditDialog(e.data)
-  }
-
-  const onTaskInserting = e => {
-    e.cancel = true
-    setParentIssueId(e.values.parentId)
-    // setOpenAddDialog(e.element)
-    setOpenNewTaskDialog(true)
-  }
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
-  // console.log(tasks)
-
-  const handleNewTaskDialogClose = () => {
-    setOpenNewTaskDialog(false)
-  }
 
   return (
     <>
@@ -175,10 +142,10 @@ export default function GanttChart({ projectId: project_id }) {
                 startIcon={<AddIcon />}
                 size="small"
                 aria-haspopup="true"
-                aria-expanded={openAddDialog ? "true" : undefined}
+                aria-expanded={openNewTaskDialog ? "true" : undefined}
                 disableElevation
                 variant="contained"
-                onClick={handleAddDialogOpen}>
+                onClick={handleNewTaskDialogOpen}>
                 New Task
               </StyledPrimaryButton>
             )}
@@ -254,10 +221,6 @@ export default function GanttChart({ projectId: project_id }) {
           allowTaskResourceUpdating={false}
         />
       </Gantt>
-
-      <CustomMenu anchorEl={openAddDialog} open={Boolean(openAddDialog) || Boolean(openEditDialog)} onClose={handleDialogClose}>
-        <TaskDetail onClose={handleDialogClose} parentId={parentIssueId} project_id={project_id} editable={Boolean(openEditDialog)} task={openEditDialog} />
-      </CustomMenu>
       <CustomDialog back open={openNewTaskDialog} onClose={handleNewTaskDialogClose}>
         {openNewTaskDialog && <CreateIssue onClose={handleNewTaskDialogClose} parent_issue_id={parentIssueId} project_id={project_id} />}
       </CustomDialog>
