@@ -135,7 +135,7 @@ export default function GanttChart({ projectId: project_id }) {
         onContentReady={_scrollToToday}
         scaleType={scaleType}
         ref={ganttRef}
-        taskListWidth={350}
+        taskListWidth={320}
         // taskContentRender={TaskTemplate}
         height={"calc(100vh - 128px)"}>
         <Tasks dataSource={tasks} />
@@ -214,7 +214,7 @@ export default function GanttChart({ projectId: project_id }) {
             }
           />
         </Toolbar>
-        <Column dataField="title" caption="Task Summary" width={340} />
+        <Column dataField="title" caption="Task Summary" width={315} />
         {/* <Column dataField="start" caption="Start Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} /> */}
         {/* <Column dataField="end" caption="End Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} /> */}
         <Validation autoUpdateParentTasks={true} />
