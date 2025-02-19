@@ -18,7 +18,7 @@ import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { getErrorMessage } from "utils/helper"
 
-export default function CreateIssue({ project_id, status_id = "", sprint_id, onClose }) {
+export default function CreateIssue({ parent_issue_id, project_id, status_id = "", sprint_id, onClose }) {
   const { project_id: project_id_params } = useParams()
   const [state, setState] = useState({
     assigned_to_id: "",
@@ -28,7 +28,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
     tracker_id: "",
     priority_id: "",
     start_date: moment(),
-    due_date: null,
+    due_date: moment().add(1, "month"),
     subject: "",
     done_ratio: 0,
     project_id: project_id || project_id_params,
@@ -68,6 +68,7 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
         sprint_id: sprint_id || (project.project_type.name === "Kanban" ? project.active_sprint?.id : undefined),
         start_date: moment(state.start_date).format("YYYY-MM-DD"),
         due_date: state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : undefined,
+        parent_issue_id,
       }).unwrap()
       if (payload) onClose()
     } catch (r) {
@@ -112,9 +113,15 @@ export default function CreateIssue({ project_id, status_id = "", sprint_id, onC
     return (
       <Box component="form" onSubmit={handleSubmit}>
         <DialogHeader>
-          <Typography variant="h6">
-            Create new task in: <strong>{state.project_id}</strong>
-          </Typography>
+          {parent_issue_id ? (
+            <Typography variant="h6">
+              Create new subtask in: <strong>{state.project_id}</strong> for issue ID <strong>#{parent_issue_id}</strong>
+            </Typography>
+          ) : (
+            <Typography variant="h6">
+              Create new task in: <strong>{state.project_id}</strong>
+            </Typography>
+          )}
         </DialogHeader>
         <DialogContent>
           <Typography variant="body2" display="block" sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>

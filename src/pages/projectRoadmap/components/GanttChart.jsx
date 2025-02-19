@@ -13,6 +13,8 @@ import { useEffect, useRef, useState } from "react"
 // import "./gantt-theme-overrides.css"
 import AddIcon from "@mui/icons-material/Add"
 import { styled } from "@mui/material/styles"
+import CreateIssue from "pages/projectIssues/components/CreateIssue"
+import CustomDialog from "pages/shared/CustomDialog"
 import TaskDetail from "./TaskDetail"
 // import TaskTemplate from "./TaskTemplate"
 
@@ -54,7 +56,7 @@ export default function GanttChart({ projectId: project_id }) {
 
   const [scaleType, setScaleType] = useState("weeks")
   // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"
-
+  const [openNewTaskDialog, setOpenNewTaskDialog] = useState(false)
   const [openAddDialog, setOpenAddDialog] = useState(null)
   const [openEditDialog, setOpenEditDialog] = useState()
   const [parentIssueId, setParentIssueId] = useState(null)
@@ -109,6 +111,12 @@ export default function GanttChart({ projectId: project_id }) {
     }
   }
 
+  const onTaskEditDialogShowing = async e => {
+    e.cancel = true
+    setOpenAddDialog(e.element)
+    setOpenEditDialog(e.data)
+  }
+
   const onTaskUpdating = async e => {
     // e.cancel = true
     console.log("Task update triggered")
@@ -130,15 +138,22 @@ export default function GanttChart({ projectId: project_id }) {
   const onTaskInserting = e => {
     e.cancel = true
     setParentIssueId(e.values.parentId)
-    setOpenAddDialog(e.element)
+    // setOpenAddDialog(e.element)
+    setOpenNewTaskDialog(true)
   }
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
   // console.log(tasks)
+
+  const handleNewTaskDialogClose = () => {
+    setOpenNewTaskDialog(false)
+  }
+
   return (
     <>
       <Gantt
         onTaskDblClick={onTaskDblClick}
+        onTaskEditDialogShowing={onTaskEditDialogShowing}
         onTaskUpdating={onTaskUpdating}
         onTaskInserting={onTaskInserting}
         onContentReady={_scrollToToday}
@@ -223,7 +238,7 @@ export default function GanttChart({ projectId: project_id }) {
             }
           />
         </Toolbar>
-        <Column dataField="title" caption="Task Summary" width={315} />
+        <Column dataField="title" caption="Task Summary" width={310} />
         {/* <Column dataField="start" caption="Start Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} /> */}
         {/* <Column dataField="end" caption="End Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} /> */}
         <Validation autoUpdateParentTasks={true} />
@@ -243,6 +258,9 @@ export default function GanttChart({ projectId: project_id }) {
       <CustomMenu anchorEl={openAddDialog} open={Boolean(openAddDialog) || Boolean(openEditDialog)} onClose={handleDialogClose}>
         <TaskDetail onClose={handleDialogClose} parentId={parentIssueId} project_id={project_id} editable={Boolean(openEditDialog)} task={openEditDialog} />
       </CustomMenu>
+      <CustomDialog back open={openNewTaskDialog} onClose={handleNewTaskDialogClose}>
+        {openNewTaskDialog && <CreateIssue onClose={handleNewTaskDialogClose} parent_issue_id={parentIssueId} project_id={project_id} />}
+      </CustomDialog>
     </>
   )
 }
