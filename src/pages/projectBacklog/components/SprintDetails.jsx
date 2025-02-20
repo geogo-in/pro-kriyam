@@ -54,7 +54,7 @@ export default function SprintDetails({ project_id, sprint_id, editable, onClose
         </Typography>
         <TextField
           type="date"
-          value={state.start_date.format("YYYY-MM-DD")}
+          value={state.start_date ? moment(state.start_date).format("YYYY-MM-DD") : ""}
           onChange={e => setState({ ...state, start_date: moment(e.target.value) })}
           required
           fullWidth

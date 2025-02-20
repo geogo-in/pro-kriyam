@@ -11,6 +11,7 @@ import { useSnackbar } from "notistack"
 import { SleekSelectWithIcon, SleekTextField } from "pages/shared/CustomTextField"
 import IssuePriorityIcon from "pages/shared/IssuePriorityIcon"
 import MemberAvatar from "pages/shared/MemberAvatar"
+import { useState } from "react"
 import { fDate } from "utils/formatDate"
 
 export const StyledListItemText = styled(ListItemText)(({ theme }) => ({
@@ -31,12 +32,35 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
   const { data: epics } = useGetEpicQuery(project_id)
   const { enqueueSnackbar } = useSnackbar()
 
-  const handleIssueUpdate = data => async () => {
+  const [tempValues, setTempValues] = useState({
+    assigned_to_id: assigned_to?.id || "",
+    priority_id: priority.id,
+    start_date: moment(issue?.start_date).format("YYYY-MM-DD"),
+    due_date: moment(issue?.due_date).format("YYYY-MM-DD"),
+  })
+
+  const handleIssueUpdate = async (field, value) => {
+    setTempValues(prev => ({ ...prev, [field]: value })) // Optimistic UI update
+
     try {
-      await updateTask({ id: issue.id, ...data }).unwrap()
+      await updateTask({ id: issue.id, [field]: value }).unwrap()
     } catch (r) {
       console.error(r)
       enqueueSnackbar(r.data?.errors?.join(", "), { variant: "error" })
+      // Revert to original value on failure
+      setTempValues(prev => ({
+        ...prev,
+        [field]:
+          field === "assigned_to_id"
+            ? assigned_to?.id || ""
+            : field === "priority_id"
+            ? priority.id
+            : field === "start_date"
+            ? moment(issue?.start_date).format("YYYY-MM-DD")
+            : field === "due_date"
+            ? moment(issue?.due_date).format("YYYY-MM-DD")
+            : prev[field],
+      }))
     }
   }
 
@@ -51,7 +75,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
           <TableRow sx={{ "td, th": { border: 0 } }}>
             <TableCell sx={{ maxWidth: "120px", minWidth: "120px" }}>Assignee</TableCell>
             <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={assigned_to?.id || ""} onChange={e => handleIssueUpdate({ assigned_to_id: e.target.value })()}>
+              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={tempValues.assigned_to_id} onChange={e => handleIssueUpdate("assigned_to_id", e.target.value)}>
                 <MenuItem value="">
                   <ListItemIcon>
                     <MemberAvatar tooltipPosition="none" />
@@ -75,7 +99,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
           <TableRow sx={{ "td, th": { border: 0 } }}>
             <TableCell>Priority</TableCell>
             <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={priority.id} onChange={e => handleIssueUpdate({ priority_id: e.target.value })()}>
+              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={tempValues.priority_id} onChange={e => handleIssueUpdate("priority_id", e.target.value)}>
                 {priorities?.map(({ name, id }) => (
                   <MenuItem key={id} value={id}>
                     <ListItemIcon>
@@ -95,8 +119,8 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
                 bgcolor="#f1f5f9"
                 minWidth={300}
                 fullWidth={false}
-                value={moment(issue?.start_date).format("YYYY-MM-DD")}
-                onChange={e => handleIssueUpdate({ start_date: e.target.value })()}
+                value={tempValues.start_date}
+                onChange={e => handleIssueUpdate("start_date", e.target.value)}
                 required
                 size="small"
                 inputProps={{ min: moment().format("YYYY-MM-DD") }}
@@ -108,8 +132,8 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
             <TableCell align="left">
               <SleekTextField
                 type="date"
-                value={moment(issue?.due_date).format("YYYY-MM-DD")}
-                onChange={e => handleIssueUpdate({ due_date: e.target.value })()}
+                value={tempValues.due_date}
+                onChange={e => handleIssueUpdate("due_date", e.target.value)}
                 required
                 bgcolor="#f1f5f9"
                 minWidth={300}
