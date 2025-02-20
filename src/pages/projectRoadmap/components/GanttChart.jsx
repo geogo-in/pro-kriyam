@@ -4,7 +4,7 @@ import { getCurrentUser, isAdmin } from "@redux/reducerSlices/user/userAuthSlice
 import { useCreateIssueRelationMutation, useDeleteIssueMutation, useDeleteIssueRelationMutation, useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import "devexpress-gantt/dist/dx-gantt.min.css"
-import Gantt, { Column, Dependencies, Editing, Item, ResourceAssignments, Resources, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
+import Gantt, { Column, Dependencies, Editing, Item, ResourceAssignments, Resources, Sorting, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
 import "devextreme/dist/css/dx.common.css"
 import "devextreme/dist/css/dx.light.css"
 import moment from "moment"
@@ -46,16 +46,18 @@ export default function GanttChart({ projectId: project_id }) {
 
   useEffect(() => {
     if (data?.issues) {
-      const tasks = data.issues.map(issue => ({
-        id: issue.id,
-        status: issue.status.id,
-        title: issue.subject,
-        start: new Date(moment(issue.start_date).startOf("days")),
-        end: new Date(moment(issue.due_date).endOf("days")),
-        assignee: issue.assigned_to?.name || "unassigned",
-        progress: issue.done_ratio || 0,
-        parentId: issue.parent?.id,
-      }))
+      const tasks = data.issues
+        .map(issue => ({
+          id: issue.id,
+          status: issue.status.id,
+          title: issue.subject,
+          start: new Date(moment(issue.start_date).startOf("days")),
+          end: new Date(moment(issue.due_date).endOf("days")),
+          assignee: issue.assigned_to?.name || "unassigned",
+          progress: issue.done_ratio || 0,
+          parentId: issue.parent?.id,
+        }))
+        .sort((a, b) => new Date(a.start) - new Date(b.start))
       setTasks(JSON.parse(JSON.stringify(tasks)))
 
       const resources = data.issues
@@ -212,7 +214,7 @@ export default function GanttChart({ projectId: project_id }) {
         <StripLine start={currentDate} title="Today" />
         {/* <ContextMenu enabled={true} /> */}
         <Dependencies dataSource={dependencies} />
-
+        <Sorting mode="multiple" showSortIndexes={true} ascendingText="Ascending Order" descendingText="Descending Order" clearText="Clear Sort" />
         <Resources dataSource={resources} />
         <ResourceAssignments dataSource={resourceAssignments} />
         <Toolbar>
@@ -286,9 +288,9 @@ export default function GanttChart({ projectId: project_id }) {
             }
           />
         </Toolbar>
-        <Column dataField="title" caption="Task Summary" width={310} />
-        {/* <Column dataField="start" caption="Start Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} /> */}
-        {/* <Column dataField="end" caption="End Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} /> */}
+        <Column dataField="title" caption="Task Summary" width={315} />
+        <Column dataField="start" sortIndex={0} sortOrder="asc" caption="Start Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} />
+        <Column dataField="end" caption="End Date" customizeText={({ value }) => moment(value).format("DD/MM/YYYY")} />
         <Validation autoUpdateParentTasks={true} />
         <Editing
           enabled={true}
