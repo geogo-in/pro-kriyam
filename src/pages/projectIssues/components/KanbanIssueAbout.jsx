@@ -1,5 +1,4 @@
-import { FiberManualRecord } from "@mui/icons-material"
-import { Box, ListItemIcon, ListItemText, MenuItem, Typography, styled } from "@mui/material"
+import { ListItemIcon, ListItemText, MenuItem, Typography, styled } from "@mui/material"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
 import MuiTableCell from "@mui/material/TableCell"
@@ -12,7 +11,6 @@ import { useSnackbar } from "notistack"
 import { SleekSelectWithIcon, SleekTextField } from "pages/shared/CustomTextField"
 import IssuePriorityIcon from "pages/shared/IssuePriorityIcon"
 import MemberAvatar from "pages/shared/MemberAvatar"
-import TypoTextField from "pages/shared/TypoTextField"
 import { fDate } from "utils/formatDate"
 
 export const StyledListItemText = styled(ListItemText)(({ theme }) => ({
@@ -121,39 +119,8 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
               />
             </TableCell>
           </TableRow>
-          <TableRow sx={{ "td, th": { border: 0 } }}>
-            <TableCell>Epic</TableCell>
-            <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={category?.id || ""} onChange={e => handleIssueUpdate({ category_id: e.target.value })()}>
-                <MenuItem value="">
-                  <ListItemText>Select Epic</ListItemText>
-                </MenuItem>
-                {epics?.map(({ id, name, color_code }) => (
-                  <MenuItem key={id} value={id}>
-                    <ListItemIcon sx={{ color: color_code }}>
-                      <FiberManualRecord />
-                    </ListItemIcon>
-                    <ListItemText>{name}</ListItemText>
-                  </MenuItem>
-                ))}
-              </SleekSelectWithIcon>
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "td, th": { border: 0 } }}>
-            <TableCell>Story Point</TableCell>
-            <TableCell align="left">
-              <Box sx={{ minHeight: 50, display: "flex", alignItems: "center", width: "300px" }}>
-                <TypoTextField type="number" placeholder="&nbsp;" my={0.8} maxWidth={300} bgcolor="#f1f5f9" p={0.8} value={issue.story_point} name="story_point" onSubmit={handleUpdate} />
-              </Box>
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "td, th": { border: 0 } }}>
-            <TableCell sx={{ width: "120px" }}>Sprint</TableCell>
-            <TableCell align="left" sx={{ fontWeight: 500 }}>
-              {sprint?.name || "-"}
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "td, th": { border: 0 } }}>
+
+          <TableRow sx={{ "td, th": { border: 0, py: 2 } }}>
             <TableCell>Reporter</TableCell>
             <TableCell align="left">
               <Typography variant="body2">

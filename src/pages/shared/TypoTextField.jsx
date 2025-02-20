@@ -29,16 +29,16 @@ export default function TypoTextField({ value: defaultValue, maxWidth, bgcolor =
     return (
       <Box position={"relative"} sx={{ flex: 1 }}>
         {editor ? (
-          <Editor value={value} onChange={setValue} placeholder="Add a more detailed description..." />
+          <Editor autoFocus value={value} onChange={setValue} placeholder="Add a more detailed description..." />
         ) : (
           <TextField sx={{ my: 0 }} {...{ required }} autoFocus value={value || ""} onChange={e => setValue(e.target.value)} fullWidth {...textFieldProps} />
         )}
         <Box position={"absolute"} bottom={-40} right={0} zIndex={100000}>
-          <Button onClick={handleClick} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: theme => theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.default, ml: 1 }}>
-            <Done />
-          </Button>
-          <Button onClick={handleClose} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: theme => theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.default, ml: 1 }}>
+          <Button onClick={handleClose} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : "#292929", minWidth: 48, background: "#f1f5f9", ml: 1 }}>
             <Close />
+          </Button>
+          <Button variant="contained" onClick={handleClick} sx={{ minWidth: 48, ml: 1, boxShadow: "none" }}>
+            <Done />
           </Button>
         </Box>
       </Box>
@@ -55,6 +55,7 @@ export default function TypoTextField({ value: defaultValue, maxWidth, bgcolor =
         width: "100%",
         backgroundColor: theme => theme.palette.mode === "light" ? bgcolor : theme.palette.background.modal,
         color: placeholderColor,
+        // fontStyle: "italic",
         maxWidth,
         px: 0.5,
         py: 0.8,

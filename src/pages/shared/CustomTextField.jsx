@@ -61,3 +61,19 @@ export const SleekSelectWithIcon = styled(props => <TextField select SelectProps
     },
   }
 })
+
+export const SleekTextField = styled(props => <TextField required margin="normal" {...props} />)(({ theme, bgcolor, minWidth = 120 }) => {
+  return {
+    marginTop: "4px",
+    marginBottom: "4px",
+    minWidth: `${minWidth}px !important`,
+    background: theme.palette.mode === "light" ? bgcolor : theme.palette.background.default,
+    borderRadius: 2,
+    ".MuiInputBase-inputSizeSmall": {
+      padding: "7px 14px",
+    },
+    fieldset: {
+      borderColor: theme.palette.mode === "light" ? bgcolor : theme.palette.background.default,
+    },
+  }
+})
