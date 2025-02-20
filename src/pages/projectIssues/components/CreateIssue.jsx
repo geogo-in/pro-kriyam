@@ -13,13 +13,14 @@ import { SelectWithIcon } from "pages/shared/CustomTextField"
 import Editor from "pages/shared/Editor"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import { DialogContent, DialogFooter, DialogHeader } from "pages/shared/StyledDialog"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { getErrorMessage } from "utils/helper"
 
 export default function CreateIssue({ parent_issue_id, project_id, status_id = "", sprint_id, onClose }) {
   const { project_id: project_id_params } = useParams()
+  const subjectRef = useRef(null)
   const [state, setState] = useState({
     assigned_to_id: "",
     category_id: "",
@@ -36,11 +37,11 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
   const [showMoreOptions, setShowMoreOptions] = useState(false)
   const [showDescriptionField, setShowDescriptionField] = useState(false)
   const { data, isLoading: isProjectsLoading } = useGetProjectsQuery(state.project_id ? skipToken : undefined)
-  const { data: project } = useGetProjectByIdQuery(state.project_id || skipToken)
-  const { data: statuses } = useGetProjectIssuesStatusesQuery(state.project_id || skipToken)
-  const { data: memberships } = useGetProjectMembershipsQuery(state.project_id || skipToken)
+  const { data: project, isLoading: isProjectLoading } = useGetProjectByIdQuery(state.project_id || skipToken)
+  const { data: statuses, isLoading: isStatusesLoading } = useGetProjectIssuesStatusesQuery(state.project_id || skipToken)
+  const { data: memberships, isLoading: isMembershipsLoading } = useGetProjectMembershipsQuery(state.project_id || skipToken)
   const { data: epic } = useGetEpicQuery(state.project_id || skipToken)
-  const { data: priorities } = useGetIssuePriorityQuery()
+  const { data: priorities, isLoading: isPrioritiesLoading } = useGetIssuePriorityQuery()
   const currentUser = useSelector(getCurrentUser)
   const [createTask, { isLoading }] = useCreateIssuesMutation()
   const { enqueueSnackbar } = useSnackbar()
@@ -49,11 +50,21 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
     const extra = {}
 
     if (!state.status_id && statuses?.length) extra.status_id = statuses[0].id
-    if (priorities?.length) extra.priority_id = priorities.find(p => p.name.toLowerCase() === NEW_ISSUE_PRIORITY)?.id || priorities[0].id
-    if (project?.tracker?.length) extra.tracker_id = project.tracker.find(p => p.name.toLowerCase() === NEW_ISSUE_TRACKER)?.id || project?.tracker[0].id
-    // if (project?.default_assignee) extra.assigned_to_id = project.default_assignee.id || ""
+    if (!state.priority_id && priorities?.length) {
+      extra.priority_id = priorities.find(p => p.name.toLowerCase() === NEW_ISSUE_PRIORITY)?.id || priorities[0].id
+    }
+    if (!state.tracker_id && project?.tracker?.length) {
+      extra.tracker_id = project.tracker.find(p => p.name.toLowerCase() === NEW_ISSUE_TRACKER)?.id || project.tracker[0].id
+    }
 
-    if (extra) setState(s => ({ ...s, ...extra }))
+    if (Object.keys(extra).length > 0) {
+      setState(prevState => ({ ...prevState, ...extra }))
+    }
+
+    if (subjectRef.current) {
+      console.log("focus on summary")
+      subjectRef.current.focus()
+    }
   }, [statuses, priorities, project])
 
   const handleChange = e => {
@@ -126,7 +137,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
           <Typography variant="body2" display="block" sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
             Summary*
           </Typography>
-          <TextField fullWidth inputRef={input => input && input.focus()} placeholder="Start typing about the task..." value={state.name} onChange={handleChange} name="subject"></TextField>
+          <TextField fullWidth inputRef={subjectRef} placeholder="Start typing about the task..." value={state.name} onChange={handleChange} name="subject"></TextField>
           <Typography variant="body2" display="block" sx={{ mt: 3, mb: 1, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
             Description
           </Typography>
@@ -154,8 +165,8 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
               </Typography>
               <TextField
                 type="date"
-                value={state.start_date.format("YYYY-MM-DD")}
-                onChange={start_date => setState(x => ({ ...x, start_date }))}
+                value={state.start_date ? moment(state.start_date).format("YYYY-MM-DD") : ""}
+                onChange={e => setState(x => ({ ...x, start_date: e.target.value }))}
                 required
                 fullWidth
                 inputProps={{ min: moment().format("YYYY-MM-DD") }}
@@ -168,7 +179,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
               <TextField
                 type="date"
                 value={state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : ""}
-                onChange={due_date => setState(x => ({ ...x, due_date }))}
+                onChange={e => setState(x => ({ ...x, due_date: e.target.value }))}
                 fullWidth
                 required
                 inputProps={{ min: moment().format("YYYY-MM-DD") }}
@@ -374,8 +385,9 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
             </Typography>
             <TextField
               type="date"
-              value={state.start_date.format("YYYY-MM-DD")}
-              onChange={start_date => setState(x => ({ ...x, start_date }))}
+              value={moment(state.start_date).format("YYYY-MM-DD")}
+              // onChange={e => setState(x => ({ ...x, start_date: moment(e.target.value) }))}
+              onChange={e => setState(x => ({ ...x, start_date: e.target.value }))}
               required
               fullWidth
               inputProps={{ min: moment().format("YYYY-MM-DD") }}
@@ -387,8 +399,9 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
             </Typography>
             <TextField
               type="date"
-              value={state.due_date ? state.due_date.format("YYYY-MM-DD") : ""}
-              onChange={due_date => setState(x => ({ ...x, due_date }))}
+              value={state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : ""}
+              // onChange={e => setState(x => ({ ...x, due_date: moment(e.target.value) }))}
+              onChange={e => setState(x => ({ ...x, due_date: e.target.value }))}
               fullWidth
               required
               inputProps={{ min: moment().format("YYYY-MM-DD") }}

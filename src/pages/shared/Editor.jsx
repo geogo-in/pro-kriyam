@@ -209,16 +209,13 @@ export default function Editor({ people, autoFocus, hash, ...props }) {
 
   const handleFocus = () => {
     if (editorRef.current) {
-      console.log("Focus", editorRef.current.getEditor().root.parentNode)
       editorRef.current.getEditor().root.parentNode.classList.add("on-focus")
     }
   }
 
   const handleBlur = () => {
     if (editorRef.current) {
-      console.log("Bue")
       editorRef.current.getEditor().root.parentNode.classList.remove("on-focus")
-      // editorRef.current.getEditor().root.parentNode.style.borderColor = "#d2dae5 !important"
     }
   }
 

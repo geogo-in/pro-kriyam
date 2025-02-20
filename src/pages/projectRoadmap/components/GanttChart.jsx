@@ -140,7 +140,6 @@ export default function GanttChart({ projectId: project_id }) {
 
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
-  console.log(project)
   return (
     <>
       <Gantt

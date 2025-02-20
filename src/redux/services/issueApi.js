@@ -19,7 +19,7 @@ const issueApi = redmineApi.injectEndpoints({
     // Issue
     getIssues: builder.query({
       query: params => ({ url: `/api/issues.json`, params }),
-      providesTags: ["Issue"],
+      providesTags: ["Issues"],
     }),
     getIssue: builder.query({
       query: issue_id => ({ url: `/api/issues/${issue_id}.json`, params: { include: "children,attachments,relations,changesets,watchers,reporter" } }),
@@ -28,11 +28,11 @@ const issueApi = redmineApi.injectEndpoints({
     }),
     createIssues: builder.mutation({
       query: issue => ({ url: `/api/issues.json`, method: "POST", body: { issue } }),
-      invalidatesTags: result => (result ? ["Issue", "Backlog", "ActiveSprint"] : []),
+      invalidatesTags: result => (result ? ["Issues", "Backlog", "ActiveSprint"] : []),
     }),
     deleteIssue: builder.mutation({
       query: id => ({ url: `api/issues/${id}.json`, method: "DELETE" }),
-      invalidatesTags: result => (result ? ["ActiveSprint", "Backlog"] : []),
+      invalidatesTags: result => (result ? ["Issues", "ActiveSprint", "Backlog"] : []),
     }),
     updateIssues: builder.mutation({
       query: ({ id, invalidatesTags, ...data }) => {
@@ -42,7 +42,7 @@ const issueApi = redmineApi.injectEndpoints({
         }
         return { url: `/api/issues/${id}.json`, method: "PUT", body: form ?? { issue: data } }
       },
-      invalidatesTags: (result, error, arg) => ["Issue", "Backlog", "ActiveSprint"],
+      invalidatesTags: (result, error, arg) => ["Issues", "Issue", "Backlog", "ActiveSprint"],
     }),
 
     // Issues Statuses
