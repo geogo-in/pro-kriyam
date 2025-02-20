@@ -1,10 +1,10 @@
 import AddIcon from "@mui/icons-material/Add"
 import LinearProgress from "@mui/material/LinearProgress"
 import { getCurrentUser, isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
-import { useDeleteIssueMutation, useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useDeleteIssueMutation, useGetIssuesQuery, useGetProjectIssuesStatusesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import "devexpress-gantt/dist/dx-gantt.min.css"
-import Gantt, { Column, Editing, Item, ResourceAssignments, Resources, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
+import Gantt, { Column, ContextMenu, Editing, Item, ResourceAssignments, Resources, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
 import "devextreme/dist/css/dx.common.css"
 import "devextreme/dist/css/dx.light.css"
 import moment from "moment"
@@ -28,11 +28,13 @@ export default function GanttChart({ projectId: project_id }) {
   const { enqueueSnackbar } = useSnackbar()
   const isSystemAdmin = useSelector(isAdmin)
   const currentUser = useSelector(getCurrentUser)
+  const { data: statuses } = useGetProjectIssuesStatusesQuery(project_id)
 
   const [tasks, setTasks] = useState()
   const [resources, setResources] = useState()
   const [resourceAssignments, setResourceAssignments] = useState()
   const ganttRef = useRef()
+  const [task, setTask] = useState();
 
   const [scaleType, setScaleType] = useState("weeks")
   // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"
@@ -138,17 +140,35 @@ export default function GanttChart({ projectId: project_id }) {
     }
   }
 
+  const onContextMenuPreparing = (e) => {
+    setTask(e.data)
+  }
+
+  const onCustomCommand = async (e) => {
+    const selectedStatus = statuses?.filter((status) => status.name === e.name)
+    console.log(selectedStatus[0])
+
+    try {
+      await updateTask({ id: task.id, status_id: selectedStatus[0].id }).unwrap()
+    } catch (r) {
+      const { message } = getErrorMessage(r)
+      enqueueSnackbar(message, { variant: "error" })
+    }
+  }
+
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
   return (
     <>
       <Gantt
         onTaskDblClick={onTaskDblClick}
+        onContextMenuPreparing={onContextMenuPreparing}
         onTaskEditDialogShowing={onTaskEditDialogShowing}
         onTaskUpdating={onTaskUpdating}
         onTaskInserting={onTaskInserting}
         onTaskDeleting={onTaskDeleting}
         onContentReady={_scrollToToday}
+        onCustomCommand={onCustomCommand}
         scaleType={scaleType}
         ref={ganttRef}
         taskListWidth={320}
@@ -156,7 +176,19 @@ export default function GanttChart({ projectId: project_id }) {
         height={"calc(100vh - 128px)"}>
         <Tasks dataSource={tasks} />
         <StripLine start={currentDate} title="Today" />
-        {/* <ContextMenu enabled={true} /> */}
+        <ContextMenu enabled={true}>
+          <Item icon="add" text="Add">
+            <Item name="addTask" text="Add Task" />
+            <Item name="addSubtask" text="Add SubTask" />
+          </Item>
+          <Item name="taskDetails" text="Task Details" />
+          <Item name="deleteTask" text="Delete Task" />
+          <Item icon="edit" text="Update Status">
+            {statuses?.map(status => (
+              <Item icon="chevronnext" name={status.name} text={status.name} />
+            ))}
+          </Item>
+        </ContextMenu>
         <Resources dataSource={resources} />
         <ResourceAssignments dataSource={resourceAssignments} />
         <Toolbar>
