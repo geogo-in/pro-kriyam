@@ -8,9 +8,9 @@ export const SprintIssueItem = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  borderRight: "0.1px solid #ebebeb",
+  borderRight: theme.palette.mode === "light" ? "0.1px solid #ebebeb" : ".1px solid #444444",
   borderRadius: 0,
-  color: "#42526E",
+  color: theme.palette.mode === "light" ? "#42526E" : theme.palette.primary.secondaryText,
   fontSize: "0.8rem",
   "&:last-child": {
     // borderTopRightRadius: 4,
@@ -25,21 +25,21 @@ export const SprintBlankSubIssueItem = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  borderRight: "0.1px solid #ebebeb",
+  borderRight: theme.palette.mode === "light" ? "0.1px solid #ebebeb" : ".1px solid #444444",
   borderRadius: 0,
-  color: "#42526E",
+  color: theme.palette.mode === "light" ? "#42526E" : theme.palette.primary.secondaryText,
   fontSize: "0.8rem",
   "&:last-child": {
     // borderTopRightRadius: 4,
     // borderBottomRightRadius: 4,
-    borderRight: `2px solid ${theme.palette.primary.main}`,
+    borderRight: theme.palette.mode === "light" ? `2px solid ${theme.palette.primary.main}` : "2px solid #444444",
   },
 }))
 
 export const StickyTitle = styled("div", { shouldForwardProp: prop => !["draggableProps", "header", "disabledChildren"].includes(prop) })(
   ({ theme, header, disabledChildren, draggableProps, ...props }) => ({
     backgroundColor: alpha(header ? theme.palette.background.default : theme.palette.common.white, 0.95),
-    borderRight: header || disabledChildren ? "none" : "0.1px solid #ebebeb",
+    borderRight: header || disabledChildren ? "none" : theme.palette.mode === "light" ? "0.1px solid #ebebeb" : ".1px solid #444444",
     borderRadius: 0, //TO-DO: use only for header
     position: draggableProps?.style?.position === "fixed" ? "" : "sticky",
     overflow: "hidden",

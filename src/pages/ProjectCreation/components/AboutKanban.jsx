@@ -5,7 +5,7 @@ import ReportImg from "assets/images/report.png"
 const AboutTemplate = ({ template }) => {
   return (
     <Box px={3} py={1}>
-      <Typography variant="body2" gutterBottom sx={{ color: theme => theme.palette.primary.defaultText }}>
+      <Typography variant="body2" gutterBottom sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.primary.secondaryText }}>
         The Kanban methodology, which means "visual signal" in Japanese, aims to assist teams in visualizing their work, restricting ongoing work, and increasing efficiency. Utilize the
         Kanban template to promote transparency, minimize bottlenecks, and enhance planning flexibility throughout the development cycle.
       </Typography>

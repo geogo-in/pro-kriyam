@@ -8,7 +8,7 @@ export default function TemplateItem({ setTemplate, template }) {
   const { name } = template
   return (
     <Card component={ButtonBase} onClick={() => setTemplate(template)} sx={{ width: "100%", mb: 2, "&:hover": { boxShadow: "1px 1px 8px -5px #00000080" } }}>
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: 140, width: "220px", bgcolor: "rgba(241,245,249, 0.6)" }}>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: 140, width: "220px", bgcolor: theme => theme.palette.mode === "light" ? "rgba(241,245,249, 0.6)" : "#000" }}>
         {template && template.name === "Scrum" ? (
           <img src={Scrum} alt="Icon" width="130" />
         ) : template.name === "Kanban" ? (
@@ -22,7 +22,7 @@ export default function TemplateItem({ setTemplate, template }) {
         <Typography variant="h5" fontWeight={500}>
           {name}
         </Typography>
-        <Typography variant="body2" sx={{ color: theme => theme.palette.primary.tertiaryText }}>
+        <Typography variant="body2" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.tertiaryText : theme.palette.primary.secondaryText }}>
           {name === "Scrum"
             ? "Use a board, backlog, and roadmap to sprint towards your project goals."
             : name === "Kanban"

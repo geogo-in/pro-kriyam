@@ -8,6 +8,7 @@ import palette from "./palette"
 import shadows from "./shadow"
 import shape from "./shape"
 import typography from "./typography"
+import { useSelector } from "react-redux"
 
 ThemeConfig.propTypes = {
   children: PropTypes.node,
@@ -15,7 +16,7 @@ ThemeConfig.propTypes = {
 
 export default function ThemeConfig({ children }) {
   //for now theme is always in light mode
-  const isLight = true
+  const isLight = useSelector((state) => state.theme.isLight);
 
   const themeOptions = useMemo(
     () => ({

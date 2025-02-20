@@ -3,6 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/query"
 import projectUiSlice from "./reducerSlices/ui/projectUiSlice"
 import userAuthSlice from "./reducerSlices/user/userAuthSlice"
 import { redmineApi } from "./services/redmineApi"
+import themeSlice from "./reducerSlices/theme/themeSlice"
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     [redmineApi.reducerPath]: redmineApi.reducer,
     currentUser: userAuthSlice,
     projectUi: projectUiSlice,
+    theme: themeSlice,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false }).concat(redmineApi.middleware),
 })

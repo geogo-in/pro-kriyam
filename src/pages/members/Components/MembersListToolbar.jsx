@@ -13,12 +13,12 @@ export default function MembersListToolbar({ handleChangePage, handleChangeRowsP
   }
 
   return (
-    <Stack direction="row" spacing={0.8} sx={{ alignItems: "center", borderBottom: "1px solid rgba(229,231,235, 0.5)" }}>
+    <Stack direction="row" spacing={0.8} sx={{ alignItems: "center", borderBottom: theme => theme.palette.mode === "light" ? "1px solid rgba(229,231,235, 0.5)" : "1px solid #292929", padding: "8px 0" }}>
       <Paper
         sx={{
           boxShadow: "none",
-          background: "#f1f5f9",
-          color: "#1E293B",
+          background: theme => theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal,
+          color: theme => theme.palette.mode === "light" ? "#1E293B" : theme.palette.primary.secondaryText,
           borderRadius: "30px",
           p: "2px 4px",
           margin: "8px 0",
@@ -26,7 +26,7 @@ export default function MembersListToolbar({ handleChangePage, handleChangeRowsP
           alignItems: "center",
           width: 280,
         }}>
-        <IconButton sx={{ p: "6px" }} aria-label="menu">
+        <IconButton sx={{ p: "6px", color: theme => theme.palette.mode === "light" ? "#1E293B" : theme.palette.primary.secondaryText, }} aria-label="menu">
           <SearchIcon />
         </IconButton>
         <InputBase sx={{ ml: 1, flex: 1 }} name="name" onKeyDown={handleFilter} onChange={handleFilter} placeholder="Search for members" />

@@ -3,13 +3,13 @@ import { Box, Button, Typography } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import ToggleStarProject from "./ToggleStarProject"
 
-const MainFlexRow = styled(Box)(() => ({
+const MainFlexRow = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-between",
   padding: "8px 12px",
   borderRadius: "4px",
-  background: "#f4f7fa",
+  background: theme.palette.mode === "light" ? "#f4f7fa" : "#132741",
 }))
 
 const BackButton = styled(Button)(({ theme }) => ({
@@ -29,7 +29,7 @@ const ProjectSidebarHeader = ({ project }) => {
       </BackButton>
       <MainFlexRow>
         <Box>
-          <Typography variant="h6" fontWeight={500} sx={{ color: "black", fontSize: "1.05rem", lineHeight: "1.4" }}>
+          <Typography variant="h6" fontWeight={500} sx={{ color: theme => theme.palette.mode === "light" ? "black" : "#69ADF3", fontSize: "1.05rem", lineHeight: "1.4" }}>
             {project.name}
           </Typography>
           <Typography variant="body2" sx={{ color: theme => theme.palette.primary.secondaryText, fontSize: "0.8rem" }}>

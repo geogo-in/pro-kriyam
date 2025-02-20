@@ -80,7 +80,7 @@ const ProjectSettingsStatus = () => {
       <Typography variant="h6" gutterBottom sx={{ fontSize: "1rem", color: theme => theme.palette.primary.defaultText }}>
         Project issue statuses
       </Typography>
-      <Typography variant="body2" sx={{ color: "primary.defaultText", mb: 1 }}>
+      <Typography variant="body2" sx={{ color: theme => theme.palette.mode === "light" ? "primary.defaultText" : theme.palette.primary.secondaryText, mb: 1 }}>
         Drag and drop issue statuses from right to left to make it available for this project.
       </Typography>
       <DragDropContext onDragEnd={onDragEnd}>

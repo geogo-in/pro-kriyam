@@ -6,7 +6,7 @@ import SprintSetup from "assets/images/sprint-setup.png"
 const AboutTemplate = ({ template }) => {
   return (
     <Box px={3} py={1}>
-      <Typography variant="body2" gutterBottom sx={{ color: theme => theme.palette.primary.defaultText }}>
+      <Typography variant="body2" gutterBottom sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.primary.secondaryText }}>
         Teams can use the Scrum framework to collaborate and divide complex projects into manageable sprints that deliver incremental value. It's important to encourage your team to
         self-organize, learn as they go, and regularly reflect on their successes and failures to keep improving.
       </Typography>
