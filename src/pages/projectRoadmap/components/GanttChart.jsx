@@ -1,10 +1,10 @@
 import AddIcon from "@mui/icons-material/Add"
 import LinearProgress from "@mui/material/LinearProgress"
 import { getCurrentUser, isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
-import { useDeleteIssueMutation, useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useCreateIssueRelationMutation, useDeleteIssueMutation, useDeleteIssueRelationMutation, useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import "devexpress-gantt/dist/dx-gantt.min.css"
-import Gantt, { Column, Editing, Item, ResourceAssignments, Resources, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
+import Gantt, { Column, Dependencies, Editing, Item, ResourceAssignments, Resources, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
 import "devextreme/dist/css/dx.common.css"
 import "devextreme/dist/css/dx.light.css"
 import moment from "moment"
@@ -22,8 +22,10 @@ const currentDate = new Date()
 
 export default function GanttChart({ projectId: project_id }) {
   const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(project_id)
-  const { data, isLoading, error } = useGetIssuesQuery({ project_id: project?.id }, { refetchOnMountOrArgChange: true, skip: !project?.id })
+  const { data, isLoading, error } = useGetIssuesQuery({ project_id: project?.id, include: "relations" }, { refetchOnMountOrArgChange: true, skip: !project?.id })
   const [updateTask] = useUpdateIssuesMutation()
+  const [createIssueRelation] = useCreateIssueRelationMutation()
+  const [deleteIssueRelation] = useDeleteIssueRelationMutation()
   const [deleteIssue, { isLoading: isDeletingIssue }] = useDeleteIssueMutation()
   const { enqueueSnackbar } = useSnackbar()
   const isSystemAdmin = useSelector(isAdmin)
@@ -32,6 +34,7 @@ export default function GanttChart({ projectId: project_id }) {
   const [tasks, setTasks] = useState()
   const [resources, setResources] = useState()
   const [resourceAssignments, setResourceAssignments] = useState()
+  const [dependencies, setDependencies] = useState()
   const ganttRef = useRef()
 
   const [scaleType, setScaleType] = useState("weeks")
@@ -43,7 +46,6 @@ export default function GanttChart({ projectId: project_id }) {
 
   useEffect(() => {
     if (data?.issues) {
-      // console.log(data.issues)
       const tasks = data.issues.map(issue => ({
         id: issue.id,
         status: issue.status.id,
@@ -55,6 +57,7 @@ export default function GanttChart({ projectId: project_id }) {
         parentId: issue.parent?.id,
       }))
       setTasks(JSON.parse(JSON.stringify(tasks)))
+
       const resources = data.issues
         .map(issue => ({
           id: issue.assigned_to?.id || "unassigned",
@@ -67,9 +70,28 @@ export default function GanttChart({ projectId: project_id }) {
       const resourceAssignments = data.issues.map(issue => ({
         id: issue.id,
         taskId: issue.id,
-        resourceId: issue.assigned_to?.id || "unassigned",
+        resourceId: issue.assigned_to?.id,
       }))
       setResourceAssignments(JSON.parse(JSON.stringify(resourceAssignments)))
+
+      const dependencies = Array.from(
+        new Set(
+          data.issues
+            .map(issue => {
+              return issue.relations.map(relation => {
+                return {
+                  id: relation.id,
+                  predecessorId: relation.issue_id,
+                  successorId: relation.issue_to_id,
+                  type: relation.relation_type === "precedes" ? 0 : relation.relation_type === "follows" ? 3 : 1,
+                }
+              })
+            })
+            .flat()
+            .map(JSON.stringify)
+        )
+      ).map(JSON.parse)
+      setDependencies(JSON.parse(JSON.stringify(dependencies)))
     }
   }, [data])
 
@@ -138,6 +160,36 @@ export default function GanttChart({ projectId: project_id }) {
     }
   }
 
+  const onDependencyInserting = async e => {
+    if (e.values.type === 2) {
+      console.log("Inserting invalid dependency", e.values.type)
+      e.cancel = true
+    } else {
+      const relation = e.values.type === 0 ? "precedes" : e.values.type === 3 ? "follows" : "relates"
+      console.log("Valid dependency", e.values.type, relation)
+      try {
+        await createIssueRelation({
+          id: e.values.predecessorId,
+          relation: {
+            issue_id: e.values.predecessorId,
+            issue_to_id: parseInt(e.values.successorId),
+            relation_type: relation,
+          },
+        }).unwrap()
+      } catch (error) {
+        e.cancel = true
+      }
+    }
+  }
+
+  const onDependencyDeleting = async e => {
+    try {
+      await deleteIssueRelation(e.values.id).unwrap()
+    } catch (error) {
+      e.cancel
+    }
+  }
+
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
   return (
@@ -148,6 +200,8 @@ export default function GanttChart({ projectId: project_id }) {
         onTaskUpdating={onTaskUpdating}
         onTaskInserting={onTaskInserting}
         onTaskDeleting={onTaskDeleting}
+        onDependencyInserting={onDependencyInserting}
+        onDependencyDeleting={onDependencyDeleting}
         onContentReady={_scrollToToday}
         scaleType={scaleType}
         ref={ganttRef}
@@ -157,6 +211,8 @@ export default function GanttChart({ projectId: project_id }) {
         <Tasks dataSource={tasks} />
         <StripLine start={currentDate} title="Today" />
         {/* <ContextMenu enabled={true} /> */}
+        <Dependencies dataSource={dependencies} />
+
         <Resources dataSource={resources} />
         <ResourceAssignments dataSource={resourceAssignments} />
         <Toolbar>
@@ -236,8 +292,8 @@ export default function GanttChart({ projectId: project_id }) {
         <Validation autoUpdateParentTasks={true} />
         <Editing
           enabled={true}
-          allowDependencyAdding={false}
-          allowDependencyDeleting={false}
+          allowDependencyAdding={true}
+          allowDependencyDeleting={true}
           allowResourceAdding={false}
           allowResourceDeleting={false}
           allowTaskAdding={true}
