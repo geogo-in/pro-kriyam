@@ -23,7 +23,7 @@ const ListItemCustom = ({ itemObject: issue, index, project_id }) => {
       <Draggable draggableId={`${issue.id}`} key={`${issue.id}`} index={index}>
         {provided => (
           <Card
-            sx={{ my: 1, p: 1, borderRadius: 0.5, boxShadow: "1px 1px 8px -5px #00000080" }}
+            sx={{ my: 1, p: 1, borderRadius: 0.5, boxShadow: "1px 1px 8px -5px #00000080", backgroundColor: theme => theme.palette.mode === "light" ? "" :"#141A21" }}
             key={`${issue.id}`}
             onClick={handleDetails}
             role={undefined}
@@ -31,7 +31,7 @@ const ListItemCustom = ({ itemObject: issue, index, project_id }) => {
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}>
-            <Typography variant="h6" sx={{ color: theme => theme.palette.primary.defaultText, fontSize: "0.85rem", fontWeight: 500, mb: 1 }}>
+            <Typography variant="h6" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.primary.secondaryText, fontSize: "0.85rem", fontWeight: 500, mb: 1 }}>
               {issue.subject}
             </Typography>
             {issue.category?.name && (
@@ -60,12 +60,12 @@ const ListItemCustom = ({ itemObject: issue, index, project_id }) => {
                 )}
 
                 <StyledTooltip title={`Story Point`}>
-                  <Chip size="small" sx={{ background: "#f1f5f9", ml: "4px !important" }} label={issue.story_point ? issue.story_point : "--"} />
+                  <Chip size="small" sx={{ background: theme => theme.palette.mode === "light" ? "#f1f5f9" : "#141A21", ml: "4px !important", color: theme => theme.palette.primary.secondaryText }} label={issue.story_point ? issue.story_point : "--"} />
                 </StyledTooltip>
               </Stack>
               <Stack direction="row" justifyContent="flex-end" alignItems="center">
                 <StyledTooltip title="Issue ID">
-                  <Typography variant="subtitle2" pr={1} sx={{ color: theme => theme.palette.primary.tertiaryText, ":hover": { textDecoration: "underline", cursor: "pointer" } }}>
+                  <Typography variant="subtitle2" pr={1} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.tertiaryText : theme.palette.primary.secondaryText, ":hover": { textDecoration: "underline", cursor: "pointer" } }}>
                     #{issue.id}
                   </Typography>
                 </StyledTooltip>

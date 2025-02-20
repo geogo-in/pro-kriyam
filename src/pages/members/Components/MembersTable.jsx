@@ -17,7 +17,7 @@ import { getErrorMessage } from "utils/helper"
 const MembersTable = ({ users, lockedUsers, registeredUsers }) => (
   <TableContainer sx={{ borderRadius: 0 }}>
     <Table aria-label="simple table">
-      <TableHead sx={{ backgroundColor: "white", borderRadius: 0, borderBottom: "none" }}>
+      <TableHead sx={{ backgroundColor: theme => theme.palette.background.modal, borderRadius: 0, borderBottom: "none" }}>
         <TableRow>
           <TableHeadCell sx={{ width: 20 }}></TableHeadCell>
           <TableHeadCell></TableHeadCell>

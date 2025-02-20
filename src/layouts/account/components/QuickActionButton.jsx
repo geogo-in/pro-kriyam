@@ -1,4 +1,4 @@
-import { Add, NotificationsNoneSharp, Settings } from "@mui/icons-material"
+import { Add, DarkModeOutlined, NotificationsNoneSharp, Settings } from "@mui/icons-material"
 import ProfileIcon from "@mui/icons-material/AccountBoxOutlined"
 import AddIcon from "@mui/icons-material/Add"
 import AddIssueIcon from "@mui/icons-material/AddTask"
@@ -19,6 +19,7 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, NavLink, useNavigate } from "react-router-dom"
 import { PATH_AUTH, PATH_DASHBOARD } from "routes/paths"
+import { toggleTheme } from "@redux/reducerSlices/theme/themeSlice"
 
 const StyledMenu = styled(props => (
   <Menu
@@ -140,6 +141,10 @@ const QuickActionButton = () => {
         <MenuItem disableRipple component={Link} to={PATH_DASHBOARD.settings}>
           <Settings />
           Settings
+        </MenuItem>
+        <MenuItem disableRipple onClick={() => dispatch(toggleTheme())}>
+          <DarkModeOutlined />
+          Change Theme
         </MenuItem>
         <MenuItem onClick={onLogoutClick} disableRipple>
           <LogoutIcon />

@@ -4,13 +4,13 @@ import Scrum from "assets/images/scrum-new.svg"
 import { LineCard as Card } from "pages/shared/StyledCard"
 const ChangeTemplate = ({ onBack, template }) => {
   return (
-    <Box px={3} py={2} sx={{ borderLeft: "2px dashed #f1f5f9" }}>
+    <Box px={3} py={2} sx={{ borderLeft: theme => theme.palette.mode === "light" ? "2px dashed #f1f5f9" : "2px dashed #444444" }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography sx={{ fontSize: "0.85rem", fontWeight: 500 }}>Template</Typography>
         <Button onClick={onBack}>Change Template</Button>
       </Stack>
       <Card sx={{ display: "flex", my: 2, justifyContent: "flex-start" }}>
-        <Box minWidth="125px" bgcolor="rgba(241,245,249, 0.4)" p={2} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Box minWidth="125px" bgcolor={theme => theme.palette.mode === "light" ? "rgba(241,245,249, 0.4)" : "#181F27"} p={2} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
           {template && template.name === "Scrum" ? <img src={Scrum} alt="Icon" /> : template.name === "Kanban" ? <img src={Kanban} alt="Icon" /> : <img src="" alt="Icon" />}
         </Box>
         <Box py={1} px={2}>

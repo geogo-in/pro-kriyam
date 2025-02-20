@@ -4,8 +4,9 @@ import { useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issu
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import "devexpress-gantt/dist/dx-gantt.min.css"
 import Gantt, { Column, Editing, Item, ResourceAssignments, Resources, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
-import "devextreme/dist/css/dx.common.css"
-import "devextreme/dist/css/dx.light.css"
+// import "devextreme/dist/css/dx.common.css"
+// import "devextreme/dist/css/dx.light.css"
+import { useTheme } from "@mui/material/styles"
 import moment from "moment"
 import CreateIssue from "pages/projectIssues/components/CreateIssue"
 import CustomDialog from "pages/shared/CustomDialog"
@@ -24,6 +25,23 @@ export default function GanttChart({ projectId: project_id }) {
   const [resources, setResources] = useState()
   const [resourceAssignments, setResourceAssignments] = useState()
   const ganttRef = useRef()
+  const theme = useTheme()
+
+  const isDarkMode = theme.palette.mode === "light" ? "dx.light.css" : "dx.dark.css";
+
+  useEffect(() => {
+    const themeLink = document.getElementById("theme-link");
+    if (themeLink) {
+      themeLink.href = `https://cdn3.devexpress.com/jslib/23.1.3/css/${isDarkMode}`;
+      document.documentElement.style.setProperty("--dx-gantt-border", theme.palette.gantt.defaultBorder)
+      document.documentElement.style.setProperty("--dx-gantt-collapsable", theme.palette.gantt.collapsableBg)
+      document.documentElement.style.setProperty("--dx-gantt-text", theme.palette.gantt.defaultText)
+      document.documentElement.style.setProperty("--dx-gantt-secondaryText", theme.palette.gantt.secondaryText)
+      document.documentElement.style.setProperty("--dx-gantt-tertiaryText", theme.palette.gantt.tertiaryText)
+      document.documentElement.style.setProperty("--dx-gantt-primaryText", theme.palette.gantt.primaryText)
+      document.documentElement.style.setProperty("--dx-gantt-selectedBg", theme.palette.gantt.selectedBg)
+    }
+  }, [isDarkMode]);
 
   const [scaleType, setScaleType] = useState("weeks")
   // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"

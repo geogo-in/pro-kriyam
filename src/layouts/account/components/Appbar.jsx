@@ -1,5 +1,6 @@
 import MenuIcon from "@mui/icons-material/Menu"
 import { Typography } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import IconButton from "@mui/material/IconButton"
@@ -11,11 +12,14 @@ import { Link } from "react-router-dom"
 import { PATH_DASHBOARD } from "routes/paths"
 import QuickActionButton from "./QuickActionButton"
 import Search from "./Search"
+import LogoWhite from "assets/images/logo-white.svg"
 
 const drawerWidth = 280
 
 const Appbar = ({ mobileOpen, setMobileOpen }) => {
   const [open, setOpen] = useState(false)
+  const theme = useTheme()
+  const logoSrc = theme.palette.mode === "light" ? Logo : LogoWhite
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -28,8 +32,8 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
           width: { sm: `calc(100% - ${0}px)` },
           ml: { sm: `${drawerWidth}px` },
           zIndex: theme => (open ? theme.zIndex.tooltip + 1 : theme.zIndex.drawer + 1),
-          background: "white",
-          borderBottom: "1px solid #F1F5F9",
+          background: theme => theme.palette.background.default,
+          borderBottom: theme => theme.palette.mode === "light" ? "1px solid #F1F5F9" : "1px solid #292929",
           boxShadow: "none",
         }}>
         <Toolbar>
@@ -38,9 +42,9 @@ const Appbar = ({ mobileOpen, setMobileOpen }) => {
           </IconButton>
           <Box sx={{ width: `${drawerWidth - 24}px`, display: "flex", alignItems: "flex-end", marginBottom: 1 }}>
             <Link to={PATH_DASHBOARD.root}>
-              <img src={Logo} alt="logo" height={40} />
+              <img src={logoSrc} alt="logo" height={40} width={85} />
             </Link>
-            <Typography variant="h6" sx={{ textTransform: "uppercase", fontWeight: 600, color: "#10172a", fontSize: "0.8rem", padding: "2px 8px" }}>
+            <Typography variant="h6" sx={{ textTransform: "uppercase", fontWeight: 600, color: theme => theme.palette.mode === "light" ? "#10172a" : "fff", fontSize: "0.8rem", padding: "2px 8px" }}>
               Projects
             </Typography>
           </Box>
