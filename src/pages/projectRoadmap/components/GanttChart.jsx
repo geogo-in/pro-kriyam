@@ -43,7 +43,6 @@ export default function GanttChart({ projectId: project_id }) {
   const [openCustomDialog, setOpenCustomDialog] = useState(false)
   const [openNewTaskForm, setOpenNewTaskForm] = useState(false)
   const [openTaskDetails, setOpenTaskDetails] = useState(false)
-  const [selectedTaskId, setSelectedTaskId] = useState(null)
   const [parentIssueId, setParentIssueId] = useState(null)
   const [selectedTask, setSelectedTask] = useState({
     id: null,
@@ -87,14 +86,16 @@ export default function GanttChart({ projectId: project_id }) {
 
   const onTaskDblClick = e => {
     e.cancel = true
-    setSelectedTaskId(e.data.id)
+    // setSelectedTaskId(e.data.id)
+    setSelectedTask({ id: e.data.id })
     setOpenCustomDialog(true)
     setOpenTaskDetails(true)
   }
 
   const onTaskEditDialogShowing = e => {
     e.cancel = true
-    setSelectedTaskId(e.key)
+    // setSelectedTaskId(e.key)
+    setSelectedTask({ id: e.key })
     setOpenCustomDialog(true)
     setOpenTaskDetails(true)
   }
@@ -159,7 +160,6 @@ export default function GanttChart({ projectId: project_id }) {
 
   const onContextMenuPreparing = e => {
     let task = tasks.find(task => task.id === e.data.id)
-    console.log({ id: task.id, statusId: task.status, assigneeId: task.assigneeId })
     setSelectedTask({ id: task.id, statusId: task.status, assigneeId: task.assigneeId })
   }
 
@@ -185,7 +185,6 @@ export default function GanttChart({ projectId: project_id }) {
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
   console.log("Gant render")
-  console.log(memberships)
   return (
     <>
       <Gantt
@@ -323,7 +322,7 @@ export default function GanttChart({ projectId: project_id }) {
         onClose={handleCustomDialogClose}
         openNewTaskForm={openNewTaskForm}
         openTaskDetails={openTaskDetails}
-        selectedTaskId={selectedTaskId}
+        selectedTaskId={selectedTask.id}
         project_id={project_id}
         parentIssueId={parentIssueId}
       />
