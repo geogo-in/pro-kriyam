@@ -165,7 +165,7 @@ export default function GanttChart({ projectId: project_id }) {
     } catch (error) {
       const { message } = getErrorMessage(error)
       enqueueSnackbar(message, { variant: "error", title: "Oops!" })
-      e.cancel
+      e.cancel = true
     }
   }
 
