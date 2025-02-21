@@ -1,12 +1,12 @@
 import { Box, Chip, IconButton, Stack, Typography } from "@mui/material"
 import Card from "@mui/material/Card"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import IssuePriorityIcon from "pages/shared/IssuePriorityIcon"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import { StyledTooltip } from "pages/shared/StyledTooltip"
 import { Draggable } from "react-beautiful-dnd"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import { PATH_DASHBOARD } from "routes/paths"
 
 const ListItemCustom = ({ itemObject: issue, index, project_id }) => {
@@ -23,7 +23,7 @@ const ListItemCustom = ({ itemObject: issue, index, project_id }) => {
       <Draggable draggableId={`${issue.id}`} key={`${issue.id}`} index={index}>
         {provided => (
           <Card
-            sx={{ my: 1, p: 1, borderRadius: 0.5, boxShadow: "1px 1px 8px -5px #00000080", backgroundColor: theme => theme.palette.mode === "light" ? "" :"#141A21" }}
+            sx={{ my: 1, p: 1, borderRadius: 0.5, boxShadow: theme => theme.palette.mode === "light" ? "1px 1px 8px -5px #00000080"  : "", backgroundColor: theme => theme.palette.mode === "light" ? "" : "#0A0E12" }}
             key={`${issue.id}`}
             onClick={handleDetails}
             role={undefined}
@@ -31,7 +31,7 @@ const ListItemCustom = ({ itemObject: issue, index, project_id }) => {
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}>
-            <Typography variant="h6" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.primary.secondaryText, fontSize: "0.85rem", fontWeight: 500, mb: 1 }}>
+            <Typography variant="h6" sx={{ color: theme => theme.palette.primary.defaultText, fontSize: "0.85rem", fontWeight: 500, mb: 1 }}>
               {issue.subject}
             </Typography>
             {issue.category?.name && (

@@ -77,7 +77,7 @@ const StyledEditorBox = styled(Box)(({ theme }) => ({
   },
   "& .mention": {
     background: theme.palette.primary.main,
-    color: "white",
+    color: theme.palette.mode === "light" ? "white" : theme.palette.primary.defaultText,
     borderRadius: 15,
     padding: 3,
   },
@@ -110,7 +110,7 @@ export const formats = [
 // Quill Toolbar component
 export const QuillToolbar = () => {
   return (
-    <Box id="toolbar" sx={{ background: "#f1f5f9", borderRadius: "4px 4px 0 0", border: "none !important" }}>
+    <Box id="toolbar" sx={{ background: theme => theme.palette.mode === "light" ? "#f1f5f9" : "#CBD5E1", borderRadius: "4px 4px 0 0", border: "none !important" }}>
       <StyledQlBox className="ql-formats">
         {/* <select className="ql-font" defaultValue="arial">
         <option value="arial">Arial</option>

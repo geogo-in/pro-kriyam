@@ -46,7 +46,7 @@ const palette = {
     gantt: {
       defaultText: "#646d76",
       primaryText: "#3e4954",
-      secondaryText: "#54637c",
+      // secondaryText: "#54637c",
       tertiaryText: "#657289",
       defaultBorder: "#edeff1",
       collapsableBg: "#edeff5",
@@ -66,9 +66,8 @@ const palette = {
       secondaryText: "#BBBEC7",
     },
     gantt: {
-      defaultText: "#fff",
+      defaultText: "#CBD5E1",
       primaryText: "#e2e8f0",
-      secondaryText: "#fff",
       tertiaryText: "#BBBEC7",
       defaultBorder: "#444444",
       collapsableBg: "#1C252E",

@@ -37,7 +37,7 @@
 }
 
 .dx-treelist-headers .dx-treelist-table .dx-row > td {
-  color: var(--dx-gantt-secondaryText) !important;
+  color: var(--dx-gantt-text) !important;
   /* color: #54637c !important; */
   font-size: 0.8rem !important;
   padding: 12px 10px;

@@ -1,5 +1,5 @@
 import { FiberManualRecord } from "@mui/icons-material"
-import { Box, ListItemIcon, ListItemText, MenuItem, Typography, styled } from "@mui/material"
+import { ListItemIcon, ListItemText, MenuItem, Typography, styled } from "@mui/material"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
 import MuiTableCell from "@mui/material/TableCell"
@@ -12,7 +12,7 @@ import { useSnackbar } from "notistack"
 import { SleekSelectWithIcon, SleekTextField } from "pages/shared/CustomTextField"
 import IssuePriorityIcon from "pages/shared/IssuePriorityIcon"
 import MemberAvatar from "pages/shared/MemberAvatar"
-import TypoTextField from "pages/shared/TypoTextField"
+import { useState } from "react"
 import { fDate } from "utils/formatDate"
 
 export const StyledListItemText = styled(ListItemText)(({ theme }) => ({
@@ -26,19 +26,48 @@ const TableCell = styled(MuiTableCell)(({ theme }) => ({
   "&:last-child": { paddingRight: "32px" },
 }))
 
-export default function IssueAbout({ project_id, comments, sprint, author, priority, assigned_to, category, created_on, updated_on, ...issue }) {
+export default function IssueAbout({ project_id, project_type, comments, sprint, author, priority, assigned_to, category, created_on, updated_on, ...issue }) {
   const { data: membership } = useGetProjectMembershipsQuery(project_id)
   const { data: priorities } = useGetIssuePriorityQuery()
   const [updateTask] = useUpdateIssuesMutation()
   const { data: epics } = useGetEpicQuery(project_id)
   const { enqueueSnackbar } = useSnackbar()
 
-  const handleIssueUpdate = data => async () => {
+  const [tempValues, setTempValues] = useState({
+    assigned_to_id: assigned_to?.id || "",
+    priority_id: priority.id,
+    start_date: moment(issue?.start_date).format("YYYY-MM-DD"),
+    due_date: moment(issue?.due_date).format("YYYY-MM-DD"),
+    story_point: issue.story_point,
+    category_id: category?.id || "",
+  })
+
+  const handleIssueUpdate = async (field, value) => {
+    setTempValues(prev => ({ ...prev, [field]: value })) // Optimistic UI update
+
     try {
-      await updateTask({ id: issue.id, ...data }).unwrap()
+      await updateTask({ id: issue.id, [field]: value }).unwrap()
     } catch (r) {
       console.error(r)
       enqueueSnackbar(r.data?.errors?.join(", "), { variant: "error" })
+      // Revert to original value on failure
+      setTempValues(prev => ({
+        ...prev,
+        [field]:
+          field === "assigned_to_id"
+            ? assigned_to?.id || ""
+            : field === "priority_id"
+            ? priority.id
+            : field === "category_id"
+            ? category?.id || ""
+            : field === "story_point"
+            ? issue.story_point
+            : field === "start_date"
+            ? moment(issue?.start_date).format("YYYY-MM-DD")
+            : field === "due_date"
+            ? moment(issue?.due_date).format("YYYY-MM-DD")
+            : prev[field],
+      }))
     }
   }
 
@@ -53,7 +82,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
           <TableRow sx={{ "td, th": { border: 0 } }}>
             <TableCell sx={{ maxWidth: "120px", minWidth: "120px" }}>Assignee</TableCell>
             <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={assigned_to?.id || ""} onChange={e => handleIssueUpdate({ assigned_to_id: e.target.value })()}>
+              <SleekSelectWithIcon bgcolor="#f1f5f9" minwidth={300} fullWidth={false} value={tempValues.assigned_to_id} onChange={e => handleIssueUpdate("assigned_to_id", e.target.value)}>
                 <MenuItem value="">
                   <ListItemIcon>
                     <MemberAvatar tooltipPosition="none" />
@@ -77,7 +106,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
           <TableRow sx={{ "td, th": { border: 0 } }}>
             <TableCell>Priority</TableCell>
             <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={priority.id} onChange={e => handleIssueUpdate({ priority_id: e.target.value })()}>
+              <SleekSelectWithIcon bgcolor="#f1f5f9" minwidth={300} fullWidth={false} value={tempValues.priority_id} onChange={e => handleIssueUpdate("priority_id", e.target.value)}>
                 {priorities?.map(({ name, id }) => (
                   <MenuItem key={id} value={id}>
                     <ListItemIcon>
@@ -95,10 +124,10 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
               <SleekTextField
                 type="date"
                 bgcolor="#f1f5f9"
-                minWidth={300}
+                minwidth={300}
                 fullWidth={false}
-                value={moment(issue?.start_date).format("YYYY-MM-DD")}
-                onChange={e => handleIssueUpdate({ start_date: e.target.value })()}
+                value={tempValues.start_date}
+                onChange={e => handleIssueUpdate("start_date", e.target.value)}
                 required
                 size="small"
                 inputProps={{ min: moment().format("YYYY-MM-DD") }}
@@ -110,50 +139,61 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
             <TableCell align="left">
               <SleekTextField
                 type="date"
-                value={moment(issue?.due_date).format("YYYY-MM-DD")}
-                onChange={e => handleIssueUpdate({ due_date: e.target.value })()}
+                value={tempValues.due_date}
+                onChange={e => handleIssueUpdate("due_date", e.target.value)}
                 required
                 bgcolor="#f1f5f9"
-                minWidth={300}
+                minwidth={300}
                 fullWidth={false}
                 size="small"
                 inputProps={{ min: moment().format("YYYY-MM-DD") }}
               />
             </TableCell>
           </TableRow>
-          <TableRow sx={{ "td, th": { border: 0 } }}>
-            <TableCell>Epic</TableCell>
-            <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={category?.id || ""} onChange={e => handleIssueUpdate({ category_id: e.target.value })()}>
-                <MenuItem value="">
-                  <ListItemText>Select Epic</ListItemText>
-                </MenuItem>
-                {epics?.map(({ id, name, color_code }) => (
-                  <MenuItem key={id} value={id}>
-                    <ListItemIcon sx={{ color: color_code }}>
-                      <FiberManualRecord />
-                    </ListItemIcon>
-                    <ListItemText>{name}</ListItemText>
-                  </MenuItem>
-                ))}
-              </SleekSelectWithIcon>
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "td, th": { border: 0 } }}>
-            <TableCell>Story Point</TableCell>
-            <TableCell align="left">
-              <Box sx={{ minHeight: 50, display: "flex", alignItems: "center", width: "300px" }}>
-                <TypoTextField type="number" placeholder="&nbsp;" my={0.8} maxWidth={300} bgcolor="#f1f5f9" p={0.8} value={issue.story_point} name="story_point" onSubmit={handleUpdate} />
-              </Box>
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "td, th": { border: 0 } }}>
-            <TableCell sx={{ width: "120px" }}>Sprint</TableCell>
-            <TableCell align="left" sx={{ fontWeight: 500 }}>
-              {sprint?.name || "-"}
-            </TableCell>
-          </TableRow>
-          <TableRow sx={{ "td, th": { border: 0 } }}>
+          {project_type === "Scrum" && (
+            <>
+              <TableRow sx={{ "td, th": { border: 0 } }}>
+                <TableCell>Epic</TableCell>
+                <TableCell align="left">
+                  <SleekSelectWithIcon bgcolor="#f1f5f9" minwidth={300} fullWidth={false} value={tempValues.category_id} onChange={e => handleIssueUpdate("category_id", e.target.value)}>
+                    <MenuItem value="">
+                      <ListItemText>Select Epic</ListItemText>
+                    </MenuItem>
+                    {epics?.map(({ id, name, color_code }) => (
+                      <MenuItem key={id} value={id}>
+                        <ListItemIcon sx={{ color: color_code }}>
+                          <FiberManualRecord />
+                        </ListItemIcon>
+                        <ListItemText>{name}</ListItemText>
+                      </MenuItem>
+                    ))}
+                  </SleekSelectWithIcon>
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ "td, th": { border: 0 } }}>
+                <TableCell>Story Point</TableCell>
+                <TableCell align="left">
+                  <SleekTextField
+                    type="number"
+                    value={tempValues.story_point}
+                    onChange={e => handleIssueUpdate("story_point", e.target.value)}
+                    required
+                    bgcolor="#f1f5f9"
+                    minwidth={300}
+                    fullWidth={false}
+                    size="small"
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ "td, th": { border: 0 } }}>
+                <TableCell sx={{ width: "120px" }}>Sprint</TableCell>
+                <TableCell align="left" sx={{ fontWeight: 500 }}>
+                  {sprint?.name || "-"}
+                </TableCell>
+              </TableRow>
+            </>
+          )}
+          <TableRow sx={{ "td, th": { border: 0, py: 2 } }}>
             <TableCell>Reporter</TableCell>
             <TableCell align="left">
               <Typography variant="body2">
