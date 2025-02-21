@@ -16,6 +16,7 @@ export function useGanttData(data) {
           title: issue.subject,
           start: new Date(moment(issue.start_date).startOf("days")),
           end: new Date(moment(issue.due_date).endOf("days")),
+          assigneeId: issue.assigned_to?.id || null,
           assignee: issue.assigned_to?.name || "unassigned",
           progress: issue.done_ratio || 0,
           parentId: issue.parent?.id,

@@ -1,10 +1,17 @@
 import AddIcon from "@mui/icons-material/Add"
 import LinearProgress from "@mui/material/LinearProgress"
 import { getCurrentUser, isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
-import { useCreateIssueRelationMutation, useDeleteIssueMutation, useDeleteIssueRelationMutation, useGetIssuesQuery, useUpdateIssuesMutation } from "@redux/services/issueApi"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
+import {
+  useCreateIssueRelationMutation,
+  useDeleteIssueMutation,
+  useDeleteIssueRelationMutation,
+  useGetIssuesQuery,
+  useGetProjectIssuesStatusesQuery,
+  useUpdateIssuesMutation,
+} from "@redux/services/issueApi"
+import { useGetProjectByIdQuery, useGetProjectMembershipsQuery } from "@redux/services/projectApi"
 import "devexpress-gantt/dist/dx-gantt.min.css"
-import Gantt, { Column, Dependencies, Editing, Item, ResourceAssignments, Resources, Sorting, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
+import Gantt, { Column, ContextMenu, Dependencies, Editing, Item, ResourceAssignments, Resources, Sorting, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
 import "devextreme/dist/css/dx.common.css"
 import "devextreme/dist/css/dx.light.css"
 import moment from "moment"
@@ -27,6 +34,8 @@ export default function GanttChart({ projectId: project_id }) {
   const [deleteIssue, { isLoading: isDeletingIssue }] = useDeleteIssueMutation()
   const isSystemAdmin = useSelector(isAdmin)
   const currentUser = useSelector(getCurrentUser)
+  const { data: statuses } = useGetProjectIssuesStatusesQuery(project_id)
+  const { data: memberships, isLoading: isMembershipsLoading } = useGetProjectMembershipsQuery(project_id)
 
   const { tasks, resources, resourceAssignments, dependencies } = useGanttData(data)
 
@@ -36,6 +45,12 @@ export default function GanttChart({ projectId: project_id }) {
   const [openTaskDetails, setOpenTaskDetails] = useState(false)
   const [selectedTaskId, setSelectedTaskId] = useState(null)
   const [parentIssueId, setParentIssueId] = useState(null)
+  const [selectedTask, setSelectedTask] = useState({
+    id: null,
+    statusId: null,
+    assigneeId: null,
+  })
+  // const [task, setTask] = useState()
 
   const ganttRef = useRef()
   const { enqueueSnackbar } = useSnackbar()
@@ -142,12 +157,41 @@ export default function GanttChart({ projectId: project_id }) {
     }
   }
 
+  const onContextMenuPreparing = e => {
+    let task = tasks.find(task => task.id === e.data.id)
+    console.log({ id: task.id, statusId: task.status, assigneeId: task.assigneeId })
+    setSelectedTask({ id: task.id, statusId: task.status, assigneeId: task.assigneeId })
+  }
+
+  const onCustomCommand = async e => {
+    console.log(e)
+    const selectedValue = e.name.split("_")
+    try {
+      let updatePayload = {
+        id: selectedTask.id,
+      }
+      if (selectedValue[0] === "status") {
+        updatePayload = { ...updatePayload, status_id: parseInt(selectedValue[1]) }
+      } else if (selectedValue[0] === "assignee") {
+        updatePayload = { ...updatePayload, assigned_to_id: parseInt(selectedValue[1]) }
+      }
+      await updateTask(updatePayload).unwrap()
+    } catch (r) {
+      const { message } = getErrorMessage(r)
+      enqueueSnackbar(message, { variant: "error" })
+    }
+  }
+
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
+  console.log("Gant render")
+  console.log(memberships)
   return (
     <>
       <Gantt
         onTaskDblClick={onTaskDblClick}
+        onContextMenuPreparing={onContextMenuPreparing}
+        onCustomCommand={onCustomCommand}
         onTaskEditDialogShowing={onTaskEditDialogShowing}
         onTaskUpdating={onTaskUpdating}
         onTaskInserting={onTaskInserting}
@@ -158,13 +202,29 @@ export default function GanttChart({ projectId: project_id }) {
         scaleType={scaleType}
         ref={ganttRef}
         taskListWidth={320}
-        // taskContentRender={TaskTemplate}
         height={"calc(100vh - 128px)"}>
         <Tasks dataSource={tasks} />
         <StripLine start={currentDate} title="Today" />
-        {/* <ContextMenu enabled={true} /> */}
         <Dependencies dataSource={dependencies} />
         <Sorting mode="multiple" showSortIndexes={true} ascendingText="Ascending Order" descendingText="Descending Order" clearText="Clear Sort" />
+        <ContextMenu enabled={true}>
+          <Item name="taskDetails" text="Details" />
+          <Item icon="add" text="Add">
+            <Item name="addTask" text="Add Task" />
+            <Item name="addSubtask" text="Add SubTask" />
+          </Item>
+          <Item icon="chevronright" text="Status">
+            {statuses?.map(status => (
+              <Item key={status.id} name={`status_${status.id}`} text={status.name} icon={status.id === selectedTask.statusId ? "check" : undefined} />
+            ))}
+          </Item>
+          <Item icon="user" text="Assignee">
+            {memberships?.map(({ user }) => (
+              <Item key={user.id} name={`assignee_${user.id}`} text={user.name} icon={user.id === selectedTask.assigneeId ? "check" : undefined} />
+            ))}
+          </Item>
+          <Item name="deleteTask" text="Delete Task" />
+        </ContextMenu>
         <Resources dataSource={resources} />
         <ResourceAssignments dataSource={resourceAssignments} />
         <Toolbar>
