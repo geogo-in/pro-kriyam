@@ -75,7 +75,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
           <TableRow sx={{ "td, th": { border: 0 } }}>
             <TableCell sx={{ maxWidth: "120px", minWidth: "120px" }}>Assignee</TableCell>
             <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={tempValues.assigned_to_id} onChange={e => handleIssueUpdate("assigned_to_id", e.target.value)}>
+              <SleekSelectWithIcon bgcolor="#f1f5f9" minwidth={300} fullWidth={false} value={tempValues.assigned_to_id} onChange={e => handleIssueUpdate("assigned_to_id", e.target.value)}>
                 <MenuItem value="">
                   <ListItemIcon>
                     <MemberAvatar tooltipPosition="none" />
@@ -99,7 +99,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
           <TableRow sx={{ "td, th": { border: 0 } }}>
             <TableCell>Priority</TableCell>
             <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={tempValues.priority_id} onChange={e => handleIssueUpdate("priority_id", e.target.value)}>
+              <SleekSelectWithIcon bgcolor="#f1f5f9" minwidth={300} fullWidth={false} value={tempValues.priority_id} onChange={e => handleIssueUpdate("priority_id", e.target.value)}>
                 {priorities?.map(({ name, id }) => (
                   <MenuItem key={id} value={id}>
                     <ListItemIcon>
@@ -117,7 +117,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
               <SleekTextField
                 type="date"
                 bgcolor="#f1f5f9"
-                minWidth={300}
+                minwidth={300}
                 fullWidth={false}
                 value={tempValues.start_date}
                 onChange={e => handleIssueUpdate("start_date", e.target.value)}
@@ -136,7 +136,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
                 onChange={e => handleIssueUpdate("due_date", e.target.value)}
                 required
                 bgcolor="#f1f5f9"
-                minWidth={300}
+                minwidth={300}
                 fullWidth={false}
                 size="small"
                 inputProps={{ min: moment().format("YYYY-MM-DD") }}

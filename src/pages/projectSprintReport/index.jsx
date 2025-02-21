@@ -52,7 +52,7 @@ export default function ProjectSprintReport() {
               <>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <SectionTitle variant="h6">Sprint Report</SectionTitle>
-                  <SleekSelectWithIcon value={sprint.name} onChange={handleChangeSprint} minWidth={150}>
+                  <SleekSelectWithIcon value={sprint.name} onChange={handleChangeSprint} minwidth={150}>
                     {closedSprints.map(sp => (
                       <MenuItem key={sp.id} value={sp.name}>
                         {sp.name}

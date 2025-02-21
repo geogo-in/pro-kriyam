@@ -53,7 +53,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
           <TableRow sx={{ "td, th": { border: 0 } }}>
             <TableCell sx={{ maxWidth: "120px", minWidth: "120px" }}>Assignee</TableCell>
             <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={assigned_to?.id || ""} onChange={e => handleIssueUpdate({ assigned_to_id: e.target.value })()}>
+              <SleekSelectWithIcon bgcolor="#f1f5f9" minwidth={300} fullWidth={false} value={assigned_to?.id || ""} onChange={e => handleIssueUpdate({ assigned_to_id: e.target.value })()}>
                 <MenuItem value="">
                   <ListItemIcon>
                     <MemberAvatar tooltipPosition="none" />
@@ -77,7 +77,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
           <TableRow sx={{ "td, th": { border: 0 } }}>
             <TableCell>Priority</TableCell>
             <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={priority.id} onChange={e => handleIssueUpdate({ priority_id: e.target.value })()}>
+              <SleekSelectWithIcon bgcolor="#f1f5f9" minwidth={300} fullWidth={false} value={priority.id} onChange={e => handleIssueUpdate({ priority_id: e.target.value })()}>
                 {priorities?.map(({ name, id }) => (
                   <MenuItem key={id} value={id}>
                     <ListItemIcon>
@@ -95,7 +95,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
               <SleekTextField
                 type="date"
                 bgcolor="#f1f5f9"
-                minWidth={300}
+                minwidth={300}
                 fullWidth={false}
                 value={moment(issue?.start_date).format("YYYY-MM-DD")}
                 onChange={e => handleIssueUpdate({ start_date: e.target.value })()}
@@ -114,7 +114,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
                 onChange={e => handleIssueUpdate({ due_date: e.target.value })()}
                 required
                 bgcolor="#f1f5f9"
-                minWidth={300}
+                minwidth={300}
                 fullWidth={false}
                 size="small"
                 inputProps={{ min: moment().format("YYYY-MM-DD") }}
@@ -124,7 +124,7 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
           <TableRow sx={{ "td, th": { border: 0 } }}>
             <TableCell>Epic</TableCell>
             <TableCell align="left">
-              <SleekSelectWithIcon bgcolor="#f1f5f9" minWidth={300} fullWidth={false} value={category?.id || ""} onChange={e => handleIssueUpdate({ category_id: e.target.value })()}>
+              <SleekSelectWithIcon bgcolor="#f1f5f9" minwidth={300} fullWidth={false} value={category?.id || ""} onChange={e => handleIssueUpdate({ category_id: e.target.value })()}>
                 <MenuItem value="">
                   <ListItemText>Select Epic</ListItemText>
                 </MenuItem>

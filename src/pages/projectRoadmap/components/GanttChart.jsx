@@ -14,8 +14,8 @@ import CustomDialog from "pages/shared/CustomDialog"
 import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
-import { PATH_DASHBOARD } from "routes/paths"
 import { getErrorMessage, getRandomMessage, issueDeleteMessages } from "utils/helper"
+import IssueDetails from "../../projectIssues/components/IssueDetails"
 import { StyledPrimaryButton, StyledSimpleButton, StyledTextButton } from "./StyledButtons"
 
 const currentDate = new Date()
@@ -39,7 +39,10 @@ export default function GanttChart({ projectId: project_id }) {
 
   const [scaleType, setScaleType] = useState("weeks")
   // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"
-  const [openNewTaskDialog, setOpenNewTaskDialog] = useState(false)
+  const [openCustomDialog, setOpenCustomDialog] = useState(false)
+  const [openNewTaskForm, setOpenNewTaskForm] = useState(false)
+  const [openTaskDetails, setOpenTaskDetails] = useState(false)
+  const [selectedTaskId, setSelectedTaskId] = useState(null)
   const [parentIssueId, setParentIssueId] = useState(null)
   const location = useLocation()
   const navigate = useNavigate()
@@ -101,37 +104,44 @@ export default function GanttChart({ projectId: project_id }) {
     try {
       var date = new Date(moment().subtract(3, "days"))
       setTimeout(() => {
-        ganttRef.current.instance.scrollToDate(date)
+        if (ganttRef.current?.instance) {
+          ganttRef.current.instance.scrollToDate(date)
+        }
       }, 0)
     } catch (r) {
       console.error(r)
     }
   }
 
-  const handleNewTaskDialogOpen = e => {
-    setOpenNewTaskDialog(true)
+  const handleOpenNewTaskForm = e => {
+    setOpenCustomDialog(true)
+    setOpenNewTaskForm(true)
   }
 
-  const handleNewTaskDialogClose = () => {
-    setOpenNewTaskDialog(false)
+  const handleCustomDialogClose = () => {
+    setOpenCustomDialog(false)
+    setOpenNewTaskForm(false)
   }
 
   const onTaskInserting = e => {
     e.cancel = true
     setParentIssueId(e.values.parentId)
-    setOpenNewTaskDialog(true)
+    setOpenCustomDialog(true)
+    setOpenNewTaskForm(true)
   }
 
   const onTaskDblClick = e => {
     e.cancel = true
-    let issuePath = `${PATH_DASHBOARD.projects.root}/${project_id}/roadmap/issues/${e.data.id}?referrer=roadmap`
-    navigate(issuePath, { state: { background: location } })
+    setSelectedTaskId(e.data.id)
+    setOpenCustomDialog(true)
+    setOpenTaskDetails(true)
   }
 
   const onTaskEditDialogShowing = e => {
     e.cancel = true
-    let issuePath = `${PATH_DASHBOARD.projects.root}/${project_id}/roadmap/issues/${e.key}?referrer=roadmap`
-    navigate(issuePath, { state: { background: location } })
+    setSelectedTaskId(e.key)
+    setOpenCustomDialog(true)
+    setOpenTaskDetails(true)
   }
 
   const onTaskUpdating = async e => {
@@ -225,10 +235,10 @@ export default function GanttChart({ projectId: project_id }) {
                 startIcon={<AddIcon />}
                 size="small"
                 aria-haspopup="true"
-                aria-expanded={openNewTaskDialog ? "true" : undefined}
+                aria-expanded={openNewTaskForm ? "true" : undefined}
                 disableElevation
                 variant="contained"
-                onClick={handleNewTaskDialogOpen}>
+                onClick={handleOpenNewTaskForm}>
                 New Task
               </StyledPrimaryButton>
             )}
@@ -304,8 +314,9 @@ export default function GanttChart({ projectId: project_id }) {
           allowTaskResourceUpdating={false}
         />
       </Gantt>
-      <CustomDialog back open={openNewTaskDialog} onClose={handleNewTaskDialogClose}>
-        {openNewTaskDialog && <CreateIssue onClose={handleNewTaskDialogClose} parent_issue_id={parentIssueId} project_id={project_id} />}
+      <CustomDialog back open={openCustomDialog} onClose={handleCustomDialogClose}>
+        {openNewTaskForm && <CreateIssue onClose={handleCustomDialogClose} parent_issue_id={parentIssueId} project_id={project_id} />}
+        {openTaskDetails && <IssueDetails onClose={handleCustomDialogClose} referrer="roadmap" issue_id={selectedTaskId} project_id={project_id} />}
       </CustomDialog>
     </>
   )

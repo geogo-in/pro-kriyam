@@ -190,7 +190,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
             Assignee
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <SelectWithIcon sx={{ ".MuiOutlinedInput-root": { borderRadius: 0.5 } }} name="assigned_to_id" value={state.assigned_to_id} onChange={handleChange} minWidth={250}>
+            <SelectWithIcon sx={{ ".MuiOutlinedInput-root": { borderRadius: 0.5 } }} name="assigned_to_id" value={state.assigned_to_id} onChange={handleChange} minwidth={250}>
               <MenuItem value="">
                 <ListItemIcon>
                   <MemberAvatar name="Automatic" tooltipPosition="none" />
@@ -222,7 +222,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
                     <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
                       Task type*
                     </Typography>
-                    <SelectWithIcon required name="tracker_id" value={state.tracker_id} onChange={handleChange} minWidth={175}>
+                    <SelectWithIcon required name="tracker_id" value={state.tracker_id} onChange={handleChange} minwidth={175}>
                       <MenuItem value="">--- Select ---</MenuItem>
                       {project?.tracker?.map(({ name, id }) => (
                         <MenuItem key={id} value={id}>
@@ -235,7 +235,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
                     <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
                       Status*
                     </Typography>
-                    <SelectWithIcon required name="status_id" value={state.status_id} onChange={handleChange} minWidth={175}>
+                    <SelectWithIcon required name="status_id" value={state.status_id} onChange={handleChange} minwidth={175}>
                       <MenuItem value="">--- Select ---</MenuItem>
                       {statuses?.map(({ name, id }) => (
                         <MenuItem key={id} value={id}>
@@ -248,7 +248,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
                     <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
                       Priority*
                     </Typography>
-                    <SelectWithIcon required name="priority_id" value={state.priority_id} onChange={handleChange} minWidth={175}>
+                    <SelectWithIcon required name="priority_id" value={state.priority_id} onChange={handleChange} minwidth={175}>
                       <MenuItem value="">--- Select ---</MenuItem>
                       {priorities?.map(({ name, id }) => (
                         <MenuItem key={id} value={id}>
@@ -287,7 +287,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
             <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
               Issue type*
             </Typography>
-            <SelectWithIcon required name="tracker_id" value={state.tracker_id} onChange={handleChange} minWidth={175}>
+            <SelectWithIcon required name="tracker_id" value={state.tracker_id} onChange={handleChange} minwidth={175}>
               <MenuItem value="">--- Select ---</MenuItem>
               {project?.tracker?.map(({ name, id }) => (
                 <MenuItem key={id} value={id}>
@@ -300,7 +300,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
             <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
               Status*
             </Typography>
-            <SelectWithIcon required name="status_id" value={state.status_id} onChange={handleChange} minWidth={175}>
+            <SelectWithIcon required name="status_id" value={state.status_id} onChange={handleChange} minwidth={175}>
               <MenuItem value="">--- Select ---</MenuItem>
               {statuses?.map(({ name, id }) => (
                 <MenuItem key={id} value={id}>
@@ -313,7 +313,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
             <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
               Priority*
             </Typography>
-            <SelectWithIcon required name="priority_id" value={state.priority_id} onChange={handleChange} minWidth={175}>
+            <SelectWithIcon required name="priority_id" value={state.priority_id} onChange={handleChange} minwidth={175}>
               <MenuItem value="">--- Select ---</MenuItem>
               {priorities?.map(({ name, id }) => (
                 <MenuItem key={id} value={id}>
@@ -344,7 +344,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
           Assignee
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <SelectWithIcon sx={{ ".MuiOutlinedInput-root": { borderRadius: 0.5 } }} name="assigned_to_id" value={state.assigned_to_id} onChange={handleChange} minWidth={250}>
+          <SelectWithIcon sx={{ ".MuiOutlinedInput-root": { borderRadius: 0.5 } }} name="assigned_to_id" value={state.assigned_to_id} onChange={handleChange} minwidth={250}>
             <MenuItem value="">
               <ListItemIcon>
                 <MemberAvatar name="Automatic" tooltipPosition="none" />
@@ -370,7 +370,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
         <Typography variant="body2" display="block" sx={{ mt: 2, mb: 0, color: theme => theme.palette.primary.defaultText }}>
           Epic
         </Typography>
-        <SelectWithIcon name="category_id" value={state.category_id} onChange={handleChange} minWidth={250}>
+        <SelectWithIcon name="category_id" value={state.category_id} onChange={handleChange} minwidth={250}>
           <MenuItem value="">--- Select ---</MenuItem>
           {epic?.map(({ name, id }) => (
             <MenuItem key={id} value={id}>
