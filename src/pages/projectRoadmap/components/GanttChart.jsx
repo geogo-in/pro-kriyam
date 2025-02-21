@@ -105,12 +105,18 @@ export default function GanttChart({ projectId: project_id }) {
     // e.cancel = true
     console.log("Task update triggered")
     if (e.newValues)
-      await updateTask({
-        id: e.key,
-        start_date: e.newValues.start ? moment(e.newValues.start).format("YYYY-MM-DD") : undefined,
-        due_date: e.newValues.end ? moment(e.newValues.end).format("YYYY-MM-DD") : undefined,
-        done_ratio: e.newValues?.progress,
-      }).unwrap()
+      try {
+        await updateTask({
+          id: e.key,
+          start_date: e.newValues.start ? moment(e.newValues.start).format("YYYY-MM-DD") : undefined,
+          due_date: e.newValues.end ? moment(e.newValues.end).format("YYYY-MM-DD") : undefined,
+          done_ratio: e.newValues?.progress,
+        }).unwrap()
+      } catch (error) {
+        const { message } = getErrorMessage(error)
+        enqueueSnackbar(message, { variant: "error", title: "Oops!" })
+        e.cancel = true
+      }
   }
 
   const onTaskDeleting = async e => {
@@ -146,6 +152,8 @@ export default function GanttChart({ projectId: project_id }) {
           },
         }).unwrap()
       } catch (error) {
+        const { message } = getErrorMessage(error)
+        enqueueSnackbar(message, { variant: "error", title: "Oops!" })
         e.cancel = true
       }
     }
@@ -155,6 +163,8 @@ export default function GanttChart({ projectId: project_id }) {
     try {
       await deleteIssueRelation(e.values.id).unwrap()
     } catch (error) {
+      const { message } = getErrorMessage(error)
+      enqueueSnackbar(message, { variant: "error", title: "Oops!" })
       e.cancel
     }
   }
@@ -179,7 +189,7 @@ export default function GanttChart({ projectId: project_id }) {
       await updateTask(updatePayload).unwrap()
     } catch (r) {
       const { message } = getErrorMessage(r)
-      enqueueSnackbar(message, { variant: "error" })
+      enqueueSnackbar(message, { variant: "error", title: "Oops!" })
     }
   }
 
