@@ -184,7 +184,7 @@ export default function GanttChart({ projectId: project_id }) {
 
   if (projectLoading || isLoading) return <LinearProgress />
   if (error) return "error"
-  console.log("Gant render")
+  console.log("Gantt render")
   return (
     <>
       <Gantt
@@ -219,7 +219,7 @@ export default function GanttChart({ projectId: project_id }) {
           </Item>
           <Item icon="user" text="Assignee">
             {memberships?.map(({ user }) => (
-              <Item key={user.id} name={`assignee_${user.id}`} text={user.name} icon={user.id === selectedTask.assigneeId ? "check" : undefined} />
+              <Item key={`tuser_${user?.id}`} name={`assignee_${user?.id}`} text={user?.name} icon={user?.id === selectedTask.assigneeId ? "check" : undefined} />
             ))}
           </Item>
           <Item name="deleteTask" text="Delete Task" />
