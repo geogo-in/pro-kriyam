@@ -51,7 +51,6 @@ import IssueAbout from "./IssueAbout"
 import IssueActivity from "./IssueActivity"
 import IssueComments from "./IssueComments"
 import IssueSubTasks from "./IssueSubTasks"
-import KanbanIssueAbout from "./KanbanIssueAbout"
 
 export const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: 4,
@@ -304,8 +303,8 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
           sx={{ display: "block", borderBottom: "1px solid rgba(229,231,235, 0.5)", pt: 1, pb: 0.5, mt: 2, mb: 1, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
           Details
         </Typography>
-        {project?.project_type?.name === "Kanban" ? <KanbanIssueAbout {...issue} project_id={project_id} /> : <IssueAbout {...issue} project_id={project_id} />}
-
+        {/* {project?.project_type?.name === "Kanban" ? <KanbanIssueAbout {...issue} project_id={project_id} /> : <IssueAbout {...issue} project_id={project_id} />} */}
+        <IssueAbout {...issue} project_id={project_id} project_type={project?.project_type?.name} />
         <Box sx={{ borderTop: "1px solid rgba(229,231,235, 0.5)", pb: 2, mt: 3 }}>
           <StyledTabs value={tab} onChange={handleTabChange}>
             <StyledTab label="Comments" value={0} />

@@ -1,3 +1,4 @@
+import { FiberManualRecord } from "@mui/icons-material"
 import { ListItemIcon, ListItemText, MenuItem, Typography, styled } from "@mui/material"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
@@ -25,7 +26,7 @@ const TableCell = styled(MuiTableCell)(({ theme }) => ({
   "&:last-child": { paddingRight: "32px" },
 }))
 
-export default function IssueAbout({ project_id, comments, sprint, author, priority, assigned_to, category, created_on, updated_on, ...issue }) {
+export default function IssueAbout({ project_id, project_type, comments, sprint, author, priority, assigned_to, category, created_on, updated_on, ...issue }) {
   const { data: membership } = useGetProjectMembershipsQuery(project_id)
   const { data: priorities } = useGetIssuePriorityQuery()
   const [updateTask] = useUpdateIssuesMutation()
@@ -37,6 +38,8 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
     priority_id: priority.id,
     start_date: moment(issue?.start_date).format("YYYY-MM-DD"),
     due_date: moment(issue?.due_date).format("YYYY-MM-DD"),
+    story_point: issue.story_point,
+    category_id: category?.id || "",
   })
 
   const handleIssueUpdate = async (field, value) => {
@@ -55,6 +58,10 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
             ? assigned_to?.id || ""
             : field === "priority_id"
             ? priority.id
+            : field === "category_id"
+            ? category?.id || ""
+            : field === "story_point"
+            ? issue.story_point
             : field === "start_date"
             ? moment(issue?.start_date).format("YYYY-MM-DD")
             : field === "due_date"
@@ -143,7 +150,49 @@ export default function IssueAbout({ project_id, comments, sprint, author, prior
               />
             </TableCell>
           </TableRow>
-
+          {project_type === "Scrum" && (
+            <>
+              <TableRow sx={{ "td, th": { border: 0 } }}>
+                <TableCell>Epic</TableCell>
+                <TableCell align="left">
+                  <SleekSelectWithIcon bgcolor="#f1f5f9" minwidth={300} fullWidth={false} value={tempValues.category_id} onChange={e => handleIssueUpdate("category_id", e.target.value)}>
+                    <MenuItem value="">
+                      <ListItemText>Select Epic</ListItemText>
+                    </MenuItem>
+                    {epics?.map(({ id, name, color_code }) => (
+                      <MenuItem key={id} value={id}>
+                        <ListItemIcon sx={{ color: color_code }}>
+                          <FiberManualRecord />
+                        </ListItemIcon>
+                        <ListItemText>{name}</ListItemText>
+                      </MenuItem>
+                    ))}
+                  </SleekSelectWithIcon>
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ "td, th": { border: 0 } }}>
+                <TableCell>Story Point</TableCell>
+                <TableCell align="left">
+                  <SleekTextField
+                    type="number"
+                    value={tempValues.story_point}
+                    onChange={e => handleIssueUpdate("story_point", e.target.value)}
+                    required
+                    bgcolor="#f1f5f9"
+                    minwidth={300}
+                    fullWidth={false}
+                    size="small"
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ "td, th": { border: 0 } }}>
+                <TableCell sx={{ width: "120px" }}>Sprint</TableCell>
+                <TableCell align="left" sx={{ fontWeight: 500 }}>
+                  {sprint?.name || "-"}
+                </TableCell>
+              </TableRow>
+            </>
+          )}
           <TableRow sx={{ "td, th": { border: 0, py: 2 } }}>
             <TableCell>Reporter</TableCell>
             <TableCell align="left">
