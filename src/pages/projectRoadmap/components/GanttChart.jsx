@@ -9,13 +9,11 @@ import "devextreme/dist/css/dx.common.css"
 import "devextreme/dist/css/dx.light.css"
 import moment from "moment"
 import { useSnackbar } from "notistack"
-import CreateIssue from "pages/projectIssues/components/CreateIssue"
-import CustomDialog from "pages/shared/CustomDialog"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useSelector } from "react-redux"
-import { useLocation, useNavigate } from "react-router-dom"
 import { getErrorMessage, getRandomMessage, issueDeleteMessages } from "utils/helper"
-import IssueDetails from "../../projectIssues/components/IssueDetails"
+import { useGanttData } from "../hooks/useGanttData" // Custom hook
+import GanttDialogs from "./GanttDialogs"
 import { StyledPrimaryButton, StyledSimpleButton, StyledTextButton } from "./StyledButtons"
 
 const currentDate = new Date()
@@ -27,82 +25,24 @@ export default function GanttChart({ projectId: project_id }) {
   const [createIssueRelation] = useCreateIssueRelationMutation()
   const [deleteIssueRelation] = useDeleteIssueRelationMutation()
   const [deleteIssue, { isLoading: isDeletingIssue }] = useDeleteIssueMutation()
-  const { enqueueSnackbar } = useSnackbar()
   const isSystemAdmin = useSelector(isAdmin)
   const currentUser = useSelector(getCurrentUser)
 
-  const [tasks, setTasks] = useState()
-  const [resources, setResources] = useState()
-  const [resourceAssignments, setResourceAssignments] = useState()
-  const [dependencies, setDependencies] = useState()
-  const ganttRef = useRef()
+  const { tasks, resources, resourceAssignments, dependencies } = useGanttData(data)
 
-  const [scaleType, setScaleType] = useState("weeks")
-  // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"
+  const [scaleType, setScaleType] = useState("weeks") // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"
   const [openCustomDialog, setOpenCustomDialog] = useState(false)
   const [openNewTaskForm, setOpenNewTaskForm] = useState(false)
   const [openTaskDetails, setOpenTaskDetails] = useState(false)
   const [selectedTaskId, setSelectedTaskId] = useState(null)
   const [parentIssueId, setParentIssueId] = useState(null)
-  const location = useLocation()
-  const navigate = useNavigate()
 
-  useEffect(() => {
-    if (data?.issues) {
-      const tasks = data.issues
-        .map(issue => ({
-          id: issue.id,
-          status: issue.status.id,
-          title: issue.subject,
-          start: new Date(moment(issue.start_date).startOf("days")),
-          end: new Date(moment(issue.due_date).endOf("days")),
-          assignee: issue.assigned_to?.name || "unassigned",
-          progress: issue.done_ratio || 0,
-          parentId: issue.parent?.id,
-        }))
-        .sort((a, b) => new Date(a.start) - new Date(b.start))
-      setTasks(JSON.parse(JSON.stringify(tasks)))
-
-      const resources = data.issues
-        .map(issue => ({
-          id: issue.assigned_to?.id || "unassigned",
-          text: issue.assigned_to?.name || "Unassigned",
-          color: issue.status.color_code || issue.status.name,
-        }))
-        .filter((resource, index, self) => index === self.findIndex(r => r.id === resource.id))
-      setResources(JSON.parse(JSON.stringify(resources)))
-
-      const resourceAssignments = data.issues.map(issue => ({
-        id: issue.id,
-        taskId: issue.id,
-        resourceId: issue.assigned_to?.id,
-      }))
-      setResourceAssignments(JSON.parse(JSON.stringify(resourceAssignments)))
-
-      const dependencies = Array.from(
-        new Set(
-          data.issues
-            .map(issue => {
-              return issue.relations.map(relation => {
-                return {
-                  id: relation.id,
-                  predecessorId: relation.issue_id,
-                  successorId: relation.issue_to_id,
-                  type: relation.relation_type === "precedes" ? 0 : relation.relation_type === "follows" ? 3 : 1,
-                }
-              })
-            })
-            .flat()
-            .map(JSON.stringify)
-        )
-      ).map(JSON.parse)
-      setDependencies(JSON.parse(JSON.stringify(dependencies)))
-    }
-  }, [data])
+  const ganttRef = useRef()
+  const { enqueueSnackbar } = useSnackbar()
 
   const _scrollToToday = args => {
     try {
-      var date = new Date(moment().subtract(3, "days"))
+      var date = new Date(moment())
       setTimeout(() => {
         if (ganttRef.current?.instance) {
           ganttRef.current.instance.scrollToDate(date)
@@ -314,10 +254,19 @@ export default function GanttChart({ projectId: project_id }) {
           allowTaskResourceUpdating={false}
         />
       </Gantt>
-      <CustomDialog back open={openCustomDialog} onClose={handleCustomDialogClose}>
+      {/* <CustomDialog back open={openCustomDialog} onClose={handleCustomDialogClose}>
         {openNewTaskForm && <CreateIssue onClose={handleCustomDialogClose} parent_issue_id={parentIssueId} project_id={project_id} />}
         {openTaskDetails && <IssueDetails onClose={handleCustomDialogClose} referrer="roadmap" issue_id={selectedTaskId} project_id={project_id} />}
-      </CustomDialog>
+      </CustomDialog> */}
+      <GanttDialogs
+        open={openCustomDialog}
+        onClose={handleCustomDialogClose}
+        openNewTaskForm={openNewTaskForm}
+        openTaskDetails={openTaskDetails}
+        selectedTaskId={selectedTaskId}
+        project_id={project_id}
+        parentIssueId={parentIssueId}
+      />
     </>
   )
 }
