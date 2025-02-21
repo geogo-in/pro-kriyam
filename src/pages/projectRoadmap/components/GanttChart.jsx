@@ -75,6 +75,7 @@ export default function GanttChart({ projectId: project_id }) {
   const handleCustomDialogClose = () => {
     setOpenCustomDialog(false)
     setOpenNewTaskForm(false)
+    setOpenTaskDetails(false)
   }
 
   const onTaskInserting = e => {
