@@ -1,11 +1,16 @@
+import { Close, Done } from "@mui/icons-material"
+import CheckIcon from "@mui/icons-material/Check"
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { LoadingButton } from "@mui/lab"
-import { Box, Paper, Stack, Typography, styled } from "@mui/material"
+import { Box, Button, IconButton, Paper, Stack, Typography, styled } from "@mui/material"
+import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
 import { useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
 import { useSnackbar } from "notistack"
 import Editor from "pages/shared/Editor"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import { useState } from "react"
+import { useSelector } from "react-redux"
 import { fDateTime } from "utils/formatDate"
 import { getErrorMessage } from "utils/helper"
 
@@ -30,11 +35,19 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
   const { data } = useGetProjectMembershipsQuery(project_id)
   const { enqueueSnackbar } = useSnackbar()
   const [comment, setComment] = useState("")
+  const currentUser = useSelector(getCurrentUser)
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedText, setEditedText] = useState("");
 
-  const handleIssueUpdate = data => async () => {
+  const handleIssueUpdate = async (data) => {
     try {
-      await updateTask({ id: issue.id, ...data }).unwrap()
-      setComment("")
+      if (editingCommentId !== null){
+        await updateTask({ id: issue.id, comments_id: editingCommentId, ...data }).unwrap()
+        setEditingCommentId(null)
+      }else{
+        await updateTask({ id: issue.id, ...data }).unwrap()
+        setComment("")
+      }
     } catch (r) {
       const { message } = getErrorMessage(r)
       enqueueSnackbar(message, { variant: "error" })
@@ -56,9 +69,35 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
                   {fDateTime(created_on)}
                 </Typography>
               </Box>
-
-              <StyledPaper variant="outlined" dangerouslySetInnerHTML={{ __html: notes }} />
-            </Box>
+              <Box sx={{ display: "flex", alignItems: "flex-start" }}>
+                <Box sx={{ flexGrow: 1 }}>
+                  {editingCommentId === id ? (
+                    <Box position={"relative"} sx={{ flex: 1 }}>
+                      <Box sx={{width: "100%", overflow: "hidden", whiteSpace: "nowrap"}}>
+                        <Editor value={editedText} onChange={e => setEditedText(e)} style={{ height: 250, width: "100%" }} people={data?.filter(d => d.user).map(({ user }) => ({ id: user.id, value: user.name }))} />
+                      </Box>
+                      <Box position={"absolute"} bottom={-40} right={0} zIndex={100000}>
+                        <Button onClick={() => {setEditingCommentId(null), setEditedText(null)}} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: "#f1f5f9", ml: 1 }}>
+                          <Close />
+                        </Button>
+                        <Button variant="contained" onClick={() => handleIssueUpdate({ notes: editedText })} sx={{ minWidth: 48, ml: 1, boxShadow: "none" }}>
+                          <Done />
+                        </Button>
+                      </Box>
+                    </Box>
+                  ) : (
+                    <StyledPaper variant="outlined" dangerouslySetInnerHTML={{ __html: notes }} />
+                  )}
+                </Box>
+                {currentUser.id === user.id && editingCommentId !== id && (
+                  <Box sx={{ ml: 1, alignSelf: "flex-start" }}>  
+                    <IconButton onClick={() =>  (setEditingCommentId(id), setEditedText(notes))}>
+                      {editingCommentId === id ? <CheckIcon fontSize="small" /> : <EditOutlinedIcon fontSize="small" />}
+                    </IconButton>
+                  </Box>
+                )}
+              </Box>
+            </Box>                
           </Stack>
         ))}
       </Box>
@@ -70,7 +109,7 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
           <Editor value={comment} onChange={e => setComment(e)} style={{ height: 250 }} people={data?.filter(d => d.user).map(({ user }) => ({ id: user.id, value: user.name }))} />
         </Box>
 
-        <LoadingButton loading={isLoading} mt={1} variant="contained" onClick={handleIssueUpdate({ notes: comment })} sx={{ alignSelf: "flex-start", borderRadius: "4px" }}>
+        <LoadingButton loading={isLoading} mt={1} variant="contained" onClick={() => handleIssueUpdate({ notes: comment })} sx={{ alignSelf: "flex-start", borderRadius: "4px" }}>
           Save comment
         </LoadingButton>
       </Stack>
