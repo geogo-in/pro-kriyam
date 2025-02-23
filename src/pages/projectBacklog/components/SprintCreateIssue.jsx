@@ -144,7 +144,7 @@ export default function SprintCreateIssue({ sprint_id, parent_issue_id, project_
               </FormPaper>
             </>
           ) : (
-            <Button onClick={handleEditable} sx={{ my: 0.5, justifyContent: "flex-start", position: "sticky", color: "#54637C" }} startIcon={<Add />}>
+            <Button onClick={handleEditable} sx={{ my: 0.5, justifyContent: "flex-start", position: "sticky", color: theme => theme.palette.mode === "light" ? "#54637C" : "#69ADF3", background: theme => theme.palette.mode === "light" ? "" : "#132741" }} startIcon={<Add />}>
               New issue
             </Button>
           )}

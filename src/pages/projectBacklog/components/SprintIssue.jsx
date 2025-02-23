@@ -93,7 +93,7 @@ export default function SprintIssue({
     <>
       <Stack
         component={Paper}
-        sx={{ borderRadius: 0, boxShadow: "none", border: ".1px solid #edeff1", borderLeft: "none" }}
+        sx={{ borderRadius: 0, boxShadow: "none", border: theme => theme.palette.mode === "light" ? ".1px solid #edeff1" : "0.1px solid #444444", borderLeft: "none", backgroundColor: theme => theme.palette.mode === "light" ? "" : theme.palette.background.modal }}
         direction="row"
         alignItems="center"
         pb={open.collapse ? 0 : ""}
@@ -102,7 +102,7 @@ export default function SprintIssue({
           disabledChildren={disabledChildren}
           draggableProps={draggableProps}
           {...dragHandleProps}
-          sx={{ display: "flex", cursor: "pointer", borderBottomLeftRadius: open.collapse ? 0 : "" }}>
+          sx={{ display: "flex", cursor: "pointer", borderBottomLeftRadius: open.collapse ? 0 : "", backgroundColor: "transparent" }}>
           <Box minWidth={10} sx={{ marginLeft: 1, marginRight: 1, position: "sticky", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <StyledTooltip title={`Issue type: ${tracker?.name}`} placement="left">
               <IconButton size="small" onClick={handleMenu("tracker")}>
@@ -130,7 +130,7 @@ export default function SprintIssue({
         ) : (
           <SprintBlankSubIssueItem />
         )}
-        <SprintIssueItem sx={{ color: "#42526E" }}>{id}</SprintIssueItem>
+        <SprintIssueItem sx={{ color: theme => theme.palette.mode === "light" ? "#42526E" : theme.palette.primary }}>{id}</SprintIssueItem>
 
         <SprintIssueItem>
           <IconButton size="small" onClick={handleMenu("membership")}>
@@ -144,7 +144,7 @@ export default function SprintIssue({
             {status?.name}
           </ButtonBase>
         </SprintIssueItem>
-        <SprintIssueItem component={ButtonBase} onClick={handleMenu("priority")} sx={{ justifyContent: "flex-start", color: "#42526E" }}>
+        <SprintIssueItem component={ButtonBase} onClick={handleMenu("priority")} sx={{ justifyContent: "flex-start", color: theme => theme.palette.mode === "light" ? "#42526E" : theme.palette.primary.secondaryText, }}>
           <Box sx={{ margin: "0 4px" }}>
             <IssuePriorityIcon type_name={priority?.name} />
           </Box>
@@ -155,7 +155,7 @@ export default function SprintIssue({
             onClick={handleMenu("epic")}
             sx={{
               backgroundColor: epics?.find(item => item.id === epic?.id)?.color_code || "inherit",
-              color: "#FFFFFF",
+              color: theme => theme.palette.mode === "light" ? "#FFFFFF" : theme.palette.primary.secondaryText,
               padding: "9px 6px",
               width: "100%",
               borderRadius: "1px",
@@ -177,9 +177,9 @@ export default function SprintIssue({
           value={state.story_point || ""}
           onChange={e => setState({ ...state, story_point: e.target.value })}
           onBlur={handleStoryPoint}
-          sx={{ width: 100, px: 1, color: "#42526E" }}
+          sx={{ width: 100, px: 1, color: theme => theme.palette.mode === "light" ? "#42526E" : theme.palette.primary.secondaryText }}
         />
-        <SprintIssueItem sx={{ color: "#42526E" }}>{issue.author?.name}</SprintIssueItem>
+        <SprintIssueItem sx={{ color: theme => theme.palette.mode === "light" ? "#42526E" : theme.palette.primary.secondaryText }}>{issue.author?.name}</SprintIssueItem>
         {/* <SprintIssueItem sx={{ width: 100, px: 1 }}>
           <MobileDatePicker
             label="Due Date"
@@ -201,7 +201,7 @@ export default function SprintIssue({
         <SprintSubIssue {...{ children }} />
       </Collapse>
       <Menu anchorEl={anchorEl?.membership} open={Boolean(anchorEl?.membership)} onClose={handleClose}>
-        <Typography variant="body2" sx={{ padding: "6px 12px", color: "#64748b" }}>
+        <Typography variant="body2" sx={{ padding: "6px 12px", color: theme => theme.palette.mode === "light" ? "#64748b" : theme.palette.primary.secondaryText }}>
           Change assignee to:{" "}
         </Typography>
         <MenuItem value="" onClick={handleIssueUpdate({ assigned_to_id: "" })} sx={{ margin: "1px 10px", borderRadius: "4px" }}>
@@ -223,7 +223,7 @@ export default function SprintIssue({
         })}
       </Menu>
       <Menu anchorEl={anchorEl?.status} open={Boolean(anchorEl?.status)} onClose={handleClose}>
-        <Typography variant="body2" sx={{ padding: "6px 12px", color: "#64748b" }}>
+        <Typography variant="body2" sx={{ padding: "6px 12px", color: theme => theme.palette.mode === "light" ? "#64748b" : theme.palette.primary.secondaryText }}>
           Change status to:{" "}
         </Typography>
         {project_statuses?.map(item => (
@@ -236,7 +236,7 @@ export default function SprintIssue({
         ))}
       </Menu>
       <Menu anchorEl={anchorEl?.priority} open={Boolean(anchorEl?.priority)} onClose={handleClose}>
-        <Typography variant="body2" sx={{ padding: "6px 12px", color: "#64748b" }}>
+        <Typography variant="body2" sx={{ padding: "6px 12px", color: theme => theme.palette.mode === "light" ? "#64748b" : theme.palette.primary.secondaryText }}>
           Change priority to:{" "}
         </Typography>
         {priorities?.map(item => (
@@ -259,7 +259,7 @@ export default function SprintIssue({
         ))}
       </Menu>
       <Menu anchorEl={anchorEl?.epic} open={Boolean(anchorEl?.epic)} onClose={handleClose}>
-        <Typography variant="body2" sx={{ padding: "6px 12px", color: "#64748b" }}>
+        <Typography variant="body2" sx={{ padding: "6px 12px", color: theme => theme.palette.mode === "light" ? "#64748b" : theme.palette.primary.secondaryText}}>
           Change Epic to:{" "}
         </Typography>
         {epics?.length ? (
@@ -279,7 +279,7 @@ export default function SprintIssue({
             </MenuItem>
           ))
         ) : (
-          <Typography p={1} variant="caption">
+          <Typography sx={{color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText}} p={1} variant="caption">
             No EPIC found. Create a new EPIC to assign.
           </Typography>
         )}

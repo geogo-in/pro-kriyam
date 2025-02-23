@@ -36,7 +36,7 @@ const TeamsList = () => {
         {teams.map(team => (
           <Grid item lg={4} key={team.id}>
             <Link component={RouterLink} to={`${PATH_DASHBOARD.members}/teams/${team.id}`}>
-              <Card sx={{ ":hover": { cursor: "pointer" } }}>
+              <Card sx={{ ":hover": { cursor: "pointer" }, background: theme => theme.palette.mode === "light" ? "" : theme.palette.background.modal }}>
                 <Box sx={{ display: "flex", alignItems: "center", py: 1.5, px: 2 }}>
                   <MemberAvatar name={`${team.name}`} height={34} width={34} />
                   <Typography variant="subtitle1" sx={{ ml: 2, color: theme => theme.palette.primary.secondaryText }}>

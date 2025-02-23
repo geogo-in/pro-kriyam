@@ -1,12 +1,12 @@
 import { LoadingButton } from "@mui/lab"
 import { Box, Checkbox, FormControlLabel, FormGroup, Stack, TextField, Typography } from "@mui/material"
+import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
+import { useCreateUserMutation, useUpdateUserMutation } from "@redux/services/userApi"
 import { useSnackbar } from "notistack"
 import { DialogContent, DialogHeader } from "pages/shared/StyledDialog"
 import { useState } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
-import { useCreateUserMutation, useUpdateUserMutation } from "@redux/services/userApi"
 import { PATH_DASHBOARD } from "routes/paths"
 import { getErrorMessage } from "utils/helper"
 
@@ -64,11 +64,12 @@ export default function CreateMember({ onClose, user }) {
       <DialogContent>
         <Box>
           <Box display="flex">
-            <TextField label="First Name" autoFocus value={state.firstname} name="firstname" {...params} style={{ marginRight: 12 }} />
-            <TextField label="Last Name" value={state.lastname} name="lastname" {...params} />
+            <TextField sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}} label="First Name" autoFocus value={state.firstname} name="firstname" {...params} style={{ marginRight: 12 }} />
+            <TextField sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}} label="Last Name" value={state.lastname} name="lastname" {...params} />
           </Box>
-          <TextField label="Username" autoComplete="username" value={state.login} name="login" helperText={inputErrors.login?.join(", ")} error={inputErrors.login} {...params} />
+          <TextField sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}} label="Username" autoComplete="username" value={state.login} name="login" helperText={inputErrors.login?.join(", ")} error={inputErrors.login} {...params} />
           <TextField
+            sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}}
             type="email"
             label="e-mail"
             value={state.mail}
@@ -78,6 +79,7 @@ export default function CreateMember({ onClose, user }) {
             {...params}
           />
           <TextField
+            sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}}
             autoComplete="new-password"
             type="password"
             label="Password"
@@ -91,16 +93,18 @@ export default function CreateMember({ onClose, user }) {
         </Box>
         <FormGroup>
           <FormControlLabel
+            sx={{color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText}}
             disabled={state.generate_password}
             control={<Checkbox name="must_change_passwd" checked={state.must_change_passwd} onChange={handleChecked} />}
             label="Must changed password"
           />
           <FormControlLabel
+            sx={{color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText}}
             disabled={state.must_change_passwd}
             control={<Checkbox name="generate_password" checked={state.generate_password} onChange={handleChecked} />}
             label="Generate password"
           />
-          <FormControlLabel disabled={currentUser.id === user?.id} control={<Checkbox name="admin" checked={state.admin} onChange={handleChecked} />} label="Administrator" />
+          <FormControlLabel sx={{color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText}} disabled={currentUser.id === user?.id} control={<Checkbox name="admin" checked={state.admin} onChange={handleChecked} />} label="Administrator" />
         </FormGroup>
         <Stack py={2} alignItems={user ? `flex-start` : `flex-start`}>
           <LoadingButton loading={isLoading} type="submit" variant="contained" sx={{ borderRadius: "4px" }}>
