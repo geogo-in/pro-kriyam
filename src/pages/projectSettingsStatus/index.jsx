@@ -1,10 +1,10 @@
 import { Box, Typography } from "@mui/material"
+import { useCreateProjectIssueStatusMutation, useGetIssuesStatusQuery, useGetProjectIssuesStatusesQuery, useUpdateProjectIssueStatusMutation } from "@redux/services/issueApi"
 import Loading from "pages/shared/Loading"
 import { LineCard as Card } from "pages/shared/StyledCard"
 import { useEffect, useState } from "react"
 import { DragDropContext } from "react-beautiful-dnd"
 import { useParams } from "react-router-dom"
-import { useCreateProjectIssueStatusMutation, useGetIssuesStatusQuery, useGetProjectIssuesStatusesQuery, useUpdateProjectIssueStatusMutation } from "@redux/services/issueApi"
 import IssueStatusColumn from "./components/IssueStatusColumn"
 
 const ProjectSettingsStatus = () => {
@@ -76,7 +76,7 @@ const ProjectSettingsStatus = () => {
   }
   if (isLoading || isGISLoading) return <Loading />
   return (
-    <Card sx={{ px: 3, py: 2, mb: 2, mt: 2 }}>
+    <Card sx={{ px: 3, py: 2, mb: 2, mt: 2, background: theme => theme.palette.mode === "light" ? "" : theme.palette.background.default , boxShadow: "var(--customShadows-card)" }}>
       <Typography variant="h6" gutterBottom sx={{ fontSize: "1rem", color: theme => theme.palette.primary.defaultText }}>
         Project issue statuses
       </Typography>
