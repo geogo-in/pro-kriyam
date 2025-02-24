@@ -13,14 +13,13 @@ import { useGetProjectByIdQuery, useGetProjectMembershipsQuery } from "@redux/se
 import "devexpress-gantt/dist/dx-gantt.min.css"
 import Gantt, { Column, ContextMenu, Dependencies, Editing, Item, ResourceAssignments, Resources, Sorting, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
 // import "devextreme/dist/css/dx.common.css"
-import { useTheme } from "@mui/material/styles"
 // import "assets/styles/dx.material.dark-modal.css"
 // import "devextreme/dist/css/dx.light.css"
 import moment from "moment"
 import { useSnackbar } from "notistack"
 import CreateIssue from "pages/projectIssues/components/CreateIssue"
 import CustomDialog from "pages/shared/CustomDialog"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import { PATH_DASHBOARD } from "routes/paths"
@@ -41,22 +40,6 @@ export default function GanttChart({ projectId: project_id }) {
   const { data: statuses } = useGetProjectIssuesStatusesQuery(project_id)
   const { data: memberships, isLoading: isMembershipsLoading } = useGetProjectMembershipsQuery(project_id)
   const { tasks, resources, resourceAssignments, dependencies } = useGanttData(data)
-  const theme = useTheme()
-
-  const isDarkMode = theme.palette.mode === "light" ? "https://cdn3.devexpress.com/jslib/24.2.5/css/dx.fluent.saas.light.compact.css" : "https://cdn3.devexpress.com/jslib/24.2.5/css/dx.fluent.saas.dark.compact.css"
-
-  useEffect(() => {
-    const themeLink = document.getElementById("theme-link")
-    if (themeLink) {
-      themeLink.href = `${isDarkMode}`
-      document.documentElement.style.setProperty("--dx-gantt-border", theme.palette.gantt.defaultBorder)
-      document.documentElement.style.setProperty("--dx-gantt-collapsable", theme.palette.gantt.collapsableBg)
-      document.documentElement.style.setProperty("--dx-gantt-text", theme.palette.gantt.defaultText)
-      document.documentElement.style.setProperty("--dx-gantt-tertiaryText", theme.palette.gantt.tertiaryText)
-      document.documentElement.style.setProperty("--dx-gantt-primaryText", theme.palette.gantt.primaryText)
-      document.documentElement.style.setProperty("--dx-gantt-selectedBg", theme.palette.gantt.selectedBg)
-    }
-  }, [isDarkMode])
 
   const [scaleType, setScaleType] = useState("weeks") // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"
   const [openNewTaskDialog, setOpenNewTaskDialog] = useState(false)
