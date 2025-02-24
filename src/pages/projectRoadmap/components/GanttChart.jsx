@@ -25,7 +25,7 @@ import { useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import { PATH_DASHBOARD } from "routes/paths"
 import { getErrorMessage, getRandomMessage, issueDeleteMessages } from "utils/helper"
-import { useGanttData } from "../hooks/useGanttData" // Custom hook
+import { useGanttData } from "../hooks/useGanttData"; // Custom hook
 import { StyledPrimaryButton, StyledSimpleButton, StyledTextButton } from "./StyledButtons"
 const currentDate = new Date()
 
@@ -43,12 +43,12 @@ export default function GanttChart({ projectId: project_id }) {
   const { tasks, resources, resourceAssignments, dependencies } = useGanttData(data)
   const theme = useTheme()
 
-  const isDarkMode = theme.palette.mode === "light" ? "dx.fluent.saas.light.compact.css" : "dx.fluent.saas.dark.compact.css"
+  const isDarkMode = theme.palette.mode === "light" ? "https://cdn3.devexpress.com/jslib/24.2.5/css/dx.fluent.saas.light.compact.css" : "https://cdn3.devexpress.com/jslib/24.2.5/css/dx.fluent.saas.dark.compact.css"
 
   useEffect(() => {
     const themeLink = document.getElementById("theme-link")
     if (themeLink) {
-      themeLink.href = `https://cdn3.devexpress.com/jslib/24.2.5/css/${isDarkMode}`
+      themeLink.href = `${isDarkMode}`
       document.documentElement.style.setProperty("--dx-gantt-border", theme.palette.gantt.defaultBorder)
       document.documentElement.style.setProperty("--dx-gantt-collapsable", theme.palette.gantt.collapsableBg)
       document.documentElement.style.setProperty("--dx-gantt-text", theme.palette.gantt.defaultText)
