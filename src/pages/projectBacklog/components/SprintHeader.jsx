@@ -26,8 +26,8 @@ export default function SprintHeader({ project_id, activeSprint, epicContainerWi
       <SprintHeaderActionbar {...sprint} {...{ activeSprint, project_id, epicContainerWidth }} />
       {sprint.issues.length > 0 && (
         <Stack direction="row" alignItems="end" py={0}>
-          <Stack direction="row" sx={{ background: "rgba(255,255,255,0.6)" }} ref={tableRef}>
-            <StickyTitle sx={{ display: "flex", alignItems: "center", cursor: "pointer", border: "0.1px solid #ebebeb", borderLeft: "none" }}>
+          <Stack direction="row" sx={{ background: theme => theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : theme.palette.background.modal }} ref={tableRef}>
+            <StickyTitle sx={{ display: "flex", alignItems: "center", cursor: "pointer", border: theme => theme.palette.mode === "light" ? "0.1px solid #ebebeb" : "0.1px solid #444444", borderLeft: "none", background: theme => theme.palette.mode === "light" ? "" : theme.palette.background.modal }}>
               <Typography sx={{ width: 432, paddingLeft: "44px", fontSize: "0.85rem", color: theme => theme.palette.primary.secondaryText }}>Issue summary</Typography>
             </StickyTitle>
             {SPRINT_ISSUE_HEADERS.map(d => (
@@ -40,7 +40,7 @@ export default function SprintHeader({ project_id, activeSprint, epicContainerWi
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                sx={{ border: "0.1px solid #ebebeb", fontSize: "0.75rem", color: theme => theme.palette.primary.secondaryText }}>
+                sx={{ border: theme => theme.palette.mode === "light" ? "0.1px solid #ebebeb" : "0.1px solid #444444", fontSize: "0.75rem", color: theme => theme.palette.primary.secondaryText }}>
                 {d}
               </Typography>
             ))}

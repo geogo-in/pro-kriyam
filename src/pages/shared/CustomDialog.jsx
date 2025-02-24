@@ -30,6 +30,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialog-paper": {
     overflowY: "visible",
     // overflowY: "auto",
+    background: theme.palette.mode === "light" ? "" : theme.palette.background.modal,
     margin: 0,
     height: "100% !important",
     width: "100% !important",
@@ -48,6 +49,6 @@ const FloatingBack = styled(IconButton)(({ theme }) => ({
   position: "absolute",
   left: "-20px",
   top: 30,
-  backgroundColor: "white",
-  ":hover": { backgroundColor: "#eee" },
+  backgroundColor: theme.palette.mode === "light" ? "white" : theme.palette.background.modal,
+  ":hover": { backgroundColor: theme.palette.mode === "light" ? "#eee" : theme.palette.background.default },
 }))

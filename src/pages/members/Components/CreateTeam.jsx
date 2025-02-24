@@ -65,7 +65,7 @@ export default function CreateTeam({ onClose, team }) {
     <Box component="form" onSubmit={handleSubmit} p={3}>
       <Typography variant="h6">{team ? "Update Team" : "Create New Team"}</Typography>
 
-      <TextField label="Team Name" value={state.name} name="name" fullWidth required onChange={handleChange} variant="outlined" margin="dense" sx={{ minWidth: 300, my: 2 }} />
+      <TextField sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}} label="Team Name" value={state.name} name="name" fullWidth required onChange={handleChange} variant="outlined" margin="dense" sx={{ minWidth: 300, my: 2 }} />
 
       <Typography>Select members</Typography>
       <List dense>

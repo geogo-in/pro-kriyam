@@ -42,11 +42,14 @@ const CustomMenu = styled(props => (
 export default CustomMenu
 
 const activeLinkMixin = theme => ({
-  backgroundColor: "#f1f5f9",
-  color: "black",
+  // backgroundColor: "#f1f5f9",
+  backgroundColor: theme.palette.mode === "light" ? "#f1f5f9": "#132741",
+  // color: "black",
+  color: theme.palette.mode === "light" ? "black" : "#69ADF3",
   "& .MuiSvgIcon-root": {
     height: "1.6em",
-    color: "black",
+    // color: "black",
+    color: theme.palette.mode === "light" ? "black" : "#69ADF3",
   },
   "& .MuiListItemText-primary": {
     transition: "font-size .1s",
@@ -64,6 +67,7 @@ export const ListItem = styled(MuiListItem)(({ theme, active }) => ({
   color: theme.palette.primary.defaultText,
   "& .MuiSvgIcon-root": {
     height: "1.6em",
+    color: theme.palette.primary.defaultText,
   },
   "& .MuiListItemText-primary": {
     transition: "font-size .1s",
@@ -72,6 +76,11 @@ export const ListItem = styled(MuiListItem)(({ theme, active }) => ({
   },
   ...(active === "true" && {
     ...activeLinkMixin(theme),
+    ...(theme.palette.mode === "dark" && {
+      "&:hover": {
+        backgroundColor: "#132741 !important",
+      },
+    }),
   }),
 }))
 

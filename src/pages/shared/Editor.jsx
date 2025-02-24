@@ -60,6 +60,35 @@ export const modules = {
 
 const StyledQlBox = styled(Box)(({ theme }) => ({
   marginRight: "4px !important",
+  "& .ql-picker-label": {
+    color: theme.palette.mode === "light" ? "" : `${theme.palette.primary.secondaryText} !important`,
+    border: "none !important",
+  },
+  "& button:hover .ql-stroke": {
+    stroke: theme.palette.mode === "light" ? "" : `${theme.palette.primary.main} !important`,
+  },
+  "& button:hover .ql-fill": {
+    fill: theme.palette.mode === "light" ? "" : `${theme.palette.primary.main} !important`,
+  },
+  "& button.ql-active .ql-stroke": {
+    stroke: theme.palette.mode === "light" ? "" : "#444444 !important",
+  },
+  "& button.ql-active .ql-fill": {
+    fill: theme.palette.mode === "light" ? "" : "#444444 !important",
+  },
+  "& .ql-stroke": {
+    stroke: theme.palette.mode === "light" ? "" : `${theme.palette.primary.secondaryText} !important`,
+  },
+  "& .ql-fill": {
+    fill: theme.palette.mode === "light" ? "" : `${theme.palette.primary.secondaryText} !important`,
+  },
+  "& .ql-picker-options": {
+    backgroundColor: theme.palette.mode === "light" ? "" : `${theme.palette.background.default} !important`,
+    border: "none !important",
+  },
+  "& .ql-picker-item": {
+    color: theme.palette.mode === "light" ? "" : `${theme.palette.primary.secondaryText} !important`,
+  },
 }))
 
 const StyledEditorBox = styled(Box)(({ theme }) => ({
@@ -67,7 +96,7 @@ const StyledEditorBox = styled(Box)(({ theme }) => ({
     height: "150px !important",
   },
   "& .ql-container": {
-    border: "1px solid #d2dae5 !important",
+    border: theme.palette.mode === "light" ? "1px solid #d2dae5 !important" : "1px solid #444444 !important",
     borderRadius: "4px",
   },
   "& .ql-container.on-focus": {
@@ -77,7 +106,7 @@ const StyledEditorBox = styled(Box)(({ theme }) => ({
   },
   "& .mention": {
     background: theme.palette.primary.main,
-    color: "white",
+    color: theme.palette.mode === "light" ? "white" : theme.palette.primary.defaultText,
     borderRadius: 15,
     padding: 3,
   },
@@ -110,7 +139,7 @@ export const formats = [
 // Quill Toolbar component
 export const QuillToolbar = () => {
   return (
-    <Box id="toolbar" sx={{ background: "#f1f5f9", borderRadius: "4px 4px 0 0", border: "none !important" }}>
+    <Box id="toolbar" sx={{ background: theme => theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.default, borderRadius: "4px 4px 0 0", border: "none !important" }}>
       <StyledQlBox className="ql-formats">
         {/* <select className="ql-font" defaultValue="arial">
         <option value="arial">Arial</option>

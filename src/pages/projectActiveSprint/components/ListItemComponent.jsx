@@ -1,12 +1,12 @@
 import { Box, Chip, IconButton, Stack, Typography } from "@mui/material"
 import Card from "@mui/material/Card"
+import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import IssuePriorityIcon from "pages/shared/IssuePriorityIcon"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import { StyledTooltip } from "pages/shared/StyledTooltip"
 import { Draggable } from "react-beautiful-dnd"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import { PATH_DASHBOARD } from "routes/paths"
 
 const ListItemCustom = ({ itemObject: issue, index, project_id }) => {
@@ -23,7 +23,7 @@ const ListItemCustom = ({ itemObject: issue, index, project_id }) => {
       <Draggable draggableId={`${issue.id}`} key={`${issue.id}`} index={index}>
         {provided => (
           <Card
-            sx={{ my: 1, p: 1, borderRadius: 0.5, boxShadow: "1px 1px 8px -5px #00000080" }}
+            sx={{ my: 1, p: 1, borderRadius: 0.5, boxShadow: theme => theme.palette.mode === "light" ? "1px 1px 8px -5px #00000080"  : "", backgroundColor: theme => theme.palette.mode === "light" ? "" : "#0A0E12" }}
             key={`${issue.id}`}
             onClick={handleDetails}
             role={undefined}
@@ -60,12 +60,12 @@ const ListItemCustom = ({ itemObject: issue, index, project_id }) => {
                 )}
 
                 <StyledTooltip title={`Story Point`}>
-                  <Chip size="small" sx={{ background: "#f1f5f9", ml: "4px !important" }} label={issue.story_point ? issue.story_point : "--"} />
+                  <Chip size="small" sx={{ background: theme => theme.palette.mode === "light" ? "#f1f5f9" : "#141A21", ml: "4px !important", color: theme => theme.palette.primary.secondaryText }} label={issue.story_point ? issue.story_point : "--"} />
                 </StyledTooltip>
               </Stack>
               <Stack direction="row" justifyContent="flex-end" alignItems="center">
                 <StyledTooltip title="Issue ID">
-                  <Typography variant="subtitle2" pr={1} sx={{ color: theme => theme.palette.primary.tertiaryText, ":hover": { textDecoration: "underline", cursor: "pointer" } }}>
+                  <Typography variant="subtitle2" pr={1} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.tertiaryText : theme.palette.primary.secondaryText, ":hover": { textDecoration: "underline", cursor: "pointer" } }}>
                     #{issue.id}
                   </Typography>
                 </StyledTooltip>

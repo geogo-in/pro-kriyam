@@ -1,12 +1,12 @@
 import { LoadingButton } from "@mui/lab"
 import { Grid, Stack, TextField, Typography } from "@mui/material"
+import { useGetProjectByIdQuery, useUpdateProjectDetailsMutation } from "@redux/services/projectApi"
+import { DEFAULT_ERROR_MSG } from "config/constants"
 import { useSnackbar } from "notistack"
 import Loading from "pages/shared/Loading"
 import { LineCard as Card } from "pages/shared/StyledCard"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { DEFAULT_ERROR_MSG } from "config/constants"
-import { useGetProjectByIdQuery, useUpdateProjectDetailsMutation } from "@redux/services/projectApi"
 import ProjectAsignee from "./ProjectAsignee"
 
 const BasicDetails = () => {
@@ -51,7 +51,7 @@ const BasicDetails = () => {
           <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
             Project name
           </Typography>
-          <TextField fullWidth placeholder="Enter project name" value={state.name} onChange={e => handleStateChange(e)} name="name"></TextField>
+          <TextField sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}} fullWidth placeholder="Enter project name" value={state.name} onChange={e => handleStateChange(e)} name="name"></TextField>
           <ProjectAsignee {...{ project_id, state, setState }} />
           {/* <CKEditor
                 editor={ClassicEditor}

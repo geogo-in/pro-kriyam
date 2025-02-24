@@ -95,7 +95,7 @@ const Sidebar = ({ sidebar, mobileOpen, setMobileOpen }) => {
         variant="permanent"
         sx={{
           display: { xs: "none", sm: "block" },
-          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth, borderRight: "1px solid #E5E7EB" },
+          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth, borderRight: theme => theme.palette.mode === "light" ? "1px solid #E5E7EB" : "1px solid #292929", backgroundColor: theme =>  theme.palette.background.default },
         }}
         open>
         {drawer}

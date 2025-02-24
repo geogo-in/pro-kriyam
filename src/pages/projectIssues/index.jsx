@@ -18,12 +18,18 @@ import IssueListToolbar from "./components/IssueListToolbar"
 
 export const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: 4,
-  backgroundColor: "#F1F5F9",
+  backgroundColor: theme.palette.mode === "light" ? "#F1F5F9" : "#0071E1",
   paddingLeft: 20,
   paddingRight: 24,
   lineHeight: 2.0,
-  color: "#000",
+  color: theme.palette.mode === "light" ? "#000" : "#fff",
   marginRight: 12,
+  ...(theme.palette.mode === "dark" && {
+    ":hover": {
+      backgroundColor:theme.palette.primary.main,
+      color: "#fff"
+    }
+  })
 }))
 
 export default function ProjectIssues() {
