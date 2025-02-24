@@ -16,7 +16,7 @@ export const StyledTabs = styled(Tabs)(({ theme }) => ({
     fontSize: "0.9rem",
   },
   "& .Mui-selected": {
-    color: theme.palette.mode === "light" ? "black !important" : "#69ADF3",
+    color: theme.palette.mode === "light" ? "black !important" : "#69ADF3 !important",
     backgroundColor: theme.palette.mode === "light" ? "#f1f5f9" : "#1A3455",
   },
   "& .MuiTabs-indicator": {
