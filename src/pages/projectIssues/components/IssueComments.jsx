@@ -17,10 +17,10 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   width: "100%",
   wordBreak: "break-word",
   borderRadius: "0 20px 20px 20px",
-  color: theme.palette.mode === "light" ? "white" : theme.palette.primary.secondaryText,
+  color: theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText,
   "& .mention": {
     background: theme.palette.primary.main,
-    color: theme.palette.mode === "light" ? "white" : theme.palette.primary.secondaryText,
+    color: theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText,
     borderRadius: 15,
     padding: 3,
   },

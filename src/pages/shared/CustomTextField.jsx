@@ -75,5 +75,8 @@ export const SleekTextField = styled(props => <TextField required margin="normal
     fieldset: {
       borderColor: theme.palette.mode === "light" ? bgcolor : theme.palette.background.default,
     },
+    "input[type='date']::-webkit-calendar-picker-indicator": {
+      filter: theme.palette.mode === "light" ? "" : "invert(1)",
+    },
   }
 })
