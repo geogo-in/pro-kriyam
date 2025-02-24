@@ -1,7 +1,7 @@
 import { CssBaseline, StyledEngineProvider, ThemeProvider } from "@mui/material"
 import createTheme from "@mui/material/styles/createTheme"
 import PropTypes from "prop-types"
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
 import { useSelector } from "react-redux"
 import breakpoints from "./breakpoints"
 import componentsOverride from "./overrides"
@@ -32,21 +32,6 @@ export default function ThemeConfig({ children }) {
   
     const theme = createTheme(themeOptions)
     theme.components = componentsOverride(theme)
-
-  const isDarkMode = theme.palette.mode === "light" ? "https://cdn3.devexpress.com/jslib/24.2.5/css/dx.fluent.saas.light.compact.css" : "https://cdn3.devexpress.com/jslib/24.2.5/css/dx.fluent.saas.dark.compact.css"
-
-  useEffect(() => {
-    const themeLink = document.getElementById("theme-link")
-    if (themeLink) {
-      themeLink.href = `${isDarkMode}`
-      document.documentElement.style.setProperty("--dx-gantt-border", theme.palette.gantt.defaultBorder)
-      document.documentElement.style.setProperty("--dx-gantt-collapsable", theme.palette.gantt.collapsableBg)
-      document.documentElement.style.setProperty("--dx-gantt-text", theme.palette.gantt.defaultText)
-      document.documentElement.style.setProperty("--dx-gantt-tertiaryText", theme.palette.gantt.tertiaryText)
-      document.documentElement.style.setProperty("--dx-gantt-primaryText", theme.palette.gantt.primaryText)
-      document.documentElement.style.setProperty("--dx-gantt-selectedBg", theme.palette.gantt.selectedBg)
-    }
-  }, [isDarkMode])
 
   return (
     <StyledEngineProvider injectFirst>
