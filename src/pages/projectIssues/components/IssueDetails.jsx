@@ -315,7 +315,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
           </TabPanel>
           <TabPanel value={tab} index={1}>
             {issue.activity_logs?.map(activity => (
-              <IssueActivity key={activity.id} {...activity} />
+              <IssueActivity key={activity.id} statuses={statuses} project={project} {...activity} />
             ))}
           </TabPanel>
         </Box>
