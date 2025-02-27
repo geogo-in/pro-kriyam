@@ -53,6 +53,10 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
       enqueueSnackbar(message, { variant: "error" })
     }
   }
+  
+  const allowEdit = (created_on) => {
+    return new Date().getTime()-new Date(created_on).getTime() > 12*60*60*1000
+  }
 
   return (
     <>
@@ -63,40 +67,36 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
               <MemberAvatar name={user?.name} tooltipPosition="none" />
             </Box>
             <Box>
-              <Box sx={{ display: "flex", mb: 0.5 }}>
+              <Box sx={{ display: "flex", mb: 0.5, alignItems: "center" }}>
                 <Typography sx={{ fontWeight: 500, fontSize: "0.8rem" }}>{user?.name}</Typography>
                 <Typography variant="caption" pl={1} component="div" sx={{ color: theme => theme.palette.primary.tertiaryText }}>
                   {fDateTime(created_on)}
                 </Typography>
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-                <Box sx={{ flexGrow: 1 }}>
-                  {editingCommentId === id ? (
-                    <Box position={"relative"} sx={{ flex: 1 }}>
-                      <Box sx={{width: "100%", overflow: "hidden", whiteSpace: "nowrap"}}>
-                        <Editor value={editedText} onChange={e => setEditedText(e)} style={{ height: 250, width: "100%" }} people={data?.filter(d => d.user).map(({ user }) => ({ id: user.id, value: user.name }))} />
-                      </Box>
-                      <Box position={"absolute"} bottom={-40} right={0} zIndex={100000}>
-                        <Button onClick={() => {setEditingCommentId(null), setEditedText(null)}} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: "#f1f5f9", ml: 1 }}>
-                          <Close />
-                        </Button>
-                        <Button variant="contained" onClick={() => handleIssueUpdate({ notes: editedText })} sx={{ minWidth: 48, ml: 1, boxShadow: "none" }}>
-                          <Done />
-                        </Button>
-                      </Box>
-                    </Box>
-                  ) : (
-                    <StyledPaper variant="outlined" dangerouslySetInnerHTML={{ __html: notes }} />
-                  )}
-                </Box>
-                {currentUser.id === user.id && editingCommentId !== id && (
-                  <Box sx={{ ml: 1, alignSelf: "flex-start" }}>  
-                    <IconButton onClick={() =>  (setEditingCommentId(id), setEditedText(notes))}>
+                {currentUser.id === user?.id && editingCommentId !== id && (
+                  <Box >  
+                    <IconButton disabled={allowEdit(created_on)} onClick={() =>  (setEditingCommentId(id), setEditedText(notes))}>
                       {editingCommentId === id ? <CheckIcon fontSize="small" /> : <EditOutlinedIcon fontSize="small" />}
                     </IconButton>
                   </Box>
                 )}
               </Box>
+              {editingCommentId === id ? (
+                <Box position={"relative"} sx={{ flex: 1 }}>
+                  <Box sx={{width: "100%", overflow: "hidden", whiteSpace: "nowrap"}}>
+                    <Editor value={editedText} onChange={e => setEditedText(e)} style={{ height: 250, width: "100%" }} people={data?.filter(d => d.user).map(({ user }) => ({ id: user.id, value: user.name }))} />
+                  </Box>
+                  <Box position={"absolute"} bottom={-40} right={0} zIndex={100000}>
+                    <Button onClick={() => {setEditingCommentId(null), setEditedText(null)}} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: "#f1f5f9", ml: 1 }}>
+                      <Close />
+                    </Button>
+                    <Button variant="contained" onClick={() => handleIssueUpdate({ notes: editedText })} sx={{ minWidth: 48, ml: 1, boxShadow: "none" }}>
+                      <Done />
+                    </Button>
+                  </Box>
+                </Box>
+              ) : (
+                <StyledPaper variant="outlined" dangerouslySetInnerHTML={{ __html: notes }} />
+              )}
             </Box>                
           </Stack>
         ))}
