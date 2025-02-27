@@ -16,6 +16,7 @@ export default function IssueActivity({ statuses, project, user, details, create
     else if (name === "assigned_to_id") return "Assignee"
     else if (name === "precedes" || name === "follows") return "Order"
     else if (name === "relates") return "Relation"
+    else if (name === "category_id") return "Epic"
     else {
       return name
       .replace(/_id$/, "")
@@ -38,6 +39,9 @@ export default function IssueActivity({ statuses, project, user, details, create
     } else if (name === "due_date" || name === "start_date") {
       const date = new Date(value);
       return date.toLocaleDateString("en-GB")
+    } else if (name === "category_id") {
+      const epic = epics?.find((e) => e.id.toString() === value)
+      return epic ? epic.name : value
     } else {
       return value
     }
