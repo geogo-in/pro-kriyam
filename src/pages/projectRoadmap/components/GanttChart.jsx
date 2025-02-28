@@ -12,8 +12,9 @@ import {
 import { useGetProjectByIdQuery, useGetProjectMembershipsQuery } from "@redux/services/projectApi"
 import "devexpress-gantt/dist/dx-gantt.min.css"
 import Gantt, { Column, ContextMenu, Dependencies, Editing, Item, ResourceAssignments, Resources, Sorting, StripLine, Tasks, Toolbar, Validation } from "devextreme-react/gantt"
-import "devextreme/dist/css/dx.common.css"
-import "devextreme/dist/css/dx.light.css"
+// import "devextreme/dist/css/dx.common.css"
+// import "assets/styles/dx.material.dark-modal.css"
+// import "devextreme/dist/css/dx.light.css"
 import moment from "moment"
 import { useSnackbar } from "notistack"
 import CreateIssue from "pages/projectIssues/components/CreateIssue"
@@ -23,9 +24,8 @@ import { useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import { PATH_DASHBOARD } from "routes/paths"
 import { getErrorMessage, getRandomMessage, issueDeleteMessages } from "utils/helper"
-import { useGanttData } from "../hooks/useGanttData" // Custom hook
+import { useGanttData } from "../hooks/useGanttData"; // Custom hook
 import { StyledPrimaryButton, StyledSimpleButton, StyledTextButton } from "./StyledButtons"
-
 const currentDate = new Date()
 
 export default function GanttChart({ projectId: project_id }) {
@@ -39,7 +39,6 @@ export default function GanttChart({ projectId: project_id }) {
   const currentUser = useSelector(getCurrentUser)
   const { data: statuses } = useGetProjectIssuesStatusesQuery(project_id)
   const { data: memberships, isLoading: isMembershipsLoading } = useGetProjectMembershipsQuery(project_id)
-
   const { tasks, resources, resourceAssignments, dependencies } = useGanttData(data)
 
   const [scaleType, setScaleType] = useState("weeks") // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"

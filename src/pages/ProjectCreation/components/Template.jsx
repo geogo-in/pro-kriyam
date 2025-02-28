@@ -20,7 +20,7 @@ const Template = ({ setTemplate }) => {
           &nbsp; Select a project template
         </Typography>
       </Box>
-      <Typography my={1} sx={{ color: theme => theme.palette.primary.defaultText }}>
+      <Typography my={1} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.primary.secondaryText }}>
         Get up and running quickly with templates that suit the way your team works. Plan, track and release great product.
       </Typography>
       {isLoading ? (

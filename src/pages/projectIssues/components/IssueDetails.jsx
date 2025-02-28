@@ -54,7 +54,7 @@ import IssueSubTasks from "./IssueSubTasks"
 
 export const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: 4,
-  backgroundColor: "#F1F5F9",
+  backgroundColor: theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default,
   paddingLeft: 12,
   paddingRight: 12,
   lineHeight: 1.9,
@@ -161,7 +161,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
       <DialogHeader>
         <Typography variant="h6" sx={{ display: "flex", width: "100%", alignItems: "center" }}>
           {issue.parent?.id && (
-            <Typography variant="body2" pl={1} sx={{ fontWeight: 500, mr: 1, color: theme => theme.palette.primary.defaultText }}>
+            <Typography variant="body2" pl={1} sx={{ fontWeight: 500, mr: 1, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.primary.secondaryText }}>
               # {issue.parent?.id} /
             </Typography>
           )}
@@ -174,7 +174,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
             <Typography
               variant="body2"
               pl={1}
-              sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText, cursor: "pointer" }}
+              sx={{ fontWeight: 500, color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.primary.secondaryText, cursor: "pointer" }}
               onClick={() => copyTextToClipboard(`${window.location.origin}${PATH_DASHBOARD.projects.root}/${project_id}/${referrer}/issues/${issue.id}?referrer=${referrer}`)}>
               #{issue.id}
             </Typography>

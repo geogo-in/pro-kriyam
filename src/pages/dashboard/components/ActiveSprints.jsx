@@ -25,7 +25,7 @@ const StyledLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
   "&:hover": {
     ".MuiBox-root": {
-      backgroundColor: "rgba(241,245,249, 0.5)",
+      backgroundColor: theme.palette.mode === "light" ? "rgba(241,245,249, 0.5)" : "#252E38",
     },
   },
 }))
@@ -39,7 +39,7 @@ const SprintCard = ({ name, project, end_date, issue_count }) => {
   }
   return (
     <StyledLink to={`/account/projects/${project.identifier}/sprint`}>
-      <Box sx={{ padding: "12px 24px", borderTop: "1px solid #EEE" }}>
+      <Box sx={{ padding: "12px 24px", borderTop: theme => theme.palette.mode === "light" ? "1px solid #EEE" : "1px solid #444444" }}>
         <Grid container spacing={2} sx={{ display: "flex", alignItems: "center" }}>
           <Grid item lg={3}>
             <Typography variant="subtitle1" color="textPrimary" sx={{ fontSize: "0.90rem", fontWeight: 500, lineHeight: 1.2, marginBottom: "2px" }}>
@@ -81,7 +81,7 @@ const ActiveSprints = () => {
   return (
     <Box>
       <SectionTitle variant="h6">Active sprints</SectionTitle>
-      <Box sx={{ padding: "10px 24px 10px 24px", color: theme => theme.palette.primary.secondaryText, fontSize: "0.8rem" }}>
+      <Box sx={{ padding: "10px 24px 10px 24px", backgroundColor: theme => theme.palette.background.modal, color: theme => theme.palette.primary.secondaryText, fontSize: "0.8rem" }}>
         <Grid container spacing={2} sx={{ display: "flex", alignItems: "center" }}>
           <Grid item lg={3}>
             Sprint
@@ -97,7 +97,7 @@ const ActiveSprints = () => {
           </Grid>
         </Grid>
       </Box>
-      <Box variant="outlined" sx={{ padding: "0px 0px 0 0" }}>
+      <Box variant="outlined" sx={{ backgroundColor: theme => theme.palette.background.modal, padding: "0px 0px 0 0" }}>
         {data.map(sprint => (sprint.name === "Board" ? "" : <SprintCard key={sprint.id} {...sprint} />))}
       </Box>
     </Box>

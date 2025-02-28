@@ -15,12 +15,15 @@ import MembersTable from "./MembersTable"
 
 export const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: 4,
-  backgroundColor: "#F1F5F9",
+  backgroundColor: theme.palette.mode === "light" ? "#F1F5F9" : "#0071E1",
   paddingLeft: 20,
   paddingRight: 24,
   lineHeight: 2.0,
-  color: "#000",
+  color: theme.palette.mode === "light" ? "#000" : "#fff",
   marginLeft: 8,
+  ":hover": {
+    backgroundColor: theme.palette.mode === "light" ? "" : theme.palette.primary.main,
+  }
 }))
 
 const MembersList = () => {

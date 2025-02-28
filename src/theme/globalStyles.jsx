@@ -1,9 +1,25 @@
 // material
 import { GlobalStyles as GlobalThemeStyles } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
+import { useEffect } from "react"
 
 export default function GlobalStyles() {
   const theme = useTheme()
+
+  const isDarkMode = theme.palette.mode === "light" ? "https://cdn3.devexpress.com/jslib/24.2.5/css/dx.fluent.saas.light.compact.css" : "https://cdn3.devexpress.com/jslib/24.2.5/css/dx.fluent.saas.dark.compact.css"
+
+  useEffect(() => {
+    const themeLink = document.getElementById("theme-link")
+    if (themeLink) {
+      themeLink.href = `${isDarkMode}`
+      document.documentElement.style.setProperty("--dx-gantt-border", theme.palette.gantt.defaultBorder)
+      document.documentElement.style.setProperty("--dx-gantt-collapsable", theme.palette.gantt.collapsableBg)
+      document.documentElement.style.setProperty("--dx-gantt-text", theme.palette.gantt.defaultText)
+      document.documentElement.style.setProperty("--dx-gantt-tertiaryText", theme.palette.gantt.tertiaryText)
+      document.documentElement.style.setProperty("--dx-gantt-primaryText", theme.palette.gantt.primaryText)
+      document.documentElement.style.setProperty("--dx-gantt-selectedBg", theme.palette.gantt.selectedBg)
+    }
+  }, [isDarkMode])
 
   return (
     <GlobalThemeStyles

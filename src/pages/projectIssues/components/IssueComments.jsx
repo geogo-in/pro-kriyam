@@ -11,15 +11,16 @@ import { getErrorMessage } from "utils/helper"
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: "8px 16px",
-  border: "1px solid #E4EEF5",
-  background: "#f1f5f9",
+  border: theme.palette.mode === "light" ? "1px solid #E4EEF5" : `1px solid ${theme.palette.background.default}`,
+  background: theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.default,
   fontSize: "0.85rem",
   width: "100%",
   wordBreak: "break-word",
   borderRadius: "0 20px 20px 20px",
+  color: theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText,
   "& .mention": {
     background: theme.palette.primary.main,
-    color: "white",
+    color: theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText,
     borderRadius: 15,
     padding: 3,
   },
@@ -51,8 +52,8 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
             </Box>
             <Box>
               <Box sx={{ display: "flex", mb: 0.5 }}>
-                <Typography sx={{ fontWeight: 500, fontSize: "0.8rem" }}>{user?.name}</Typography>
-                <Typography variant="caption" pl={1} component="div" sx={{ color: theme => theme.palette.primary.tertiaryText }}>
+                <Typography sx={{ fontWeight: 500, fontSize: "0.8rem", color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText }}>{user?.name}</Typography>
+                <Typography variant="caption" pl={1} component="div" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.tertiaryText : "#979BA6" }}>
                   {fDateTime(created_on)}
                 </Typography>
               </Box>
@@ -63,7 +64,7 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
         ))}
       </Box>
       <Stack spacing={1}>
-        <Typography variant="body1" gutterBottom sx={{ color: theme => theme.palette.primary.defaultText, fontWeight: 500 }}>
+        <Typography variant="body1" gutterBottom sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.primary.secondaryText, fontWeight: 500 }}>
           Add a comment
         </Typography>
         <Box>
