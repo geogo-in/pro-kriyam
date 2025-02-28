@@ -8,8 +8,14 @@ export const Card = styled(MuiCard)(({ theme }) => ({
   boxShadow: "1px 1px 8px -5px #00000080",
 }))
 export const LineCard = styled(MuiCard)(({ theme }) => ({
+  background: theme.palette.background.modal,
   boxShadow: "none",
-  border: "1px solid rgba(229,231,235,0.95)",
+  border: theme.palette.mode === "light" ? "1px solid rgba(229,231,235,0.95)" : "1px solid #292929",
+  boxShadow: "var(--customShadows-card)", 
+  transitionProperty: "box-shadow, background, border", 
+  transitionDuration: "300ms", 
+  transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)", 
+  transitionDelay: "0s"
 }))
 export const CardHeader = styled("div")(({ theme }) => ({
   borderBottom: "1px solid rgba(218,220,224, 0.7)",

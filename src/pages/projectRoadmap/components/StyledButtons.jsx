@@ -11,12 +11,15 @@ export const StyledPrimaryButton = styled(Button)(({ theme }) => ({
 
 export const StyledSimpleButton = styled(Button)(({ theme }) => ({
   borderRadius: 4,
-  backgroundColor: "#F1F5F9",
+  backgroundColor: theme.palette.mode === "light" ? "#F1F5F9" : "#0071E1",
   paddingLeft: 12,
   paddingRight: 12,
   lineHeight: 2.0,
-  color: "#000",
+  color: theme.palette.mode === "light" ? "#000" : "#fff",
   boxShadow: "none",
+  ":hover": {
+    backgroundColor: theme.palette.mode === "light" ? "" : theme.palette.primary.main
+  }
 }))
 
 export const StyledTextButton = styled(Button)(({ theme }) => ({

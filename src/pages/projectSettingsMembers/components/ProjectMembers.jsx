@@ -21,7 +21,7 @@ const ProjectMembers = ({ project_id }) => {
       {membership.length ? (
         <TableContainer sx={{ borderRadius: 0, borderTop: "1px solid rgba(218,220,224, 0.4)", mt: 2 }}>
           <Table aria-label="simple table">
-            <TableHead sx={{ backgroundColor: "white", borderRadius: 0, borderBottom: "none" }}>
+            <TableHead sx={{ backgroundColor: theme => theme.palette.mode === "light" ?  "white" : theme.palette.background.modal, borderRadius: 0, borderBottom: "none" }}>
               <TableRow>
                 <TableHeadCell sx={{ width: 20 }}></TableHeadCell>
                 <TableHeadCell>Member</TableHeadCell>

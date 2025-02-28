@@ -12,17 +12,17 @@ import ProjectIssueStatusCreate from "./ProjectIssueStatusCreate"
 
 const IssueStatusColumn = ({ id, column, project_id }) => {
   return (
-    <Box elevation={0} sx={{ borderRadius: "4px", mt: 1.5, ml: 0, mr: 2, mb: 0.5, width: "285px", overflowX: "hidden" }}>
-      <Stack direction="row" alignItems="center" spacing={1} px={1.5} py={1} sx={{ bgcolor: "rgba(228,238,245, 0.6)", border: "1px solid #E4EEF5", mb: 0 }}>
+    <Box elevation={0} sx={{ borderRadius: "8px", mt: 1.5, ml: 0, mr: 2, mb: 0.5, width: "285px", overflowX: "hidden" }}>
+      <Stack direction="row" alignItems="center" spacing={1} px={1.5} py={1} sx={{ borderBottom: theme => theme.palette.mode === "light" ? "" : "1px solid #292929", bgcolor: theme =>  theme.palette.mode === "light" ? "rgba(228,238,245, 0.6)" : theme.palette.background.modal, border: theme => theme.palette.mode === "light" ? "1px solid #E4EEF5" : "", mb: 0, boxShadow: theme => theme.palette.mode === "light" ? "var(--customShadows-card)" : "", transitionProperty: "box-shadow, background, border", transitionDuration: "300ms", transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)", transitionDelay: "0s", }}>
         <Typography variant="h6" sx={{ fontSize: "0.95rem", color: theme => theme.palette.primary.defaultText }}>
           {id === "project" ? "Active for this project" : "Other available statues"}
         </Typography>
       </Stack>
       <StrictModeDroppable droppableId={id} isDropDisabled={id === "master"}>
         {provided => (
-          <List ref={provided.innerRef} sx={{ border: "1px solid #f1f5f9", minHeight: "500px", background: "#f7fafc", px: 1, pt: 0 }}>
+          <List ref={provided.innerRef} sx={{ borderRadius: "0 0 8px 8px", border: theme => theme.palette.mode === "light" ? "1px solid #f1f5f9" : "", minHeight: "500px", background: theme => theme.palette.mode === "light" ? "#f7fafc" : theme.palette.background.modal, px: 2, pt: 0,  }}>
             {column.map((status, index) => (
-              <Box my={0} key={status.id}>
+              <Box my={0} py={1} key={status.id}>
                 <Draggable draggableId={`${status.id}`} key={`${status.id}`} index={index}>
                   {provided => <StatusCard {...{ status, id, column, project_id, provided }} />}
                 </Draggable>
@@ -66,10 +66,11 @@ function StatusCard({ status, id, column, project_id, provided }) {
       enqueueSnackbar(message, { variant: "error" })
     }
   }
+  console.log(status.color_code)
   return (
     <>
       <Card
-        sx={{ my: 1, py: 1.5, px: 2, borderRadius: 0.5, boxShadow: "1px 1px 8px -5px #00000080", background: status.color_code }}
+        sx={{ my: 1, py: 1.5, px: 2, borderRadius: 0.5, boxShadow: theme => theme.palette.mode === "light" ? "1px 1px 8px -5px #00000080"  : "", background: theme => (status.color_code !== undefined && status.color_code !== null) ? status.color_code : theme.palette.mode === "light" ? "white" : "#0A0E12" }}
         key={`${status.id}`}
         role={undefined}
         component="li"
@@ -77,7 +78,7 @@ function StatusCard({ status, id, column, project_id, provided }) {
         {...provided.draggableProps}
         {...provided.dragHandleProps}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h5" sx={{ color: "primary.defaultText", fontSize: "0.95rem", fontWeight: 500, mb: 1 }}>
+          <Typography variant="h5" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : (status.color_code !== undefined && status.color_code !== null) ? "#444444" : theme.palette.primary.defaultText, fontSize: "0.95rem", fontWeight: 500, mb: 1 }}>
             {status.name}
           </Typography>
           {status.is_closed && <DoneIcon sx={{ color: "green", height: 18, width: 18, ml: 1 }} />}
@@ -85,7 +86,7 @@ function StatusCard({ status, id, column, project_id, provided }) {
         {id !== "master" && (
           <Box sx={{ borderTop: "1px dashed rgba(117,117,117,0.3)", display: "flex", mt: 1, pt: 0.5, justifyContent: "space-between" }}>
             <Box display="flex" alignItems="center">
-              <Button onClick={handleColorMenu} size="small" sx={{ padding: "0px", color: theme => theme.palette.primary.secondaryText }}>
+              <Button onClick={handleColorMenu} size="small" sx={{ padding: "0px", color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : "#808080" }}>
                 Change color
               </Button>
             </Box>
@@ -95,7 +96,7 @@ function StatusCard({ status, id, column, project_id, provided }) {
                   <Button
                     disabled={column.filter(c => c.is_closed).length < 2 && status.is_closed}
                     onClick={handleOpen}
-                    sx={{ padding: "0px", color: theme => theme.palette.primary.secondaryText }}>
+                    sx={{ padding: "0px", color: theme => theme.palette.mode === "light" ? theme.palette.primary.secondaryText : "#727272" }}>
                     Remove
                   </Button>
                 )}

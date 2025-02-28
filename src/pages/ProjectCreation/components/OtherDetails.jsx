@@ -32,7 +32,7 @@ const OtherDetails = ({ template }) => {
       <List>
         {["New", "In Progress", "Done"].map(status => (
           <ListItem disablePadding key={status}>
-            <ListItemText primary={status} sx={{ "& .MuiTypography-root": { fontSize: "0.8rem", fontWeight: 500 } }} />
+            <ListItemText primary={status} sx={{ "& .MuiTypography-root": { fontSize: "0.8rem", fontWeight: 500 }, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText }} />
           </ListItem>
         ))}
       </List>

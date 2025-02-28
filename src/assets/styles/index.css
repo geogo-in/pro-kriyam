@@ -4,9 +4,13 @@
 .dx-gantt {
   border: none !important;
 }
+.dx-gantt .dx-toolbar {
+  background: none !important;
+}
 .dx-gantt .dx-gantt-altRow,
 .dx-gantt .dx-gantt-collapsable-row {
-  background-color: #edeff5 !important;
+  background-color: var(--dx-gantt-collapsable) !important;
+  /* background-color: #edeff5 !important; */
 }
 
 .dx-treelist .dx-row-lines > td,
@@ -14,22 +18,27 @@
 .dx-gantt .dx-gantt-tsac,
 .dx-treelist-headers,
 .dx-treelist-headers .dx-treelist-table .dx-row > td {
-  border-bottom: 1px solid #edeff1 !important;
+  /* border-bottom: 1px solid #edeff1 !important; */
+  border-bottom: 1px solid var(--dx-gantt-border) !important;
 }
 
 .dx-treelist .dx-column-lines > td {
-  border-left: 1px solid #edeff1 !important;
-  border-right: 1px solid #edeff1 !important;
+  border-left: 1px solid var(--dx-gantt-border) !important;
+  border-right: 1px solid var(--dx-gantt-border) !important;
+  /* border-left: 1px solid #edeff1 !important;
+  border-right: 1px solid #edeff1 !important; */
 }
 
 /* Column header color */
 .dx-gantt .dx-gantt-header {
-  color: #646d76 !important;
+  /* color: #646d76 !important; */
+  color: var(--dx-gantt-text) !important;
   font-size: 0.75rem !important;
 }
 
 .dx-treelist-headers .dx-treelist-table .dx-row > td {
-  color: #54637c !important;
+  color: var(--dx-gantt-text) !important;
+  /* color: #54637c !important; */
   font-size: 0.8rem !important;
   padding: 12px 10px;
   /* font-weight: 500; */
@@ -42,7 +51,8 @@
 .dx-gantt .dx-gantt-header .dx-gantt-tsa,
 .dx-gantt .dx-gantt-header .dx-gantt-tsac,
 .dx-gantt .dx-gantt-header .dx-gantt-vb {
-  border-color: #edeff1 !important;
+  border-color: var(--dx-gantt-border) !important;
+  /* border-color: #edeff1 !important; */
 }
 .dx-gantt .dx-gantt-header .dx-gantt-tsa:first-child {
   font-weight: 500 !important;
@@ -50,17 +60,21 @@
 
 /* Header boder bottom */
 .dx-gantt .dx-gantt-header .dx-gantt-tsa:last-child {
-  border-bottom: 3px solid #edeff1 !important;
+  border-bottom: 3px solid var(--dx-gantt-border) !important;
+  /* border-bottom: 3px solid #edeff1 !important; */
 }
 .dx-treelist-table.dx-treelist-table-fixed tr td.dx-treelist-action {
-  border-bottom: 3px solid #edeff1 !important;
+  /* border-bottom: 3px solid #edeff1 !important; */
+  border-bottom: 3px solid var(--dx-gantt-border) !important;
 }
 
 .dx-gantt .dx-gantt-vb {
-  border-left: 1px solid #edeff1 !important;
+  border-left: 1px solid var(--dx-gantt-border) !important;
+  /* border-left: 1px solid #edeff1 !important; */
 }
 .dx-gantt .dx-gantt-hb {
-  border-top: 1px solid #edeff1 !important;
+  border-top: 1px solid var(--dx-gantt-border) !important;
+  /* border-top: 1px solid #edeff1 !important; */
 }
 .dx-treelist .dx-row > td {
   /* padding: 7px; */
@@ -72,12 +86,14 @@
 .dx-data-row .dx-treelist-text-content {
   font-size: 0.8rem !important;
   font-weight: 500 !important;
-  color: #657289 !important;
+  color: var(--dx-gantt-tertiaryText) !important;
+  /* color: #657289 !important; */
 }
 .dx-data-row.dx-gantt-collapsable-row .dx-treelist-text-content {
   font-size: 0.8rem !important;
   font-weight: 500 !important;
-  color: #3e4954 !important;
+  /* color: #3e4954 !important; */
+  color: var(--dx-gantt-primaryText) !important;
   /* color: rgb(62, 73, 84) !important; */
 }
 
@@ -136,7 +152,8 @@
 
 .dx-gantt .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row > td,
 .dx-gantt .dx-gantt-sel {
-  background-color: #e5f5fd !important;
+  background-color: var(--dx-gantt-selectedBg) !important;
+  /* background-color: #e5f5fd !important; */
 }
 
 /* Text editor */
@@ -146,4 +163,8 @@
 .ql-editor.ql-blank::before {
   color: #657289;
   font-size: 0.8rem;
+}
+
+:root {
+  --customShadows-card: 0 0 2px 0 rgba(0, 0, 0, 0.2), 0 12px 24px -4px rgba(0, 0, 0, 0.12);
 }

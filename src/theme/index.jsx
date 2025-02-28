@@ -2,6 +2,7 @@ import { CssBaseline, StyledEngineProvider, ThemeProvider } from "@mui/material"
 import createTheme from "@mui/material/styles/createTheme"
 import PropTypes from "prop-types"
 import { useMemo } from "react"
+import { useSelector } from "react-redux"
 import breakpoints from "./breakpoints"
 import componentsOverride from "./overrides"
 import palette from "./palette"
@@ -15,7 +16,7 @@ ThemeConfig.propTypes = {
 
 export default function ThemeConfig({ children }) {
   //for now theme is always in light mode
-  const isLight = true
+  const isLight = useSelector((state) => state.theme.isLight);
 
   const themeOptions = useMemo(
     () => ({
@@ -28,9 +29,9 @@ export default function ThemeConfig({ children }) {
     }),
     [isLight]
   )
-
-  const theme = createTheme(themeOptions)
-  theme.components = componentsOverride(theme)
+  
+    const theme = createTheme(themeOptions)
+    theme.components = componentsOverride(theme)
 
   return (
     <StyledEngineProvider injectFirst>

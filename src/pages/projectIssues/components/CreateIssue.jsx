@@ -103,8 +103,8 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
 
           <DialogContent>
             <Box>
-              <Typography variant="subtitle">First, select a project</Typography>
-              <TextField select fullWidth label="Project" name="project_id" value={state.project_id} onChange={handleChange}>
+              <Typography sx={{color: theme => theme.palette.mode === "light" ? "white" : theme.palette.primary.defaultText}} variant="subtitle">First, select a project</Typography>
+              <TextField sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}} select fullWidth label="Project" name="project_id" value={state.project_id} onChange={handleChange}>
                 <MenuItem>--- Select ---</MenuItem>
                 {data.projects?.map(({ name, identifier }) => (
                   <MenuItem key={identifier} value={identifier}>
@@ -124,11 +124,11 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
       <Box component="form" onSubmit={handleSubmit}>
         <DialogHeader>
           {parent_issue_id ? (
-            <Typography variant="h6">
+            <Typography sx={{color: theme => theme.palette.mode === "light" ? "#000" : theme.palette.primary.defaultText}} variant="h6">
               Create new subtask in: <strong>{state.project_id}</strong> for issue ID <strong>#{parent_issue_id}</strong>
             </Typography>
           ) : (
-            <Typography variant="h6">
+            <Typography sx={{color: theme => theme.palette.mode === "light" ? "#000" : theme.palette.primary.defaultText}} variant="h6">
               Create new task in: <strong>{state.project_id}</strong>
             </Typography>
           )}
@@ -137,7 +137,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
           <Typography variant="body2" display="block" sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
             Summary*
           </Typography>
-          <TextField fullWidth inputRef={subjectRef} placeholder="Start typing about the task..." value={state.name} onChange={handleChange} name="subject"></TextField>
+          <TextField sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}} fullWidth inputRef={subjectRef} placeholder="Start typing about the task..." value={state.name} onChange={handleChange} name="subject"></TextField>
           <Typography variant="body2" display="block" sx={{ mt: 3, mb: 1, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
             Description
           </Typography>
@@ -152,7 +152,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
             />
           ) : (
             <Box
-              sx={{ px: 2, py: 6.6, borderRadius: 1, bgcolor: "#f6f9fb", fontStyle: "italic", color: "#657289", cursor: "text", fontSize: "0.8rem" }}
+              sx={{ px: 2, py: 6.6, borderRadius: 1, bgcolor: theme => theme.palette.mode === "light" ? "#f6f9fb" : theme.palette.background.default, fontStyle: "italic", color: "#657289", cursor: "text", fontSize: "0.8rem" }}
               onClick={() => setShowDescriptionField(true)}>
               Add a more detailed description...
             </Box>
@@ -164,6 +164,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
                 Start Date*
               </Typography>
               <TextField
+                sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}}
                 type="date"
                 value={state.start_date ? moment(state.start_date).format("YYYY-MM-DD") : ""}
                 onChange={e => setState(x => ({ ...x, start_date: e.target.value }))}
@@ -177,6 +178,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
                 Due Date*
               </Typography>
               <TextField
+                sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}}
                 type="date"
                 value={state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : ""}
                 onChange={e => setState(x => ({ ...x, due_date: e.target.value }))}
@@ -277,7 +279,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
   return (
     <Box component="form" onSubmit={handleSubmit}>
       <DialogHeader>
-        <Typography variant="h6">
+        <Typography sx={{color: theme => theme.palette.mode === "light" ? "#000" : theme.palette.primary.defaultText}} variant="h6">
           Create new issue in: <strong>{state.project_id}</strong>
         </Typography>
       </DialogHeader>
@@ -328,7 +330,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
         <Typography variant="body2" display="block" sx={{ fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
           Summary*
         </Typography>
-        <TextField fullWidth autoFocus placeholder="Start typing about the task..." value={state.name} onChange={handleChange} name="subject"></TextField>
+        <TextField sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}} fullWidth autoFocus placeholder="Start typing about the task..." value={state.name} onChange={handleChange} name="subject"></TextField>
         <Typography variant="body2" display="block" sx={{ mt: 3, mb: 1, fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
           Description
         </Typography>
@@ -344,7 +346,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
           Assignee
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <SelectWithIcon sx={{ ".MuiOutlinedInput-root": { borderRadius: 0.5 } }} name="assigned_to_id" value={state.assigned_to_id} onChange={handleChange} minwidth={250}>
+          <SelectWithIcon sx={{ ".MuiOutlinedInput-root": { borderRadius: 0.5, borderColor: theme => theme.palette.mode === "light" ? "" : "#444444", } }} name="assigned_to_id" value={state.assigned_to_id} onChange={handleChange} minwidth={250}>
             <MenuItem value="">
               <ListItemIcon>
                 <MemberAvatar name="Automatic" tooltipPosition="none" />
@@ -384,6 +386,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
               Start Date*
             </Typography>
             <TextField
+              sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"} }}
               type="date"
               value={moment(state.start_date).format("YYYY-MM-DD")}
               // onChange={e => setState(x => ({ ...x, start_date: moment(e.target.value) }))}
@@ -398,6 +401,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
               Due Date*
             </Typography>
             <TextField
+              sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"} }}
               type="date"
               value={state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : ""}
               // onChange={e => setState(x => ({ ...x, due_date: moment(e.target.value) }))}

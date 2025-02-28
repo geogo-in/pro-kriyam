@@ -1,18 +1,24 @@
 import { Add, Done } from "@mui/icons-material"
 import { LoadingButton } from "@mui/lab"
 import { Box, Button, ClickAwayListener, InputBase, Paper, styled } from "@mui/material"
+import { useCreateSprintMutation } from "@redux/services/redmineApi"
 import { useSnackbar } from "notistack"
 import { useState } from "react"
-import { useCreateSprintMutation } from "@redux/services/redmineApi"
 
 export const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: 4,
-  border: `1px solid #FFF`,
-  backgroundColor: "#F1F5F9",
+  border: theme.palette.mode === "light" ? `1px solid #FFF` : "",
+  backgroundColor: theme.palette.mode === "light" ? "#F1F5F9" : "#0071E1",
   paddingLeft: 20,
   paddingRight: 24,
   lineHeight: 1.8,
-  color: "#000",
+  color: theme.palette.mode === "light" ? "#000" : "#fff",
+  ...(theme.palette.mode === "dark" && {
+    ":hover": {
+      backgroundColor:theme.palette.primary.main,
+      color: "#fff"
+    }
+  })
 }))
 
 const StyledPaper = styled(Paper)(({ theme }) => ({

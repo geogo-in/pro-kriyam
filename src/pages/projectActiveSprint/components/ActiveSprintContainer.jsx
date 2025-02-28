@@ -82,7 +82,7 @@ export default function ActiveSprintContainer({ columns, setColumns, filter, set
   }
   return (
     <>
-      <Box sx={{ margin: "0 2px", padding: "4px 0", borderBottom: "1px solid rgba(229,231,235, 0.5)" }}>
+      <Box sx={{ margin: "0 2px", padding: "4px 0", borderBottom: theme => theme.palette.mode === "light" ? "1px solid rgba(229,231,235, 0.5)" : "1px solid #292929" }}>
         <FilterContainer {...{ filter, setFilter, project_id }} />
       </Box>
       <ScrollableGrid>

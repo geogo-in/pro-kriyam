@@ -57,7 +57,7 @@ export default function Details({ template, setTemplateDetail, setTemplate }) {
           </Typography>
         </Box>
       </Box>
-      <Typography my={1} sx={{ color: theme => theme.palette.primary.defaultText }}>
+      <Typography my={1} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : theme.palette.primary.secondaryText }}>
         You can change these details anytime in your project settings.
       </Typography>
       <Box component="form" onSubmit={handleSubmit} container maxWidth="md" sx={{ mx: "auto", mt: 3 }}>
@@ -69,7 +69,7 @@ export default function Details({ template, setTemplateDetail, setTemplate }) {
                 <LoadingButton variant="contained" loading={isLoading} type="submit">
                   Create project
                 </LoadingButton>
-                <Button onClick={handleClose} sx={{ color: "grey", ml: 2 }}>
+                <Button onClick={handleClose} sx={{ color: theme => theme.palette.mode === "light" ? "grey" : "white", ml: 2 }}>
                   Cancel
                 </Button>
               </Stack>
