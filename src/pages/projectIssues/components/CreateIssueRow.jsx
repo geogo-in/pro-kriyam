@@ -1,6 +1,6 @@
 import { Add, Clear } from "@mui/icons-material"
 import { Box, Button, CircularProgress, IconButton, InputBase, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Tooltip } from "@mui/material"
-import { useCreateIssuesMutation,useGetIssuePriorityQuery, useGetIssueTypeQuery } from "@redux/services/issueApi"
+import { useCreateIssuesMutation, useGetIssuePriorityQuery, useGetIssueTypeQuery } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import { useEffect, useState } from "react"
