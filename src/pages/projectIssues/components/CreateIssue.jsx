@@ -164,7 +164,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
                 Start Date*
               </Typography>
               <TextField
-                sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}}
+                sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}, "input[type='date']::-webkit-calendar-picker-indicator": {filter: theme => theme.palette.mode === "light" ? "" : "invert(1)",},}}
                 type="date"
                 value={state.start_date ? moment(state.start_date).format("YYYY-MM-DD") : ""}
                 onChange={e => setState(x => ({ ...x, start_date: e.target.value }))}
@@ -178,7 +178,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
                 Due Date*
               </Typography>
               <TextField
-                sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}}}
+                sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}, "input[type='date']::-webkit-calendar-picker-indicator": {filter: theme => theme.palette.mode === "light" ? "" : "invert(1)",},}}
                 type="date"
                 value={state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : ""}
                 onChange={e => setState(x => ({ ...x, due_date: e.target.value }))}
@@ -386,7 +386,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
               Start Date*
             </Typography>
             <TextField
-              sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"} }}
+              sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}, "input[type='date']::-webkit-calendar-picker-indicator": {filter: theme => theme.palette.mode === "light" ? "" : "invert(1)",},}}
               type="date"
               value={moment(state.start_date).format("YYYY-MM-DD")}
               // onChange={e => setState(x => ({ ...x, start_date: moment(e.target.value) }))}
@@ -401,7 +401,7 @@ export default function CreateIssue({ parent_issue_id, project_id, status_id = "
               Due Date*
             </Typography>
             <TextField
-              sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"} }}
+              sx={{ "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}, "input[type='date']::-webkit-calendar-picker-indicator": {filter: theme => theme.palette.mode === "light" ? "" : "invert(1)",},}}
               type="date"
               value={state.due_date ? moment(state.due_date).format("YYYY-MM-DD") : ""}
               // onChange={e => setState(x => ({ ...x, due_date: moment(e.target.value) }))}
