@@ -34,7 +34,7 @@ const ForgotPassword = ({ ...props }) => {
       <Typography variant="h4" sx={{ fontWeight: 600, color: theme => "#10172a", fontSize: "1.6rem", padding: "2px 8px" }}>
         Wait, forgot your password?
       </Typography>
-      <Typography variant="body1" sx={{ padding: "2px 8px" }}>
+      <Typography variant="body1" sx={{ padding: "2px 8px", color: theme => theme.palette.mode === "light" ? "" : "#292929" }}>
         Don't worry, we'll send the reset link to your registered mail ID.
       </Typography>
       <Box sx={{ px: 1, mt: 4, mb: 4 }}>
