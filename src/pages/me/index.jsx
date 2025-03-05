@@ -1,5 +1,4 @@
-// import { Box, Typography } from "@mui/material"
-import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { Close, Done, Edit, Visibility, VisibilityOff } from "@mui/icons-material"
 import { Box, Container, Divider, FormControl, Grid, IconButton, Link, MenuItem, Select, TextField, Typography } from "@mui/material"
 import InputAdornment from "@mui/material/InputAdornment"
 import Table from "@mui/material/Table"
@@ -37,7 +36,25 @@ export default function Me() {
   const [visibleMonths, setVisibleMonths] = useState(2)
   const [filterType, setFilterType] = useState("start_date")
   const [selectedRole, setSelectedRole] = useState("")
-  
+
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedUser, setEditedUser] = useState({ ...user })
+
+  const handleUserChange = (e) => {
+    setEditedUser({ ...editedUser, [e.target.name]: e.target.value })
+  }
+
+  const handleSave = async () => {
+    setIsEditing(false)
+    try{
+      await updateUser({ id: user.id, firstname: editedUser.firstname, lastname: editedUser.lastname, mail: editedUser.mail, login: editedUser.login }).unwrap()
+      enqueueSnackbar("Info updated successfully", {variant: "success"})
+    } catch (error) {
+      const { message } = getErrorMessage(error)
+      enqueueSnackbar(message, { variant: "error" })
+    }
+  }
+
   const filteredMemberships = selectedRole ? me?.memberships.filter(member => member.roles.some(role => role.name === selectedRole)): me?.memberships
 
   const handleIssue = (issue) => {
@@ -104,20 +121,92 @@ export default function Me() {
   return (
     <Container component={Box}  sx={{minHeight: `calc( 100vh - 64px )`, display: "flex", flexDirection: "column" }}>
       <Box sx={{ flexDirection: { xs: "column", sm: "row" }, display: "flex", flex: 1, maxWidth: { sm: "calc(100% - 320px)" } }}>
-        <Box sx={{ px: 3, py: 4, width: { xs: "100%", sm: "320px" }, display: "flex", flexDirection: "column", gap: 1 }}>
+        <Box sx={{ px: 3, py: 4, width: { xs: "100%", sm: "320px !important" }, minWidth: "320px", display: "flex", flexDirection: "column", gap: 1 }}>
           <Box sx={{ display: "flex", flexDirection: { xs: "row", sm: "column" }, gap: { xs: 3, sm: 1 } }} >
-            <MemberAvatar height={40} width={40} name={`${user.firstname} ${user.lastname}`} />
-            <Box>
-              <Typography variant="h5">
-                {user.firstname} {user.lastname}
-              </Typography>
-              <Typography variant="h6" sx={{ color: theme => theme.palette.mode === "light" ? "#64748B" : theme.palette.primary.secondaryText, fontWeight: 200 }} >
-                {user.login}
-              </Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", }}>
+              <MemberAvatar height={40} width={40} name={`${user.firstname} ${user.lastname}`} />
+              <Box sx={{ display: "flex", flexDirection: "row" }} >
+                <IconButton size="small" variant="contained" sx={{ mr: 1, my: 1, backgroundColor: theme => theme.palette.background.modal, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} onClick={() => (isEditing ? handleSave() : setIsEditing(true))}>
+                  {isEditing ? <Done/> : <Edit/>}
+                </IconButton>
+                {isEditing && (
+                  <IconButton
+                  size="small"
+                  sx={{my: 1, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText, backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),"&:hover": { backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),},}}
+                  onClick={() => setIsEditing(false)}
+                  >
+                    <Close/>
+                  </IconButton>
+                )}
+              </Box>
             </Box>
-            <Typography sx={{ display: { xs: "none", sm: "block" } }} >
-              Email: {user.mail}
-            </Typography>
+            <Box>
+              <Box>
+                {isEditing ? (
+                  <TextField 
+                    sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}, "& input": { color: theme => theme.palette.primary.defaultText } }}
+                    name="firstname" 
+                    value={editedUser.firstname} 
+                    onChange={handleUserChange} 
+                    variant="outlined" 
+                    size="small"
+                    placeholder="Enter Firstname"
+                    fullWidth
+                  />
+                ) : (
+                  <Typography variant="h5">
+                    {editedUser.firstname} {editedUser.lastname}
+                  </Typography>
+                )}
+                
+                {isEditing ? (
+                  <TextField 
+                    sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}, "& input": { color: theme => theme.palette.primary.defaultText } }}
+                    name="lastname" 
+                    value={editedUser.lastname} 
+                    onChange={handleUserChange} 
+                    variant="outlined" 
+                    size="small"
+                    placeholder="Enter Lastname"
+                    fullWidth
+                  />
+                ) : null}
+              </Box>
+
+              {isEditing ? (
+                <TextField
+                  name="login" 
+                  value={editedUser.login} 
+                  onChange={handleUserChange} 
+                  variant="outlined" 
+                  size="small"
+                  placeholder="Enter username"
+                  sx={{ mt: 1, "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}, "& input": { color: theme => theme.palette.primary.defaultText } }}
+                  fullWidth
+                />
+              ) : (
+                <Typography variant="h6" sx={{ color: theme => theme.palette.mode === "light" ? "#64748B" : theme.palette.primary.secondaryText, fontWeight: 200 }}>
+                  {editedUser.login}
+                </Typography>
+              )}
+
+              {isEditing ? (
+                <TextField
+                  name="mail" 
+                  value={editedUser.mail} 
+                  onChange={handleUserChange} 
+                  variant="outlined" 
+                  size="small"
+                  placeholder="Enter Email"
+                  sx={{ mt: 1, "& fieldset": { borderColor: theme => theme.palette.mode === "light" ? "" : "#444444" }, "& input": { color: theme => theme.palette.primary.defaultText } }}
+                  fullWidth
+                />
+              ) : (
+                <Typography sx={{ display: { xs: "none", sm: "block" } }}>
+                  Email: {editedUser.mail}
+                </Typography>
+              )}
+            </Box>
           </Box>
           <Box>
             {changePass.isEditing && (
@@ -154,7 +243,7 @@ export default function Me() {
             </PrimaryRoundButton>
             {changePass.isEditing && (
               <StyledButton
-                sx={{my: 1, backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),"&:hover": { backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),},}}
+                sx={{my: 1, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText, backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),"&:hover": { backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),},}}
                 onClick={() => setChangePass({newPass: "", showPassword: false, isEditing: false})}
               >
                 Cancel
@@ -173,7 +262,7 @@ export default function Me() {
           <Box sx={{mb: 3, display: "flex", flexDirection: "column"}} >
             <Box sx={{ mb: 2, display: "flex", flexDirection: "row", alignItems: "center" , justifyContent: "space-between"}} >
               <Typography color={theme => theme.palette.primary.defaultText} variant="h6">
-                Memberships
+                Projects
               </Typography>
               <FormControl size="small" sx={{ minWidth: 120, display: "flex", flexDirection: "row", alignItems: "center", gap: 1 }}>
                 <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
@@ -201,14 +290,14 @@ export default function Me() {
                 <TableBody>
                 {filteredMemberships?.map((member) => (
                   <StyledTableRow key={member.id} hover className="button" sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                    <TableCell onClick={() => handleMemberships(member.project.id)} sx={{ pl: 4, py: 2, fontSize: "0.9rem", fontWeight: 500, "& span": { color: theme => theme.palette.primary.defaultText }, "& :hover": { color: theme => theme.palette.mode === "light" ? "#000" : theme.palette.primary.main } }}>
+                    <TableCell onClick={() => handleMemberships(member.project.id)} sx={{ pl: 4, py: 2, fontSize: "0.9rem", fontWeight: 500, "&:span": { color: theme => theme.palette.primary.defaultText }, "&:hover": { color: theme => theme.palette.mode === "light" ? "#000" : theme.palette.primary.main } }}>
                       {member.project.name}
                     </TableCell>
                     <TableCell>
                     {member.roles.map((role) => (
-                      <>
+                      <div key={role.id}>
                       {role.name}
-                      </>
+                      </div>
                     ))}
                     </TableCell>
                   </StyledTableRow>
@@ -219,7 +308,7 @@ export default function Me() {
           </Box>
           <Box sx={{mb: 3}}>
             <Typography sx={{mb: 1}} color={theme => theme.palette.primary.defaultText} variant="h6">
-              Groups
+              Teams
             </Typography>
             <Divider/>
             <Grid container spacing={2} sx={{ mt: 2 }}>
@@ -246,7 +335,7 @@ export default function Me() {
               </Typography>
               <FormControl size="small" sx={{ minWidth: 120, display: "flex", flexDirection: "row", alignItems: "center" , gap: 1 }}>
                 <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
-                  Filter by: 
+                  Sort by: 
                 </Typography>
                 <Select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
                   <MenuItem value="start_date">Start Date</MenuItem>

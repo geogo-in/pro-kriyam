@@ -27,13 +27,13 @@ const issueApi = redmineApi.injectEndpoints({
       },
     }),
     createUser: builder.mutation({ query: user => ({ url: `/api/users.json`, method: "POST", body: { user } }), invalidatesTags: (_, error) => (error ? [] : ["Users"]) }),
-    updateUser: builder.mutation({ query: ({ id, ...user }) => ({ url: `/users/${id}.json`, method: "PUT", body: { user } }), invalidatesTags: (_, error) => (error ? [] : ["Users"]) }),
+    updateUser: builder.mutation({ query: ({ id, ...user }) => ({ url: `/users/${id}.json`, method: "PUT", body: { user } }), invalidatesTags: (_, error) => (error ? [] : ["Users","User"]) }),
     updateUserFCM: builder.mutation({
       query: ({ user_id, firebase_key }) => ({ url: `/api/users/${user_id}.json`, method: "PUT", body: { user: { firebase_key } } }),
       invalidatesTags: (_, error) => (error ? [] : ["Users"]),
     }),
     getUsers: builder.query({ query: params => ({ url: `/users.json`, params: params || { limit: 10000 } }), providesTags: ["Users"] }),
-    getUser: builder.query({ query: user_id => ({ url: `/users/${user_id}.json`, params: { include: "memberships,groups" } }), transformResponse: result => result.user }),
+    getUser: builder.query({ query: user_id => ({ url: `/users/${user_id}.json`, params: { include: "memberships,groups" } }), transformResponse: result => result.user, providesTags: ["User"] }),
     getUserIssues: builder.query({
       query: assigned_to_id => ({ url: `/api/issues.json`, params: { assigned_to_id } }),
       providesTags: ["Issue"],

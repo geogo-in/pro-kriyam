@@ -30,7 +30,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const redmineApi = createApi({
   reducerPath: "redmine",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Issue", "Issues", "Roadmap", "Backlog", "ActiveSprint", "Sprints", "Epic", "ProjectIssueStatuses", "ProjectMembers", "Projects", "Project", "Users", "Groups", "Group", ""],
+  tagTypes: ["Issue", "Issues", "Roadmap", "Backlog", "ActiveSprint", "Sprints", "Epic", "ProjectIssueStatuses", "ProjectMembers", "Projects", "Project", "Users", "User", "Groups", "Group", ""],
 
   endpoints: builder => ({
     getBacklogDetails: builder.query({
