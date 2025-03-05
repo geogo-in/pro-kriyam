@@ -3,7 +3,6 @@ import { useGetStoryPointQuery } from "@redux/services/redmineApi"
 import Loading from "pages/shared/Loading"
 import { SectionTitle } from "pages/shared/SectionTitle"
 import SprintIssues from "./SprintIssues"
-import MembershipFilter from "pages/projectBacklog/components/MembershipFilter"
 
 export default function StorypointBreakdown({ projectId, sprintId }) {
   const { data: storypoint, isLoading, error } = useGetStoryPointQuery({ project_id: projectId, sprint_id: sprintId })
