@@ -126,13 +126,13 @@ export default function Me() {
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", }}>
               <MemberAvatar height={40} width={40} name={`${user.firstname} ${user.lastname}`} />
               <Box sx={{ display: "flex", flexDirection: "row" }} >
-                <IconButton size="small" variant="contained" sx={{ mr: 1, my: 1, backgroundColor: theme => theme.palette.background.modal, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} onClick={() => (isEditing ? handleSave() : setIsEditing(true))}>
+                <IconButton size="small" variant="contained" sx={{ mr: 1, my: 1, backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),"&:hover": { backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),}, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} onClick={() => (isEditing ? handleSave() : setIsEditing(true))}>
                   {isEditing ? <Done/> : <Edit/>}
                 </IconButton>
                 {isEditing && (
                   <IconButton
                   size="small"
-                  sx={{my: 1, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText, backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),"&:hover": { backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),},}}
+                  sx={{my: 1, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }}
                   onClick={() => setIsEditing(false)}
                   >
                     <Close/>
