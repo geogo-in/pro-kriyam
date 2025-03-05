@@ -28,7 +28,7 @@ export default function IssueListItem({ issue, project_id, referrer, display, ..
         <TableCell component="th" scope="row" padding="checkbox" sx={{ padding: "6px !important" }}>
           {issue.id}
         </TableCell>
-        <TableCell sx={{ padding: "6px !important", "& span": { color: theme => theme.palette.primary.defaultText }, "& :hover": { color: "#000" } }}>
+        <TableCell sx={{ padding: "6px !important", "& span": { color: theme => theme.palette.primary.defaultText }, "& :hover": { color: theme => theme.palette.mode === "light" ? "#000" : theme.palette.primary.main } }}>
           <span style={{ fontSize: "0.9rem", fontWeight: 500 }}>{issue.subject}</span>
         </TableCell>
         <TableCell align="right" sx={{ padding: "6px !important" }}>
