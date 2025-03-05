@@ -33,8 +33,11 @@ const issueApi = redmineApi.injectEndpoints({
       invalidatesTags: (_, error) => (error ? [] : ["Users"]),
     }),
     getUsers: builder.query({ query: params => ({ url: `/users.json`, params: params || { limit: 10000 } }), providesTags: ["Users"] }),
-    getUser: builder.query({ query: user_id => ({ url: `/users/${user_id}.json` }), transformResponse: result => result.user }),
-
+    getUser: builder.query({ query: user_id => ({ url: `/users/${user_id}.json`, params: { include: "memberships,groups" } }), transformResponse: result => result.user }),
+    getUserIssues: builder.query({
+      query: assigned_to_id => ({ url: `/api/issues.json`, params: { assigned_to_id } }),
+      providesTags: ["Issue"],
+    }),
     getRoles: builder.query({ query: () => ({ url: `/roles.json` }) }),
     createGroups: builder.mutation({ query: ({ id, ...group }) => ({ url: `/groups.json`, method: "POST", body: { group } }), invalidatesTags: (_, error) => (error ? [] : ["Groups"]) }),
     getGroups: builder.query({ query: params => ({ url: `/groups.json`, params }), transformResponse: result => result.groups, providesTags: ["Groups"] }),
@@ -65,6 +68,7 @@ export const {
   useCreateUserMutation,
   useCreateGroupsMutation,
   useGetUserQuery,
+  useGetUserIssuesQuery,
   useGetRolesQuery,
   useGetUsersQuery,
   useGetGroupsQuery,

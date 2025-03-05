@@ -23,7 +23,7 @@ export default function ProjectSprintReport() {
       const sprint = (sprint_id && closedSprints.find(sp => sp.id == sprint_id)) || closedSprints[0]
 
       setSprint(sprint)
-      navigate(`${PATH_DASHBOARD.projects.root}/${project_id}/report/${sprint_id}`, { replace: true })
+      navigate(`${PATH_DASHBOARD.projects.root}/${project_id}/report/${sprint.id}`, { replace: true })
     }
   }, [closedSprints, sprint_id])
 
