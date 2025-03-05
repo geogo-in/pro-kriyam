@@ -6,6 +6,7 @@ import { Box, Button, IconButton, Paper, Stack, Typography, styled } from "@mui/
 import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
 import { useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
+import moment from "moment"
 import { useSnackbar } from "notistack"
 import Editor from "pages/shared/Editor"
 import MemberAvatar from "pages/shared/MemberAvatar"
@@ -53,10 +54,6 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
       enqueueSnackbar(message, { variant: "error" })
     }
   }
-  
-  const allowEdit = (created_on) => {
-    return new Date().getTime()-new Date(created_on).getTime() > 12*60*60*1000
-  }
 
   return (
     <>
@@ -74,7 +71,7 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
                 </Typography>
                 {currentUser.id === user?.id && editingCommentId !== id && (
                   <Box >  
-                    <IconButton disabled={allowEdit(created_on)} onClick={() =>  (setEditingCommentId(id), setEditedText(notes))}>
+                    <IconButton disabled={moment().diff(moment(created_on), "hours") > 12} onClick={() =>  (setEditingCommentId(id), setEditedText(notes))}>
                       {editingCommentId === id ? <CheckIcon fontSize="small" /> : <EditOutlinedIcon fontSize="small" />}
                     </IconButton>
                   </Box>
