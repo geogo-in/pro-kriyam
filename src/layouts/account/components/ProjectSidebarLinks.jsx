@@ -16,7 +16,7 @@ import { PATH_DASHBOARD } from "routes/paths"
 
 const activeLinkMixin = theme => ({
   // backgroundColor: "#f1f5f9",
-  backgroundColor: theme.palette.mode === "light" ? "#f1f5f9": "#132741",
+  backgroundColor: theme.palette.mode === "light" ? "#f1f5f9" : "#132741",
   color: theme.palette.mode === "light" ? "black" : "#69ADF3",
   "& .MuiSvgIcon-root": {
     height: "1.6em",
@@ -88,7 +88,7 @@ const ProjectSidebarLinks = ({ project }) => {
     primaryLinks.unshift({ icon: <RoadmapIcon />, label: "Roadmap", to: `${projectBaseUrl}/roadmap` })
     // primaryLinks.push({ icon: <IssuesIcon />, label: "Tasks", to: `${projectBaseUrl}/issues` })
   }
-  if (Admin) primaryLinks.push({ icon: <SettingsIcon />, label: "Settings", to: `${projectBaseUrl}/settings` })
+  if (Admin) primaryLinks.push({ icon: <SettingsIcon />, label: "Project Settings", to: `${projectBaseUrl}/settings` })
 
   return (
     <List sx={{ paddingRight: 3, paddingTop: 1, paddingLeft: 3 }}>

@@ -24,7 +24,7 @@ import { useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import { PATH_DASHBOARD } from "routes/paths"
 import { getErrorMessage, getRandomMessage, issueDeleteMessages } from "utils/helper"
-import { useGanttData } from "../hooks/useGanttData"; // Custom hook
+import { useGanttData } from "../hooks/useGanttData" // Custom hook
 import { StyledPrimaryButton, StyledSimpleButton, StyledTextButton } from "./StyledButtons"
 const currentDate = new Date()
 
@@ -41,7 +41,8 @@ export default function GanttChart({ projectId: project_id }) {
   const { data: memberships, isLoading: isMembershipsLoading } = useGetProjectMembershipsQuery(project_id)
   const { tasks, resources, resourceAssignments, dependencies } = useGanttData(data)
 
-  const [scaleType, setScaleType] = useState("weeks") // "auto" | "minutes" | "hours" | "days" | "weeks" | "months" | "quarters" | "years"
+  const [scaleType, setScaleType] = useState("months")
+
   const [openNewTaskDialog, setOpenNewTaskDialog] = useState(false)
   const [parentIssueId, setParentIssueId] = useState(null)
   const [selectedTask, setSelectedTask] = useState({
@@ -266,6 +267,7 @@ export default function GanttChart({ projectId: project_id }) {
           />
 
           <Item name="separator" />
+          {/* <Item name="addTask" /> */}
           <Item name="collapseAll" />
           <Item name="expandAll" />
           <Item name="separator" />
@@ -325,6 +327,7 @@ export default function GanttChart({ projectId: project_id }) {
         <Validation autoUpdateParentTasks={true} />
         <Editing
           enabled={true}
+          allowAdding={true}
           allowDependencyAdding={true}
           allowDependencyDeleting={true}
           allowResourceAdding={false}
