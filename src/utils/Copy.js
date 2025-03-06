@@ -17,7 +17,7 @@ function fallbackCopyTextToClipboard(text) {
     var successful = document.execCommand("copy")
     if (!successful) throw new Error()
 
-    enqueueSnackbar("Copying to clipboard was successful!", { variant: "success" })
+    enqueueSnackbar("Successfully copied the URL to clipboard", { variant: "success", title: "Copied!" })
   } catch (err) {
     console.error("Fallback: Oops, unable to copy", err)
     enqueueSnackbar("Copying to clipboard was failed!", { variant: "error" })
@@ -33,8 +33,8 @@ export function copyTextToClipboard(text) {
   }
   navigator.clipboard.writeText(text).then(
     function () {
-      console.debug("Async: Copying to clipboard was successful!")
-      enqueueSnackbar("Copying to clipboard was successful!", { variant: "success", title: "Success" })
+      // console.debug("Async: Copying to clipboard was successful!")
+      enqueueSnackbar("Successfully copied the URL to clipboard", { variant: "success", title: "Copied!" })
     },
     function (err) {
       console.error("Async: Could not copy text: ", err)
