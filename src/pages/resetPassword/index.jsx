@@ -1,7 +1,7 @@
 import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import { LoadingButton } from "@mui/lab"
-import { IconButton } from "@mui/material"
+import { IconButton, styled } from "@mui/material"
 import InputAdornment from "@mui/material/InputAdornment"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
@@ -41,7 +41,7 @@ const ResetPassword = ({ ...props }) => {
   const handleChange = e => setState({ ...state, [e.target.name]: e.target.value })
   return (
     <UserFormLayout>
-      <Typography variant="body1" color="black" fontWeight="bold">
+      <Typography variant="body1" color="black" fontWeight="bold" >
         Set new password
       </Typography>
       <Typography variant="body2" color="gray" fontWeight="300" sx={{ pb: 3 }}>
@@ -53,7 +53,7 @@ const ResetPassword = ({ ...props }) => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} edge="end">
+                <IconButton sx={{color: theme => theme.palette.mode === "light" ? "" : "#64748B"}} aria-label="toggle password visibility" onClick={handleClickShowPassword} edge="end">
                   {state.showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -72,7 +72,7 @@ const ResetPassword = ({ ...props }) => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} edge="end">
+                <IconButton sx={{color: theme => theme.palette.mode === "light" ? "" : "#64748B"}} aria-label="toggle password visibility" onClick={handleClickShowPassword} edge="end">
                   {state.showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -89,13 +89,48 @@ const ResetPassword = ({ ...props }) => {
           onChange={handleChange}
         />
 
-        <LoadingButton fullWidth loading={isLoading} disabled={passwordNotMatch} variant="contained" color="secondary" type="submit" sx={{ py: 1, my: 3 }}>
+        <StyledLoadingButton fullWidth loading={isLoading} disabled={passwordNotMatch} variant="contained" color="secondary" type="submit" sx={{ py: 1, my: 3 }}>
           RESET
-        </LoadingButton>
+        </StyledLoadingButton>
       </form>
     </UserFormLayout>
   )
 }
 
 export default ResetPassword
-const StyledTextField = props => <TextField required margin="normal" fullWidth {...props} />
+const StyledTextField = styled((props) => (
+  <TextField required margin="normal" fullWidth {...props} />
+))(({ theme }) => ({
+  "& .MuiInputBase-input": {
+    color: theme.palette.mode === "light" ? "white" : "black",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: theme.palette.mode === "light" ? "" : "#444444",
+    },
+    "&:hover fieldset": {
+      borderColor: theme.palette.mode === "light" ? "" : "#292929",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "blue",
+    },
+  },
+  "& .MuiInputLabel-root": {
+    color: theme.palette.mode === "light" ? "" : "#292929",
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "blue",
+  },
+  
+}));
+
+const StyledLoadingButton = styled(LoadingButton)(({ theme }) => ({
+  "&.Mui-disabled": theme.palette.mode === "dark"
+    ? {
+        backgroundColor: "#E0E0E0",
+        color: "#444444",
+      }
+    : {},
+}));
+
+// const StyledTextField = props => <TextField InputProps={{ style: { color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText}}} required margin="normal" fullWidth {...props} />
