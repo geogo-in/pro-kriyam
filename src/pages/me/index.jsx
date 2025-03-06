@@ -1,16 +1,12 @@
-import { Close, Done, Edit, Visibility, VisibilityOff } from "@mui/icons-material"
-import { Box, Container, Divider, FormControl, Grid, IconButton, Link, MenuItem, Select, TextField, Typography } from "@mui/material"
-import InputAdornment from "@mui/material/InputAdornment"
-import Table from "@mui/material/Table"
-import TableBody from "@mui/material/TableBody"
-import TableContainer from "@mui/material/TableContainer"
-import TableHead from "@mui/material/TableHead"
-import TableRow from "@mui/material/TableRow"
+import { Edit } from "@mui/icons-material"
+import { Box, Container, Divider, FormControl, Grid, IconButton, LinearProgress, Link, MenuItem, Select, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
-import { useGetRolesQuery, useGetUserIssuesQuery, useGetUserQuery, useUpdateUserMutation } from "@redux/services/userApi"
+import { useGetRolesQuery, useGetUserIssuesQuery, useGetUserQuery } from "@redux/services/userApi"
 import moment from "moment"
-import { enqueueSnackbar } from "notistack"
+import ChangePassword from "pages/memberDetails/Components/ChangePassword"
+import EditInformation from "pages/memberDetails/Components/EditInformation"
 import { StyledButton } from "pages/projectIssues"
+import CustomDialog from "pages/shared/CustomDialog"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import PrimaryRoundButton from "pages/shared/PrimaryRoundButton"
@@ -20,40 +16,22 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom"
 import { PATH_DASHBOARD } from "routes/paths"
-import { getErrorMessage } from "utils/helper"
 
 export default function Me() {
   const user = useSelector(getCurrentUser)
-  const {data: me} = useGetUserQuery(user?.id)
+  const {data: me, isLoading } = useGetUserQuery(user?.id)
   const {data: issues} = useGetUserIssuesQuery(user.id)
-  const [updateUser, { isLoading: isUpdating, error }] = useUpdateUserMutation()
   const { data: roles } = useGetRolesQuery()
   const location = useLocation()
   const navigate = useNavigate()
   
-  const [changePass, setChangePass] = useState({newPass: "", showPassword: false, isEditing: false}) 
   const [groupedIssues, setGroupedIssues] = useState({})
   const [visibleMonths, setVisibleMonths] = useState(2)
   const [filterType, setFilterType] = useState("start_date")
   const [selectedRole, setSelectedRole] = useState("")
 
-  const [isEditing, setIsEditing] = useState(false)
+  const [state, setState] = useState()
   const [editedUser, setEditedUser] = useState({ ...user })
-
-  const handleUserChange = (e) => {
-    setEditedUser({ ...editedUser, [e.target.name]: e.target.value })
-  }
-
-  const handleSave = async () => {
-    setIsEditing(false)
-    try{
-      await updateUser({ id: user.id, firstname: editedUser.firstname, lastname: editedUser.lastname, mail: editedUser.mail, login: editedUser.login }).unwrap()
-      enqueueSnackbar("Info updated successfully", {variant: "success"})
-    } catch (error) {
-      const { message } = getErrorMessage(error)
-      enqueueSnackbar(message, { variant: "error" })
-    }
-  }
 
   const filteredMemberships = selectedRole ? me?.memberships.filter(member => member.roles.some(role => role.name === selectedRole)): me?.memberships
 
@@ -67,10 +45,6 @@ export default function Me() {
   
   const handleMemberships = (project) => {
     navigate(`${PATH_DASHBOARD.projects.root}/${project}`, { state: { background: location } })
-  }
-  
-  const handleChange = (key, value) => {
-    setChangePass((prev) => ({ ...prev, [key]: value }))
   }
 
   useEffect(() => {
@@ -96,159 +70,36 @@ export default function Me() {
   const visibleMonthsList = allMonths.slice(0, visibleMonths)
   const hasMore = visibleMonths < allMonths.length
 
-  const updatePassword = async () => {
-    if (!changePass.isEditing) {
-      setChangePass((prev) => ({ ...prev, isEditing: true }))
-      return
-    }
-
-    if (changePass.newPass.length > 0) {
-      if (changePass.newPass.length < 8){
-        enqueueSnackbar("Password should be 8 characters or greater", {variant: "error"})
-        return
-      }
-      try{
-        await updateUser({ id: user.id, password: changePass.newPass }).unwrap()
-        enqueueSnackbar("Password is successfully updated", {variant: "success"})
-        setChangePass({newPass: "", showPassword: false, isEditing: false})
-      } catch (error) {
-        const { message } = getErrorMessage(error)
-        enqueueSnackbar(message, { variant: "error" })
-      }
-    }
-  }
-
+  if (isLoading) return <LinearProgress />
   return (
     <Container component={Box}  sx={{minHeight: `calc( 100vh - 64px )`, display: "flex", flexDirection: "column" }}>
-      <Box sx={{ flexDirection: { xs: "column", sm: "row" }, display: "flex", flex: 1, maxWidth: { sm: "calc(100% - 320px)" } }}>
-        <Box sx={{ px: 3, py: 4, width: { xs: "100%", sm: "320px !important" }, minWidth: "320px", display: "flex", flexDirection: "column", gap: 1 }}>
+      <Box sx={{ flexDirection: { xs: "column", sm: "row" }, display: "flex", flex: 1 }}>
+        <Box sx={{ px: 3, py: 4, width: { xs: "100%", sm: "280px !important" }, minWidth: "280px", display: "flex", flexDirection: "column", gap: 1 }}>
           <Box sx={{ display: "flex", flexDirection: { xs: "row", sm: "column" }, gap: { xs: 3, sm: 1 } }} >
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", }}>
               <MemberAvatar height={40} width={40} name={`${user.firstname} ${user.lastname}`} />
-              <Box sx={{ display: "flex", flexDirection: "row" }} >
-                <IconButton size="small" variant="contained" sx={{ mr: 1, my: 1, backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),"&:hover": { backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),}, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} onClick={() => (isEditing ? handleSave() : setIsEditing(true))}>
-                  {isEditing ? <Done/> : <Edit/>}
-                </IconButton>
-                {isEditing && (
-                  <IconButton
-                  size="small"
-                  sx={{my: 1, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }}
-                  onClick={() => setIsEditing(false)}
-                  >
-                    <Close/>
-                  </IconButton>
-                )}
-              </Box>
+              <IconButton size="small" variant="contained" sx={{ mr: 1, my: 1, backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),"&:hover": { backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),}, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} onClick={() => setState("edit_profile")} >
+                <Edit />
+              </IconButton>
             </Box>
             <Box>
               <Box>
-                {isEditing ? (
-                  <TextField 
-                    sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}, "& input": { color: theme => theme.palette.primary.defaultText } }}
-                    name="firstname" 
-                    value={editedUser.firstname} 
-                    onChange={handleUserChange} 
-                    variant="outlined" 
-                    size="small"
-                    placeholder="Enter Firstname"
-                    fullWidth
-                  />
-                ) : (
-                  <Typography variant="h5">
-                    {editedUser.firstname} {editedUser.lastname}
-                  </Typography>
-                )}
-                
-                {isEditing ? (
-                  <TextField 
-                    sx={{"& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}, "& input": { color: theme => theme.palette.primary.defaultText } }}
-                    name="lastname" 
-                    value={editedUser.lastname} 
-                    onChange={handleUserChange} 
-                    variant="outlined" 
-                    size="small"
-                    placeholder="Enter Lastname"
-                    fullWidth
-                  />
-                ) : null}
+                <Typography variant="h5">
+                  {me?.firstname} {me?.lastname}
+                </Typography>
               </Box>
-
-              {isEditing ? (
-                <TextField
-                  name="login" 
-                  value={editedUser.login} 
-                  onChange={handleUserChange} 
-                  variant="outlined" 
-                  size="small"
-                  placeholder="Enter username"
-                  sx={{ mt: 1, "& fieldset": {borderColor: theme => theme.palette.mode === "light" ? "" : "#444444"}, "& input": { color: theme => theme.palette.primary.defaultText } }}
-                  fullWidth
-                />
-              ) : (
-                <Typography variant="h6" sx={{ color: theme => theme.palette.mode === "light" ? "#64748B" : theme.palette.primary.secondaryText, fontWeight: 200 }}>
-                  {editedUser.login}
-                </Typography>
-              )}
-
-              {isEditing ? (
-                <TextField
-                  name="mail" 
-                  value={editedUser.mail} 
-                  onChange={handleUserChange} 
-                  variant="outlined" 
-                  size="small"
-                  placeholder="Enter Email"
-                  sx={{ mt: 1, "& fieldset": { borderColor: theme => theme.palette.mode === "light" ? "" : "#444444" }, "& input": { color: theme => theme.palette.primary.defaultText } }}
-                  fullWidth
-                />
-              ) : (
-                <Typography sx={{ display: { xs: "none", sm: "block" } }}>
-                  Email: {editedUser.mail}
-                </Typography>
-              )}
+              <Typography variant="h6" sx={{ color: theme => theme.palette.mode === "light" ? "#64748B" : theme.palette.primary.secondaryText, fontWeight: 200 }}>
+                {me?.login}
+              </Typography>
+              <Typography sx={{ display: { xs: "none", sm: "block" } }}>
+                {me?.mail}
+              </Typography>
             </Box>
           </Box>
           <Box>
-            {changePass.isEditing && (
-              <Box sx={{ minHeight: "44px" }}>
-                <TextField
-                  sx={{
-                    "& fieldset": { borderColor: (theme) => (theme.palette.mode === "light" ? "" : "#444444") },
-                  }}
-                  variant="outlined"
-                  fullWidth
-                  size="small"
-                  type={changePass.showPassword ? "text" : "password"}
-                  value={changePass.newPass}
-                  onChange={(e) => handleChange("newPass", e.target.value)}
-                  placeholder="Enter new password"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          sx={{ color: (theme) => (theme.palette.mode === "light" ? "" : "#64748B") }}
-                          onClick={() => handleChange("showPassword", !changePass.showPassword)}
-                          edge="end"
-                        >
-                          {changePass.showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Box>
-            )}
-            <PrimaryRoundButton variant="contained" sx={{ mr: 1, my: 1 }} onClick={updatePassword}>
-              {changePass.isEditing ? "Save" : "Change Password"}
+            <PrimaryRoundButton variant="contained" sx={{ mr: 1, my: 1 }} onClick={() => setState("change_pwd")}>
+              Change Password
             </PrimaryRoundButton>
-            {changePass.isEditing && (
-              <StyledButton
-                sx={{my: 1, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText, backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),"&:hover": { backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),},}}
-                onClick={() => setChangePass({newPass: "", showPassword: false, isEditing: false})}
-              >
-                Cancel
-              </StyledButton>
-            )}
           </Box>
         </Box>
         <Divider
@@ -258,7 +109,7 @@ export default function Me() {
             backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : "#292929"
           }}
         />
-        <Box sx={ theme => ({ px: 3, py: 4,  width: "calc( 100% - 320px )", display: "flex", flexDirection: "column", gap: 2, [theme.breakpoints.down("lg")]: { width: "100%" } })}>
+        <Box sx={ theme => ({ px: 3, py: 4,  width: "calc( 100% - 600px )", display: "flex", flexDirection: "column", gap: 2, [theme.breakpoints.down("lg")]: { width: "100%" } })}>
           <Box sx={{mb: 3, display: "flex", flexDirection: "column"}} >
             <Box sx={{ mb: 2, display: "flex", flexDirection: "row", alignItems: "center" , justifyContent: "space-between"}} >
               <Typography color={theme => theme.palette.primary.defaultText} variant="h6">
@@ -280,7 +131,7 @@ export default function Me() {
             </Box>
             <Divider/>
             <TableContainer sx={{ mt: 2}}>
-              <Table sx={{ minWidth: 750, tableLayout: "fixed" }} >
+              <Table>
                 <TableHead sx={{ backgroundColor: theme => theme.palette.background.modal, borderRadius: 0, borderBottom: "none" }}>
                   <TableRow>
                     <TableHeadCell sx={{ pl: 4 }} >Project</TableHeadCell>
@@ -401,6 +252,10 @@ export default function Me() {
           </Box>
         </Box>
       </Box>
+
+      <CustomDialog back open={Boolean(state)} onClose={() => setState(null)} >
+        {state === "edit_profile" ? <EditInformation onClose={() => setState(null)} user={user} editedUser={editedUser} setEditedUser={setEditedUser} /> : state === "change_pwd" ? <ChangePassword onClose={() => setState(null)} user={user} /> : null }
+      </CustomDialog>
     </Container>
   )
 }
