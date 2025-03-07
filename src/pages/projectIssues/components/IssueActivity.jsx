@@ -1,10 +1,11 @@
-import { Avatar, Box, Grid, Stack, Typography } from "@mui/material"
+import { TrendingFlat } from '@mui/icons-material'
+import { Box, Grid, Stack, Typography } from "@mui/material"
 import { useGetEpicQuery, useGetIssuePriorityQuery, useGetIssuesQuery } from "@redux/services/issueApi"
 import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
-import { stringAvatar } from "utils/Avatar"
+import MemberAvatar from "pages/shared/MemberAvatar"
 import { fDate } from "utils/formatDate"
 
-export default function IssueActivity({ statuses, project, user, details, created_on, id, notes, ...props }) {
+export default function IssueActivity({ tag, statuses, project, user, details, created_on, id, notes, ...props }) {
 
   const { data: epics } = useGetEpicQuery(project?.id)
   const { data: membership } = useGetProjectMembershipsQuery(project?.id)
@@ -27,7 +28,9 @@ export default function IssueActivity({ statuses, project, user, details, create
   }
 
   const activityValue = (name,value) => {
-    if (name === "assigned_to_id"){
+    if( value === null){
+      return "None"
+    } else if (name === "assigned_to_id"){
       const member = membership?.find((m) => m.user.id.toString() === value)?.user
       return member ? member.name : value
     } else if (name === "priority_id") {
@@ -48,76 +51,71 @@ export default function IssueActivity({ statuses, project, user, details, create
   }
 
   return (
-    <Stack spacing={1} direction="row" mt={1}>
-      <Box>
-        <Avatar {...stringAvatar(user?.name)} />
-      </Box>
+    <Box pb={1.5}>
+      {details.map(({ property, name, new_value, old_value }, i) => (
+        <Stack spacing={1} direction="row" mt={1} pt={0.7} mb={1}>
+          <Box>
+            <MemberAvatar name={user?.name} tooltipPosition="none" />
+          </Box>
 
-      <Grid container columns={12}>
-        <Grid item xs={9}>
-          <Typography>{user?.name}</Typography>
-        </Grid>
-        <Grid item xs={3}>
-          <Typography color="text.secondary" variant="tiny">
-            Remark:{" "}
-          </Typography>
-          <Typography color="green" variant="tiny">
-            OK
-          </Typography>
-        </Grid>
-
-        <Grid container>
-          <Grid item xs={9}>
-            {details.map(({ property, name, new_value, old_value }, i) => (
-              <Typography noWrap key={`details-${i}-${id}`} color="text.secondary" variant="tiny" component="div" lineHeight={1.2} fontWeight={300}>
-                <Box component="span" color="green">
-                  {activityName(name,property)}
-                </Box>{" "}
-                changed
-                {name === "description" ? (
-                  "."
-                ) : name === "precedes" ? (
-                  <>
-                    {old_value ? `: Task no longer precedes Issue ID- ${activityValue(name,old_value)}` : ""}{""}
-                    <Box component="span">
-                        {new_value ? `: Task set to precede Issue ID- ${activityValue(name,new_value)}` : ""}
-                    </Box>
-                  </>
-                ) : name === "relates" ? (
-                  <>
-                    {old_value ? `: Relation removed from Issue ID- ${activityValue(name,old_value)}` : ""}{""}
-                    <Box component="span">
-                        {new_value ? `: Relation added to Issue ID- ${activityValue(name,new_value)}` : ""}
-                    </Box>
-                  </>
-                ) : name === "follows" ? (
-                  <>
-                    {old_value ? `: Task no longer to follow Issue ID- ${activityValue(name,old_value)}` : ""}{""}
-                    <Box component="span">
-                        {new_value ? `: Task to follow Issue ID- ${activityValue(name,new_value)}` : ""}
-                    </Box>
-                    </>
-                ) : (
-                  <>
-                    {old_value ? ` from ${activityValue(name,old_value)}` : ""}{" "}
-                    <Box component="span" color="text.primary" den>
-                      {new_value ? ` to ${activityValue(name,new_value)}` : ""}
-                    </Box>
-                  </>
-                )}
+          <Grid container columns={12}>
+            <Grid item xs={9}>
+              <Typography>
+                {user?.name}{" "}
+                {name === "status_id" ? 
+                  <Box sx={{fontSize: "0.8rem"}} component="span" noWrap key={`activity-${id}`} color="text.secondary" fontWeight={300}>
+                    changed the {activityName(name,property)}
+                  </Box> : 
+                  <Box sx={{fontSize: "0.8rem"}} component="span" noWrap key={`activity-${id}`} color="text.secondary" fontWeight={300}>
+                    updated the {activityName(name,property)}
+                  </Box>
+                }
               </Typography>
-            ))}
-            <Typography noWrap color="text.secondary" variant="tiny" component="div" lineHeight={1.2} fontWeight={300}>
-              <Box component="span" color="text.primary" dangerouslySetInnerHTML={{ __html: notes.substring(0, 100).concat(notes.length < 100 ? "." : "...") }} />
-            </Typography>
+            </Grid>
+              {!tag ?
+              <Grid item xs={3}>
+                <Typography color="text.secondary" variant="tiny">
+                  Remark:{" "}
+                </Typography>
+                <Typography color="green" variant="tiny">
+                  OK
+                </Typography>
+              </Grid> : 
+              <Grid item xs={3}>
+                <Typography sx={{ backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} color="text.secondary" variant="tiny">
+                  Activity
+                </Typography>
+              </Grid>
+              }
+
+            <Grid container>
+              <Grid item xs={9}>
+                <Box sx={{ mt: 0.5, display: "flex", alignItems: "center", gap: 1 }} >
+                  <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 500, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
+                    {activityValue(name,old_value)}
+                  </Box>
+                  <TrendingFlat fontSize='small' />
+                  <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 500, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
+                    {activityValue(name,new_value)}
+                  </Box>
+                </Box>
+                {!tag ?
+                  <Typography noWrap color="text.secondary" variant="tiny" component="div" lineHeight={1.2} fontWeight={300}>
+                    <Box component="span" color="text.primary" dangerouslySetInnerHTML={{ __html: notes.substring(0, 100).concat(notes.length < 100 ? "." : "...") }} />
+                  </Typography> : null
+                }
+              </Grid>
+              {!tag ?
+                <Grid item xs={3}>
+                  <Typography color="text.secondary" variant="tiny">
+                    {fDate(created_on, "dd D/M, h:mm A z")}
+                  </Typography>
+                </Grid> : null
+              }
+            </Grid>
           </Grid>
-          <Grid item xs={3}>
-            <Typography color="text.secondary" variant="tiny">
-              {fDate(created_on, "dd D/M, h:mm A z")}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Stack>
+        </Stack>
+      ))}
+    </Box>
   )
 }

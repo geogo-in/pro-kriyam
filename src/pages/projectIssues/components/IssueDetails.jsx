@@ -16,6 +16,8 @@ import {
   Menu,
   MenuItem,
   IconButton as MuiIconButton,
+  Paper,
+  Select,
   Stack,
   Typography,
   styled,
@@ -29,13 +31,12 @@ import { useDeleteAttachmentMutation } from "@redux/services/redmineApi"
 import { skipToken } from "@reduxjs/toolkit/dist/query"
 
 import { getCurrentUser, isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
+import moment from "moment"
 import { useSnackbar } from "notistack"
 import { SleekSelectWithIcon } from "pages/shared/CustomTextField"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import { LineCard as Card } from "pages/shared/StyledCard"
-import { StyledTab, StyledTabs } from "pages/shared/StyledTabs"
 import { StyledTooltip } from "pages/shared/StyledTooltip"
-import TabPanel from "pages/shared/TabPanel"
 import TypoTextField from "pages/shared/TypoTextField"
 import { useRef, useState } from "react"
 import { useSelector } from "react-redux"
@@ -45,6 +46,7 @@ import { getFileTypeIcon } from "utils/getFileTypeIcon"
 import { getIssueStatusColor } from "utils/getIssueStatusColor"
 import { getErrorMessage, getRandomMessage, issueDeleteMessages } from "utils/helper"
 
+import MemberAvatar from "pages/shared/MemberAvatar"
 import { insertParam } from "utils/insertParams"
 import CreateIssueRow from "./CreateIssueRow"
 import IssueAbout from "./IssueAbout"
@@ -63,6 +65,20 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   marginTop: 4,
   minWidth: 20,
 }))
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  background: "transparent",
+  fontSize: "0.85rem",
+  boxShadow: "none",
+  width: "100%",
+  wordBreak: "break-word",
+  color: theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText,
+  "& .mention": {
+    background: "transparent",
+    color: theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText,
+  },
+}))
+
 export const StyledListItemText = styled(ListItemText)(({ theme }) => ({ ".MuiTypography-root": { fontSize: "0.80rem" } }))
 
 export default function IssueDetails({ project_id, issue_id, referrer = "issues", onClose }) {
@@ -83,6 +99,14 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   const [isUploading, setIsUploading] = useState(false)
   const [newSubtask, setNewSubtask] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
+  const [selectedActivity,setSelectedActivity] = useState("comment")
+  const [allActivity, setAllActivity] = useState(null)
+
+  if (issue && allActivity === null){
+    const allEntries = [...issue?.activity_logs, ...issue?.comments]
+    allEntries.sort((a, b) => moment(a.created_on).diff(moment(b.created_on)))
+    setAllActivity(allEntries)
+  }
 
   const inputFile = useRef()
   const subtaskRef = useRef(null)
@@ -306,18 +330,50 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
         {/* {project?.project_type?.name === "Kanban" ? <KanbanIssueAbout {...issue} project_id={project_id} /> : <IssueAbout {...issue} project_id={project_id} />} */}
         <IssueAbout {...issue} project_id={project_id} project_type={project?.project_type?.name} />
         <Box sx={{ borderTop: "1px solid rgba(229,231,235, 0.5)", pb: 2, mt: 3 }}>
-          <StyledTabs value={tab} onChange={handleTabChange}>
-            <StyledTab label="Comments" value={0} />
-            <StyledTab label="Activities" value={1} />
-          </StyledTabs>
-          <TabPanel value={tab} index={0}>
-            <IssueComments {...issue} project_id={project_id} />
-          </TabPanel>
-          <TabPanel value={tab} index={1}>
-            {issue.activity_logs?.map(activity => (
-              <IssueActivity key={activity.id} statuses={statuses} project={project} {...activity} />
-            ))}
-          </TabPanel>
+          <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 2, borderBottom: "1px solid rgba(229,231,235, 0.5)", pt: 1, pb: 1, mt: 2, mb: 1 }} >
+            <Typography
+              variant="body1"
+              gutterBottom
+              sx={{ display: "block", fontWeight: 500, color: theme => theme.palette.primary.defaultText }}>
+              Activity
+            </Typography>
+            <Select size="small" value={selectedActivity} onChange={(e) => setSelectedActivity(e.target.value)} >
+              <MenuItem value="comment">Comments</MenuItem>
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value="history">History</MenuItem>
+            </Select>
+          </Box>
+          {selectedActivity === "comment" ? <IssueComments {...issue} project_id={project_id} /> : selectedActivity === "history" ? 
+            issue.activity_logs?.map(activity => (
+              <IssueActivity tag={false} key={activity.id} statuses={statuses} project={project} {...activity} />
+            )) : allActivity.map(activity => (
+              (activity.notes !== "" || activity.details.length === 0) ? 
+              <Stack spacing={1} direction="row" mt={1} pt={0.7} mb={1}>
+                <Box>
+                  <MemberAvatar name={activity.user?.name} tooltipPosition="none" />
+                </Box>
+          
+                <Grid container columns={12}>
+                  <Grid item xs={9}>
+                    <Typography>{activity.user?.name}{" "}
+                    <Box sx={{fontSize: "0.8rem"}} component="span" noWrap key={`activity-${activity.id}`} color="text.secondary"  fontWeight={300}>
+                      added a comment
+                    </Box>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={{ backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} color="text.secondary" variant="tiny">
+                      Comment
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <StyledPaper dangerouslySetInnerHTML={{ __html: activity.notes}} />
+                  </Grid>
+                </Grid>
+              </Stack>
+                : <IssueActivity tag={true} key={activity.id} statuses={statuses} project={project} {...activity} />
+            ))
+          }
         </Box>
       </DialogContentFull>
     </Box>
