@@ -38,7 +38,7 @@ import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import { LineCard as Card } from "pages/shared/StyledCard"
 import { StyledTooltip } from "pages/shared/StyledTooltip"
 import TypoTextField from "pages/shared/TypoTextField"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { PATH_DASHBOARD } from "routes/paths"
 import { copyTextToClipboard } from "utils/Copy"
@@ -102,11 +102,13 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
   const [selectedActivity,setSelectedActivity] = useState("comment")
   const [allActivity, setAllActivity] = useState(null)
 
-  if (issue && allActivity === null){
-    const allEntries = [...issue?.activity_logs, ...issue?.comments]
-    allEntries.sort((a, b) => moment(a.created_on).diff(moment(b.created_on)))
-    setAllActivity(allEntries)
-  }
+  useEffect(() => {
+    if (issue){
+      const allEntries = [...issue?.activity_logs, ...issue?.comments]
+      allEntries.sort((a, b) => moment(a.created_on).diff(moment(b.created_on)))
+      setAllActivity(allEntries)
+    }
+  },[issue])
 
   const inputFile = useRef()
   const subtaskRef = useRef(null)
@@ -346,33 +348,33 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
           {selectedActivity === "comment" ? <IssueComments {...issue} project_id={project_id} /> : selectedActivity === "history" ? 
             issue.activity_logs?.map(activity => (
               <IssueActivity tag={false} key={activity.id} statuses={statuses} project={project} {...activity} />
-            )) : allActivity.map(activity => (
+            )) : selectedActivity === "all" ? allActivity.map(activity => (
               (activity.notes !== "" || activity.details.length === 0) ? 
-              <Stack spacing={1} direction="row" mt={1} pt={0.7} mb={1}>
-                <Box>
-                  <MemberAvatar name={activity.user?.name} tooltipPosition="none" />
-                </Box>
-          
-                <Grid container columns={12}>
-                  <Grid item xs={9}>
-                    <Typography>{activity.user?.name}{" "}
-                    <Box sx={{fontSize: "0.8rem"}} component="span" noWrap key={`activity-${activity.id}`} color="text.secondary"  fontWeight={300}>
-                      added a comment
-                    </Box>
-                    </Typography>
+                <Stack spacing={1} direction="row" mt={1} pt={0.7} mb={1}>
+                  <Box>
+                    <MemberAvatar name={activity.user?.name} tooltipPosition="none" />
+                  </Box>
+            
+                  <Grid container columns={12}>
+                    <Grid item xs={9}>
+                      <Typography>{activity.user?.name}{" "}
+                      <Box sx={{fontSize: "0.8rem"}} component="span" noWrap key={`activity-${activity.id}`} color="text.secondary"  fontWeight={300}>
+                        added a comment
+                      </Box>
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Typography sx={{ backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} color="text.secondary" variant="tiny">
+                        Comment
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <StyledPaper dangerouslySetInnerHTML={{ __html: activity.notes}} />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={3}>
-                    <Typography sx={{ backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} color="text.secondary" variant="tiny">
-                      Comment
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <StyledPaper dangerouslySetInnerHTML={{ __html: activity.notes}} />
-                  </Grid>
-                </Grid>
-              </Stack>
+                </Stack>
                 : <IssueActivity tag={true} key={activity.id} statuses={statuses} project={project} {...activity} />
-            ))
+            )) : null
           }
         </Box>
       </DialogContentFull>
