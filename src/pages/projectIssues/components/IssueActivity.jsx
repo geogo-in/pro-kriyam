@@ -63,10 +63,10 @@ export default function IssueActivity({ tag, statuses, project, user, details, c
               <Typography>
                 {user?.name}{" "}
                 {name === "status_id" ? 
-                  <Box sx={{fontSize: "0.8rem"}} component="span" noWrap key={`activity-${id}`} color="text.secondary" fontWeight={300}>
+                  <Box sx={{fontSize: "0.8rem"}} component="span" noWrap key={`activity-${id}`} color="text.secondary" fontWeight={400}>
                     changed the {activityName(name,property)}
                   </Box> : 
-                  <Box sx={{fontSize: "0.8rem"}} component="span" noWrap key={`activity-${id}`} color="text.secondary" fontWeight={300}>
+                  <Box sx={{fontSize: "0.8rem"}} component="span" noWrap key={`activity-${id}`} color="text.secondary" fontWeight={400}>
                     updated the {activityName(name,property)}
                   </Box>
                 }
@@ -91,11 +91,11 @@ export default function IssueActivity({ tag, statuses, project, user, details, c
             <Grid container>
               <Grid item xs={9}>
                 <Box sx={{ mt: 0.5, display: "flex", alignItems: "center", gap: 1 }} >
-                  <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 500, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
+                  <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 400, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
                     {activityValue(name,old_value)}
                   </Box>
                   <TrendingFlat fontSize='small' />
-                  <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 500, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
+                  <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 400, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
                     {activityValue(name,new_value)}
                   </Box>
                 </Box>
