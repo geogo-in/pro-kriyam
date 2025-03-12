@@ -1,4 +1,6 @@
 import ProjectSprintReport from "pages/projectSprintReport"
+import GroupSettings from "pages/settings/components/GroupSettings"
+import UserSettings from "pages/settings/components/UserSettings"
 import { lazy, Suspense } from "react"
 import { Navigate, useRoutes } from "react-router-dom"
 import AuthGuard from "../guards/AuthGuard"
@@ -126,8 +128,11 @@ export default function Router() {
           <AccountLayout sidebar={"settings"} />
         </AuthGuard>
       ),
-      children: [{ path: "settings", children: [{ index: true, element: <Settings /> }] }],
-    },
+      children: [
+        { path: "settings", children: [{ index: true, element: <Settings /> }] },
+        { path: "user-settings", children: [{ index: true, element: <UserSettings /> }] },
+        { path: "group-settings", children: [{ index: true, element: <GroupSettings /> }] },
+    ]},
     {
       path: "account",
       element: (

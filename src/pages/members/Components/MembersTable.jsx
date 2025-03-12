@@ -5,10 +5,12 @@ import TableBody from "@mui/material/TableBody"
 import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
+import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
 import { useUpdateUserMutation } from "@redux/services/userApi"
 import { enqueueSnackbar } from "notistack"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import { StyledTableRow, TableCell, TableHeadCell } from "pages/shared/StyledTable"
+import { useSelector } from "react-redux"
 import { Link as RouterLink } from "react-router-dom"
 import { PATH_DASHBOARD } from "routes/paths"
 import { fDate } from "utils/formatDate"
@@ -46,6 +48,7 @@ const MembersTable = ({ users, lockedUsers, registeredUsers }) => (
 export default MembersTable
 
 function ProjectItem({ locked, registered, ...row }) {
+  const user = useSelector(getCurrentUser)
   const [updateUser, { isLoading }] = useUpdateUserMutation()
   const handleUpdateUser = async () => {
     try {
@@ -85,7 +88,7 @@ function ProjectItem({ locked, registered, ...row }) {
       </TableCell>
       <TableCell>{fDate(row.created_on)}</TableCell>
       <TableCell align="center">
-        <IconButton onClick={handleUpdateUser} disabled={isLoading}>
+        <IconButton onClick={handleUpdateUser} disabled={isLoading || row.id === user?.id}>
           {isLoading ? (
             <CircularProgress size={20} />
           ) : registered ? (

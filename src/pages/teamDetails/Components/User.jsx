@@ -1,5 +1,5 @@
 import { Delete } from "@mui/icons-material"
-import { Avatar, CircularProgress, Divider, IconButton, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from "@mui/material"
+import { Avatar, Button, ButtonBase, CircularProgress, Divider, IconButton, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { useRemoveGroupUserMutation } from "@redux/services/userApi"
 import { stringAvatar } from "utils/Avatar"
@@ -26,9 +26,13 @@ export default function User({ user, team_id }) {
         </ListItemAvatar>
         <ListItemText primary={user.name} secondary={"#" + user.id} />
         <ListItemSecondaryAction>
-          <IconButton onClick={handleDeleteUser} disabled={isLoading}>
-            {isLoading ? <CircularProgress size={20} /> : <Delete />}
-          </IconButton>
+          { isLoading ? <CircularProgress size={20} /> :
+          <Button sx={{ color: "error.main" }} onClick={handleDeleteUser} >
+            Remove Member
+          </Button> }
+          {/* <IconButton onClick={handleDeleteUser} disabled={isLoading}>
+            {isLoading ? <CircularProgress size={20} /> : <Button sx={{ color: "error.main" }} >Remove Member</Button>}
+          </IconButton> */}
         </ListItemSecondaryAction>
       </ListItem>
       <Divider variant="inset" component="li" />
