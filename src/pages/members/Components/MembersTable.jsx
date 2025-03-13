@@ -1,5 +1,5 @@
 import { Lock, LockOpen } from "@mui/icons-material"
-import { CircularProgress, IconButton, Link, Tooltip, Typography } from "@mui/material"
+import { CircularProgress, IconButton, Tooltip, Typography } from "@mui/material"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
 import TableContainer from "@mui/material/TableContainer"
@@ -8,13 +8,14 @@ import TableRow from "@mui/material/TableRow"
 import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
 import { useUpdateUserMutation } from "@redux/services/userApi"
 import { enqueueSnackbar } from "notistack"
+import CustomDialog from "pages/shared/CustomDialog"
 import MemberAvatar from "pages/shared/MemberAvatar"
 import { StyledTableRow, TableCell, TableHeadCell } from "pages/shared/StyledTable"
+import { useState } from "react"
 import { useSelector } from "react-redux"
-import { Link as RouterLink } from "react-router-dom"
-import { PATH_DASHBOARD } from "routes/paths"
 import { fDate } from "utils/formatDate"
 import { getErrorMessage } from "utils/helper"
+import CreateMember from "./CreateMember"
 
 const MembersTable = ({ users, lockedUsers, registeredUsers }) => (
   <TableContainer sx={{ borderRadius: 0 }}>
@@ -50,6 +51,10 @@ export default MembersTable
 function ProjectItem({ locked, registered, ...row }) {
   const user = useSelector(getCurrentUser)
   const [updateUser, { isLoading }] = useUpdateUserMutation()
+  const [state,setState] = useState()
+  const handleClose = () => {
+    setState()
+  }
   const handleUpdateUser = async () => {
     try {
       if (!window.confirm("Are you sure?")) return
@@ -66,12 +71,12 @@ function ProjectItem({ locked, registered, ...row }) {
         <MemberAvatar name={`${row.firstname} ${row.lastname}`} height={34} width={34} />
       </TableCell>
       <TableCell component="th">
-        <Typography sx={{ lineHeight: "1.1rem", "& span": { color: theme => theme.palette.primary.defaultText }, "& :hover": { color: theme => theme.palette.primary.main } }}>
-          <Link component={RouterLink} to={`${PATH_DASHBOARD.members}/${row.id}`}>
-            <span style={{ fontSize: "0.9rem", fontWeight: 500, display: "block" }}>
-              {row.firstname} {row.lastname}
-            </span>
-          </Link>
+        <Typography onClick={() => setState(row) } sx={{ lineHeight: "1.1rem", "& span": { color: theme => theme.palette.primary.defaultText }, "& :hover": { color: theme => theme.palette.primary.main } }}>
+          {/* <Link component={RouterLink} to={`${PATH_DASHBOARD.members}/${row.id}`}> */}
+          <span style={{ fontSize: "0.9rem", fontWeight: 500, display: "block" }}>
+            {row.firstname} {row.lastname}
+          </span>
+          {/* </Link> */}
         </Typography>
         <Typography variant="caption" sx={{ color: theme => theme.palette.primary.tertiaryText }}>
           {row.login}
@@ -104,6 +109,11 @@ function ProjectItem({ locked, registered, ...row }) {
           )}
         </IconButton>
       </TableCell>
+      
+      <CustomDialog back open={Boolean(state)} onClose={handleClose}>
+        <CreateMember user={state} onClose={handleClose} />
+      </CustomDialog>
+
     </StyledTableRow>
   )
 }

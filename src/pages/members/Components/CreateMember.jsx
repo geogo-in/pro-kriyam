@@ -35,6 +35,7 @@ export default function CreateMember({ onClose, user }) {
       if (user) {
         await updateUser({ id: user.id, ...state }).unwrap()
         enqueueSnackbar("User is successfully updated", { variant: "success" })
+        onClose()
       } else {
         const payload = await createUser(state).unwrap()
         enqueueSnackbar(payload.message, { variant: "success" })
@@ -56,11 +57,15 @@ export default function CreateMember({ onClose, user }) {
   const params = { fullWidth: true, required: true, onChange: handleChange, variant: "outlined", margin: "dense", style: { minWidth: 300 } }
   return (
     <Box component="form" onSubmit={handleSubmit}>
-      {!user && (
+      {!user ? (
         <DialogHeader>
           <Typography variant="h6">Create new user</Typography>
         </DialogHeader>
-      )}
+      ) :
+      <DialogHeader>
+        <Typography variant="h6">Edit Member: {user.firstname} {user.lastname}</Typography>
+      </DialogHeader>
+      }
       <DialogContent>
         <Box>
           <Box display="flex">
