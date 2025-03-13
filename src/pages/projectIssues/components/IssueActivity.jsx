@@ -53,11 +53,10 @@ export default function IssueActivity({ tag, statuses, project, user, details, c
   return (
     <Box pb={1.5}>
       {details.map(({ property, name, new_value, old_value }, i) => (
-        <Stack spacing={1} direction="row" mt={1} pt={0.7} mb={1}>
+        <Stack spacing={1} direction="row" mt={1} pt={0.7}>
           <Box>
             <MemberAvatar name={user?.name} tooltipPosition="none" />
           </Box>
-
           <Grid container columns={12}>
             <Grid item xs={9}>
               <Typography>
@@ -72,46 +71,21 @@ export default function IssueActivity({ tag, statuses, project, user, details, c
                 }
               </Typography>
             </Grid>
-              {!tag ?
-              <Grid item xs={3}>
-                <Typography color="text.secondary" variant="tiny">
-                  Remark:{" "}
-                </Typography>
-                <Typography color="green" variant="tiny">
-                  OK
-                </Typography>
-              </Grid> : 
-              <Grid item xs={3}>
-                <Typography sx={{ backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} color="text.secondary" variant="tiny">
-                  Activity
-                </Typography>
-              </Grid>
-              }
-
+            <Grid item xs={3}>
+              <Typography color="text.secondary" variant="tiny">
+                {fDate(created_on, "dd D/M, h:mm A z")}
+              </Typography>
+            </Grid>
             <Grid container>
-              <Grid item xs={9}>
-                <Box sx={{ mt: 0.5, display: "flex", alignItems: "center", gap: 1 }} >
-                  <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 400, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
-                    {activityValue(name,old_value)}
-                  </Box>
-                  <TrendingFlat fontSize='small' />
-                  <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 400, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
-                    {activityValue(name,new_value)}
-                  </Box>
+              <Box sx={{ mt: 0.5, display: "flex", alignItems: "center", gap: 1 }} >
+                <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 400, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
+                  {activityValue(name,old_value)}
                 </Box>
-                {!tag ?
-                  <Typography noWrap color="text.secondary" variant="tiny" component="div" lineHeight={1.2} fontWeight={300}>
-                    <Box component="span" color="text.primary" dangerouslySetInnerHTML={{ __html: notes.substring(0, 100).concat(notes.length < 100 ? "." : "...") }} />
-                  </Typography> : null
-                }
-              </Grid>
-              {!tag ?
-                <Grid item xs={3}>
-                  <Typography color="text.secondary" variant="tiny">
-                    {fDate(created_on, "dd D/M, h:mm A z")}
-                  </Typography>
-                </Grid> : null
-              }
+                <TrendingFlat fontSize='small' />
+                <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 400, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
+                  {activityValue(name,new_value)}
+                </Box>
+              </Box>
             </Grid>
           </Grid>
         </Stack>

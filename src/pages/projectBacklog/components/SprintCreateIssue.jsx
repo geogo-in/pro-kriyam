@@ -1,12 +1,10 @@
 import { Add, Clear } from "@mui/icons-material"
-import { Box, Button, CircularProgress, IconButton, InputBase, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Tooltip } from "@mui/material"
-import { useCreateIssuesMutation, useGetIssueTypeQuery } from "@redux/services/issueApi"
+import { Box, Button, CircularProgress, IconButton, InputBase, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, styled, Tooltip } from "@mui/material"
+import { useCreateIssuesMutation, useGetIssuePriorityQuery, useGetIssueTypeQuery } from "@redux/services/issueApi"
 import { useGetProjectByIdQuery } from "@redux/services/projectApi"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-
-import { styled } from "@mui/material"
 
 export const StickyContainer = styled(Box)(({ theme }) => ({
   // width: "900px",
@@ -42,6 +40,7 @@ export default function SprintCreateIssue({ sprint_id, parent_issue_id, project_
   const backlogContainerWidth = useSelector(state => state.projectUi.backlogContainerWidth)
   const backlogTableWidth = useSelector(state => state.projectUi.backlogTableWidth)
   const { data: project } = useGetProjectByIdQuery(project_id)
+  const { data: priorities } = useGetIssuePriorityQuery()
 
   useEffect(() => {
     const tracker = trackers?.[0]
@@ -64,6 +63,7 @@ export default function SprintCreateIssue({ sprint_id, parent_issue_id, project_
         sprint_id: sprint_id !== "backlog" ? sprint_id : undefined,
         subject: state.subject,
         tracker_id: state.tracker_id,
+        priority_id: priorities.find(p => p.name.toLowerCase() === "normal")?.id,
       }).unwrap()
       handleEditable()
     } catch (r) {

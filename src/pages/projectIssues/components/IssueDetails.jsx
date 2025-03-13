@@ -47,6 +47,7 @@ import { getIssueStatusColor } from "utils/getIssueStatusColor"
 import { getErrorMessage, getRandomMessage, issueDeleteMessages } from "utils/helper"
 
 import MemberAvatar from "pages/shared/MemberAvatar"
+import { fDate } from "utils/formatDate"
 import { insertParam } from "utils/insertParams"
 import CreateIssueRow from "./CreateIssueRow"
 import IssueAbout from "./IssueAbout"
@@ -66,16 +67,33 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   minWidth: 20,
 }))
 
+// const StyledPaper = styled(Paper)(({ theme }) => ({
+//   background: "transparent",
+//   fontSize: "0.85rem",
+//   boxShadow: "none",
+//   width: "100%",
+//   wordBreak: "break-word",
+//   color: theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText,
+//   "& .mention": {
+//     background: "transparent",
+//     color: theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText,
+//   },
+// }))
+
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  background: "transparent",
+  padding: "8px 16px",
+  border: theme.palette.mode === "light" ? "1px solid #E4EEF5" : `1px solid ${theme.palette.background.default}`,
+  background: theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.default,
   fontSize: "0.85rem",
-  boxShadow: "none",
   width: "100%",
   wordBreak: "break-word",
+  borderRadius: "0 20px 20px 20px",
   color: theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText,
   "& .mention": {
-    background: "transparent",
+    background: theme.palette.primary.main,
     color: theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText,
+    borderRadius: 15,
+    padding: 3,
   },
 }))
 
@@ -356,7 +374,7 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
                   </Box>
             
                   <Grid container columns={12}>
-                    <Grid item xs={9}>
+                    <Grid sx={{ mb: 0.5 }} item xs={9}>
                       <Typography>{activity.user?.name}{" "}
                       <Box sx={{fontSize: "0.8rem"}} component="span" noWrap key={`activity-${activity.id}`} color="text.secondary"  fontWeight={300}>
                         added a comment
@@ -364,12 +382,12 @@ export default function IssueDetails({ project_id, issue_id, referrer = "issues"
                       </Typography>
                     </Grid>
                     <Grid item xs={3}>
-                      <Typography sx={{ backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} color="text.secondary" variant="tiny">
-                        Comment
+                      <Typography color="text.secondary" variant="tiny">
+                        {fDate(activity?.created_on, "dd D/M, h:mm A z")}
                       </Typography>
                     </Grid>
-                    <Grid item xs={3}>
-                      <StyledPaper dangerouslySetInnerHTML={{ __html: activity.notes}} />
+                    <Grid item xs={5}>
+                      <StyledPaper variant="outlined" dangerouslySetInnerHTML={{ __html: activity.notes}} />
                     </Grid>
                   </Grid>
                 </Stack>
