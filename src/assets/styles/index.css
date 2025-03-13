@@ -113,7 +113,9 @@
 }
 .dx-gantt .dx-gantt-taskWrapper .dx-gantt-task .dx-gantt-tPrg {
   border-radius: 0 4px 4px 0 !important;
-  background-color: rgba(255, 255, 255, 0.5) !important;
+  /* background-color: rgba(255, 255, 255, 0.5) !important; */
+  /* background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 10px, rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0.1) 20px); */
+  background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6) 10px, rgba(255, 255, 255, 0.3) 10px, rgba(255, 255, 255, 0.3) 20px);
   height: 16px !important;
   top: 4px !important;
 }
@@ -122,7 +124,8 @@
   background-color: #ffcf37 !important;
 }
 .dx-gantt .dx-gantt-taskWrapper .dx-gantt-task .dx-gantt-titleIn {
-  color: #865e17 !important;
+  /* color: #865e17 !important; */
+  color: transparent !important;
 }
 .dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent {
   background-color: #42ccff !important;
@@ -138,7 +141,8 @@
   border-top-color: #42ccff !important;
 }
 .dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent .dx-gantt-titleIn {
-  color: #21667f !important;
+  /* color: #21667f !important;  */
+  color: transparent !important;
   /* background-color: #0b6ffc !important; */
 }
 
