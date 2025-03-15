@@ -1,11 +1,12 @@
 import { Edit } from "@mui/icons-material"
-import { Box, Container, Divider, FormControl, Grid, IconButton, LinearProgress, Link, MenuItem, Select, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { Box, Container, Divider, FormControl, Grid, IconButton, LinearProgress, MenuItem, Select, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
 import { useGetRolesQuery, useGetUserIssuesQuery, useGetUserQuery } from "@redux/services/userApi"
 import moment from "moment"
 import ChangePassword from "pages/memberDetails/Components/ChangePassword"
 import EditInformation from "pages/memberDetails/Components/EditInformation"
 import { StyledButton } from "pages/projectIssues"
+import EditGroup from "pages/settings/components/EditGroup"
 import CustomDialog from "pages/shared/CustomDialog"
 import IssueTypeIcon from "pages/shared/IssueTypeIcon"
 import MemberAvatar from "pages/shared/MemberAvatar"
@@ -14,7 +15,7 @@ import { Card } from "pages/shared/StyledCard"
 import { StyledTableRow, TableCell, TableHeadCell } from "pages/shared/StyledTable"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { PATH_DASHBOARD } from "routes/paths"
 
 export default function Me() {
@@ -165,16 +166,14 @@ export default function Me() {
             <Grid container spacing={2} sx={{ mt: 2 }}>
               {me?.groups.map(team => (
                 <Grid item lg={4} key={team.id}>
-                  <Link component={RouterLink} to={`${PATH_DASHBOARD.members}/teams/${team.id}`}>
-                    <Card sx={{ ":hover": { cursor: "pointer" }, background: theme => theme.palette.mode === "light" ? "" : theme.palette.background.modal }}>
-                      <Box sx={{ display: "flex", alignItems: "center", py: 1.5, px: 2 }}>
-                        <MemberAvatar name={`${team.name}`} height={34} width={34} />
-                        <Typography variant="subtitle1" sx={{ ml: 2, color: theme => theme.palette.primary.secondaryText }}>
-                          {team.name}
-                        </Typography>
-                      </Box>
-                    </Card>
-                  </Link>
+                  <Card onClick={() => setState(team.id)} sx={{ ":hover": { cursor: "pointer" }, background: theme => theme.palette.mode === "light" ? "" : theme.palette.background.modal }}>
+                    <Box sx={{ display: "flex", alignItems: "center", py: 1.5, px: 2 }}>
+                      <MemberAvatar name={`${team.name}`} height={34} width={34} />
+                      <Typography variant="subtitle1" sx={{ ml: 2, color: theme => theme.palette.primary.secondaryText }}>
+                        {team.name}
+                      </Typography>
+                    </Box>
+                  </Card>
                 </Grid>
               ))}
             </Grid>
@@ -254,7 +253,7 @@ export default function Me() {
       </Box>
 
       <CustomDialog back open={Boolean(state)} onClose={() => setState(null)} >
-        {state === "edit_profile" ? <EditInformation onClose={() => setState(null)} user={user} editedUser={editedUser} setEditedUser={setEditedUser} /> : state === "change_pwd" ? <ChangePassword onClose={() => setState(null)} user={user} /> : null }
+        {state === "edit_profile" ? <EditInformation onClose={() => setState(null)} user={user} editedUser={editedUser} setEditedUser={setEditedUser} /> : state === "change_pwd" ? <ChangePassword onClose={() => setState(null)} user={user} /> : state !== null ? <EditGroup team_id={state} onClose={() => setState(null)} /> : null }
       </CustomDialog>
     </Container>
   )
