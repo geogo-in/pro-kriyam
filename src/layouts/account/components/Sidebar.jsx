@@ -5,7 +5,7 @@ import MembersActiveIcon from "@mui/icons-material/People"
 import MembersIcon from "@mui/icons-material/PeopleOutline"
 // import SettingsActiveIcon from "@mui/icons-material/Settings"
 // import SettingsIcon from "@mui/icons-material/SettingsOutlined"
-import { Tune } from "@mui/icons-material"
+import { Group, Person, Tune } from "@mui/icons-material"
 import ProjectActiveIcon from "@mui/icons-material/Widgets"
 import ProjectIcon from "@mui/icons-material/WidgetsOutlined"
 import { ListItemText } from "@mui/material"
@@ -32,6 +32,8 @@ const Sidebar = ({ sidebar, mobileOpen, setMobileOpen }) => {
     switch (sidebar) {
       case "settings": {
         links.push({ icon: <Tune />, label: "General Settings", to: "/account/settings" })
+        links.push({ icon: <Person />, label: "Users", to: "/account/user-settings" })
+        links.push({ icon: <Group />, label: "Groups", to: "/account/group-settings" })
         break
       }
 
