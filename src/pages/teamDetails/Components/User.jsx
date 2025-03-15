@@ -1,11 +1,13 @@
-import { Delete } from "@mui/icons-material"
-import { Avatar, CircularProgress, Divider, IconButton, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from "@mui/material"
-import { useSnackbar } from "notistack"
+import { Avatar, Button, CircularProgress, Divider, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from "@mui/material"
+import { isAdmin } from "@redux/reducerSlices/user/userAuthSlice"
 import { useRemoveGroupUserMutation } from "@redux/services/userApi"
+import { useSnackbar } from "notistack"
+import { useSelector } from "react-redux"
 import { stringAvatar } from "utils/Avatar"
 import { getErrorMessage } from "utils/helper"
 
 export default function User({ user, team_id }) {
+  const Admin = useSelector(isAdmin)
   const [removeGroupUser, { isLoading }] = useRemoveGroupUserMutation()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -26,9 +28,15 @@ export default function User({ user, team_id }) {
         </ListItemAvatar>
         <ListItemText primary={user.name} secondary={"#" + user.id} />
         <ListItemSecondaryAction>
-          <IconButton onClick={handleDeleteUser} disabled={isLoading}>
-            {isLoading ? <CircularProgress size={20} /> : <Delete />}
-          </IconButton>
+          { isLoading ? <CircularProgress size={20} /> :
+          Admin && (
+            <Button sx={{ color: "error.main" }} onClick={handleDeleteUser} >
+              Remove Member
+            </Button>
+          )}
+          {/* <IconButton onClick={handleDeleteUser} disabled={isLoading}>
+            {isLoading ? <CircularProgress size={20} /> : <Button sx={{ color: "error.main" }} >Remove Member</Button>}
+          </IconButton> */}
         </ListItemSecondaryAction>
       </ListItem>
       <Divider variant="inset" component="li" />
