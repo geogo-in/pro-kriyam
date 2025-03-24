@@ -4,7 +4,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { LoadingButton } from "@mui/lab"
 import { Box, Button, IconButton, Paper, Stack, Typography, styled } from "@mui/material"
 import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
-import { useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useUpdateIssueCommentsMutation, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
 import moment from "moment"
 import { useSnackbar } from "notistack"
@@ -33,6 +33,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 
 const IssueComments = ({ project_id, comments, sprint, author, priority, assigned_to, category, created_on, updated_on, ...issue }) => {
   const [updateTask, { isLoading }] = useUpdateIssuesMutation()
+  const [updateComments] = useUpdateIssueCommentsMutation()
   const { data } = useGetProjectMembershipsQuery(project_id)
   const { enqueueSnackbar } = useSnackbar()
   const [comment, setComment] = useState("")
@@ -43,7 +44,7 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
   const handleIssueUpdate = async (data) => {
     try {
       if (editingCommentId !== null){
-        await updateTask({ id: issue.id, comments_id: editingCommentId, ...data }).unwrap()
+        await updateComments({ id: issue.id, comment_id: editingCommentId, comment: data.notes }).unwrap()
         setEditingCommentId(null)
       }else{
         await updateTask({ id: issue.id, ...data }).unwrap()
