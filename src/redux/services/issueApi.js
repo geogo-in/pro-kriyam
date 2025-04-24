@@ -44,7 +44,16 @@ const issueApi = redmineApi.injectEndpoints({
       },
       invalidatesTags: (result, error, arg) => ["Issues", "Issue", "Backlog", "ActiveSprint"],
     }),
-
+    createIssueRelation: builder.mutation({
+      query: ({ id, invalidatesTags, ...relation }) => {
+        return { url: `/issues/${id}/relations.json`, method: "POST", body: relation }
+      },
+      invalidatesTags: result => (result ? ["Issues"] : []),
+    }),
+    deleteIssueRelation: builder.mutation({
+      query: id => ({ url: `/relations/${id}.json`, method: "DELETE" }),
+      invalidatesTags: result => (result ? ["Issues"] : []),
+    }),
     // Issues Statuses
     getProjectIssuesStatuses: builder.query({
       query: project_id => ({ url: `/api/projects/${project_id}/project_issue_statuses.json` }),
@@ -102,6 +111,8 @@ export const {
   useCreateIssuesMutation,
   useUpdateIssuesMutation,
   useDeleteIssueMutation,
+  useCreateIssueRelationMutation,
+  useDeleteIssueRelationMutation,
 
   useGetProjectIssuesStatusesQuery,
   useCreateProjectIssueStatusMutation,
