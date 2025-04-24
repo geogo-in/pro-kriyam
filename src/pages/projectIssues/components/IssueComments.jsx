@@ -4,7 +4,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { LoadingButton } from "@mui/lab"
 import { Box, Button, IconButton, Paper, Stack, Typography, styled } from "@mui/material"
 import { getCurrentUser } from "@redux/reducerSlices/user/userAuthSlice"
-import { useUpdateIssuesMutation } from "@redux/services/issueApi"
+import { useUpdateIssueCommentsMutation, useUpdateIssuesMutation } from "@redux/services/issueApi"
 import { useGetProjectMembershipsQuery } from "@redux/services/projectApi"
 import moment from "moment"
 import { useSnackbar } from "notistack"
@@ -34,6 +34,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 
 const IssueComments = ({ project_id, comments, sprint, author, priority, assigned_to, category, created_on, updated_on, ...issue }) => {
   const [updateTask, { isLoading }] = useUpdateIssuesMutation()
+  const [updateComments] = useUpdateIssueCommentsMutation()
   const { data } = useGetProjectMembershipsQuery(project_id)
   const { enqueueSnackbar } = useSnackbar()
   const [comment, setComment] = useState("")
@@ -44,7 +45,7 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
   const handleIssueUpdate = async (data) => {
     try {
       if (editingCommentId !== null){
-        await updateTask({ id: issue.id, comments_id: editingCommentId, ...data }).unwrap()
+        await updateComments({ id: issue.id, comment_id: editingCommentId, comment: data.notes }).unwrap()
         setEditingCommentId(null)
       }else{
         await updateTask({ id: issue.id, ...data }).unwrap()
@@ -65,7 +66,7 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
               <MemberAvatar name={user?.name} tooltipPosition="none" />
             </Box>
             <Box>
-              <Box sx={{ display: "flex", mb: 0.5 }}>
+              <Box sx={{ display: "flex", mb: 0.5, alignItems: "center" }}>
                 <Typography sx={{ fontWeight: 500, fontSize: "0.8rem", color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText }}>{user?.name}</Typography>
                 <Typography variant="caption" pl={1} component="div" sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.tertiaryText : "#979BA6" }}>
                   {fDateTime(created_on)}
@@ -73,7 +74,7 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
                 {currentUser.id === user?.id && editingCommentId !== id && (
                   <Box >  
                     <IconButton disabled={moment().diff(moment(created_on), "hours") > 12} onClick={() =>  (setEditingCommentId(id), setEditedText(notes))}>
-                      {editingCommentId === id ? <CheckIcon fontSize="small" /> : <EditOutlinedIcon fontSize="small" />}
+                      {editingCommentId === id ? <CheckIcon fontSize="small" /> : <EditOutlinedIcon sx={{ color: theme => (moment().diff(moment(created_on), "hours") > 12) ? "" : theme.palette.mode === "light" ? "" : theme.palette.primary.secondaryText }} fontSize="small" />}
                     </IconButton>
                   </Box>
                 )}
@@ -84,7 +85,7 @@ const IssueComments = ({ project_id, comments, sprint, author, priority, assigne
                     <Editor value={editedText} onChange={e => setEditedText(e)} style={{ height: 250, width: "100%" }} people={data?.filter(d => d.user).map(({ user }) => ({ id: user.id, value: user.name }))} />
                   </Box>
                   <Box position={"absolute"} bottom={-40} right={0} zIndex={100000}>
-                    <Button onClick={() => {setEditingCommentId(null), setEditedText(null)}} sx={{ color: theme => theme.palette.primary.defaultText, minWidth: 48, background: "#f1f5f9", ml: 1 }}>
+                    <Button onClick={() => {setEditingCommentId(null), setEditedText(null)}} sx={{ color: theme => theme.palette.mode === "light" ? theme.palette.primary.defaultText : "#f1f5f9", minWidth: 48, background: theme => theme.palette.mode === "light" ? "#f1f5f9" : "", ml: 1 }}>
                       <Close />
                     </Button>
                     <Button variant="contained" onClick={() => handleIssueUpdate({ notes: editedText })} sx={{ minWidth: 48, ml: 1, boxShadow: "none" }}>

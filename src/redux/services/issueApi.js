@@ -53,7 +53,12 @@ const issueApi = redmineApi.injectEndpoints({
     deleteIssueRelation: builder.mutation({
       query: id => ({ url: `/relations/${id}.json`, method: "DELETE" }),
       invalidatesTags: result => (result ? ["Issues"] : []),
+    }),    
+    updateIssueComments: builder.mutation({
+      query: ({ id, comment_id, comment }) => ({ url: `api/issues/${id}/edit_comment/${comment_id}`, method: "PATCH", body: { notes: comment } }),
+      invalidatesTags: result => ["Issue"],
     }),
+
     // Issues Statuses
     getProjectIssuesStatuses: builder.query({
       query: project_id => ({ url: `/api/projects/${project_id}/project_issue_statuses.json` }),
@@ -110,6 +115,7 @@ export const {
   useGetIssueQuery,
   useCreateIssuesMutation,
   useUpdateIssuesMutation,
+  useUpdateIssueCommentsMutation,
   useDeleteIssueMutation,
   useCreateIssueRelationMutation,
   useDeleteIssueRelationMutation,
