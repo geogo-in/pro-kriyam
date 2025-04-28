@@ -45,6 +45,10 @@ export default function IssueActivity({ tag, statuses, project, user, details, c
     } else if (name === "category_id") {
       const epic = epics?.find((e) => e.id.toString() === value)
       return epic ? epic.name : value
+    } else if (name === "description") {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(value, 'text/html');
+      return doc.body.textContent || "None";
     } else {
       return value
     }
@@ -78,11 +82,11 @@ export default function IssueActivity({ tag, statuses, project, user, details, c
             </Grid>
             <Grid container>
               <Box sx={{ mt: 0.5, display: "flex", alignItems: "center", gap: 1 }} >
-                <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 400, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
+                <Box component="span" sx={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: "150px", fontWeight: old_value === null ? 300 : 400, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
                   {activityValue(name,old_value)}
                 </Box>
                 <TrendingFlat fontSize='small' />
-                <Box component="span" sx={{ fontWeight: old_value === null ? 300 : 400, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
+                <Box component="span" sx={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: "150px", fontWeight: new_value === null ? 300 : 400, fontSize: "0.8rem", backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : theme.palette.background.default, px: 1, py: 0.5, borderRadius: 0.5, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} >
                   {activityValue(name,new_value)}
                 </Box>
               </Box>
