@@ -96,8 +96,15 @@ const StyledEditorBox = styled(Box)(({ theme }) => ({
     height: "150px !important",
   },
   "& .ql-container": {
+    height: "100% !important",
     border: theme.palette.mode === "light" ? "1px solid #d2dae5 !important" : "1px solid #444444 !important",
     borderRadius: "4px",
+    display: "flex",
+    flexDirection: "column",
+  },
+  "& .ql-editor": {
+    flex: 1,
+    overflowY: "auto",
   },
   "& .ql-container.on-focus": {
     border: "1px solid #2563eb !important",
