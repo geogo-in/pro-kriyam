@@ -102,7 +102,7 @@ const StyledTextField = styled((props) => (
   <TextField required margin="normal" fullWidth {...props} />
 ))(({ theme }) => ({
   "& .MuiInputBase-input": {
-    color: theme.palette.mode === "light" ? "white" : "black",
+    color: theme.palette.mode === "light" ? "" : "black",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
