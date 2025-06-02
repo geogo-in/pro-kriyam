@@ -30,7 +30,7 @@ const currentDate = new Date()
 
 export default function GanttChart({ projectId: project_id }) {
   const { data: project, isLoading: projectLoading } = useGetProjectByIdQuery(project_id)
-  const { data, isLoading, error } = useGetIssuesQuery({ project_id: project?.id, include: "relations" }, { refetchOnMountOrArgChange: true, skip: !project?.id })
+  const { data, isLoading, error } = useGetIssuesQuery({ project_id: project?.id, include: "relations", limit: 1000 }, { refetchOnMountOrArgChange: true, skip: !project?.id })
   const [updateTask] = useUpdateIssuesMutation()
   const [createIssueRelation] = useCreateIssueRelationMutation()
   const [deleteIssueRelation] = useDeleteIssueRelationMutation()
