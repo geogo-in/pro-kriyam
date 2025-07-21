@@ -73,13 +73,23 @@ export default function Me() {
 
   if (isLoading) return <LinearProgress />
   return (
-    <Container component={Box}  sx={{minHeight: `calc( 100vh - 64px )`, display: "flex", flexDirection: "column" }}>
+    <Container component={Box} sx={{ minHeight: `calc( 100vh - 64px )`, display: "flex", flexDirection: "column" }}>
       <Box sx={{ flexDirection: { xs: "column", sm: "row" }, display: "flex", flex: 1 }}>
         <Box sx={{ px: 3, py: 4, width: { xs: "100%", sm: "280px !important" }, minWidth: "280px", display: "flex", flexDirection: "column", gap: 1 }}>
-          <Box sx={{ display: "flex", flexDirection: { xs: "row", sm: "column" }, gap: { xs: 3, sm: 1 } }} >
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", }}>
+          <Box sx={{ display: "flex", flexDirection: { xs: "row", sm: "column" }, gap: { xs: 3, sm: 1 } }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <MemberAvatar height={40} width={40} name={`${user.firstname} ${user.lastname}`} />
-              <IconButton size="small" variant="contained" sx={{ mr: 1, my: 1, backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),"&:hover": { backgroundColor: (theme) => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),}, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} onClick={() => setState("edit_profile")} >
+              <IconButton
+                size="small"
+                variant="contained"
+                sx={{
+                  mr: 1,
+                  my: 1,
+                  backgroundColor: theme => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),
+                  "&:hover": { backgroundColor: theme => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal) },
+                  color: theme => (theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText),
+                }}
+                onClick={() => setState("edit_profile")}>
                 <Edit />
               </IconButton>
             </Box>
@@ -89,12 +99,10 @@ export default function Me() {
                   {me?.firstname} {me?.lastname}
                 </Typography>
               </Box>
-              <Typography variant="h6" sx={{ color: theme => theme.palette.mode === "light" ? "#64748B" : theme.palette.primary.secondaryText, fontWeight: 200 }}>
+              <Typography variant="h6" sx={{ color: theme => (theme.palette.mode === "light" ? "#64748B" : theme.palette.primary.secondaryText), fontWeight: 200 }}>
                 {me?.login}
               </Typography>
-              <Typography sx={{ display: { xs: "none", sm: "block" } }}>
-                {me?.mail}
-              </Typography>
+              <Typography sx={{ display: { xs: "none", sm: "block" } }}>{me?.mail}</Typography>
             </Box>
           </Box>
           <Box>
@@ -107,20 +115,20 @@ export default function Me() {
           sx={{
             width: { xs: "100%", sm: "1px" },
             height: { xs: "1px", sm: "auto" },
-            backgroundColor: theme => theme.palette.mode === "light" ? "#F1F5F9" : "#292929"
+            backgroundColor: theme => (theme.palette.mode === "light" ? "#F1F5F9" : "#292929"),
           }}
         />
-        <Box sx={ theme => ({ px: 3, py: 4,  width: "calc( 100% - 600px )", display: "flex", flexDirection: "column", gap: 2, [theme.breakpoints.down("lg")]: { width: "100%" } })}>
-          <Box sx={{mb: 3, display: "flex", flexDirection: "column"}} >
-            <Box sx={{ mb: 2, display: "flex", flexDirection: "row", alignItems: "center" , justifyContent: "space-between"}} >
+        <Box sx={theme => ({ px: 3, py: 4, width: "calc( 100% - 600px )", display: "flex", flexDirection: "column", gap: 2, [theme.breakpoints.down("lg")]: { width: "100%" } })}>
+          <Box sx={{ mb: 3, display: "flex", flexDirection: "column" }}>
+            <Box sx={{ mb: 2, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
               <Typography color={theme => theme.palette.primary.defaultText} variant="h6">
                 Projects
               </Typography>
               <FormControl size="small" sx={{ minWidth: 120, display: "flex", flexDirection: "row", alignItems: "center", gap: 1 }}>
                 <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
-                  Filter by: 
+                  Filter by:
                 </Typography>
-                <Select value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)} displayEmpty>
+                <Select value={selectedRole} onChange={e => setSelectedRole(e.target.value)} displayEmpty>
                   <MenuItem value="">All Roles</MenuItem>
                   {roles?.roles?.map(role => (
                     <MenuItem key={role.id} value={role.name}>
@@ -130,43 +138,52 @@ export default function Me() {
                 </Select>
               </FormControl>
             </Box>
-            <Divider/>
-            <TableContainer sx={{ mt: 2}}>
+            <Divider />
+            <TableContainer sx={{ mt: 2 }}>
               <Table>
                 <TableHead sx={{ backgroundColor: theme => theme.palette.background.modal, borderRadius: 0, borderBottom: "none" }}>
                   <TableRow>
-                    <TableHeadCell sx={{ pl: 4 }} >Project</TableHeadCell>
+                    <TableHeadCell sx={{ pl: 4 }}>Project</TableHeadCell>
                     <TableHeadCell>Role</TableHeadCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                {filteredMemberships?.map((member) => (
-                  <StyledTableRow key={member.id} hover className="button" sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                    <TableCell onClick={() => handleMemberships(member.project.id)} sx={{ pl: 4, py: 2, fontSize: "0.9rem", fontWeight: 500, "&:span": { color: theme => theme.palette.primary.defaultText }, "&:hover": { color: theme => theme.palette.mode === "light" ? "#000" : theme.palette.primary.main } }}>
-                      {member.project.name}
-                    </TableCell>
-                    <TableCell>
-                    {member.roles.map((role) => (
-                      <div key={role.id}>
-                      {role.name}
-                      </div>
-                    ))}
-                    </TableCell>
-                  </StyledTableRow>
-                ))}
+                  {filteredMemberships?.map(member => (
+                    <StyledTableRow key={member.id} hover className="button" sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                      <TableCell
+                        onClick={() => handleMemberships(member.project.id)}
+                        sx={{
+                          pl: 4,
+                          py: 2,
+                          fontSize: "0.9rem",
+                          fontWeight: 500,
+                          "&:span": { color: theme => theme.palette.primary.defaultText },
+                          "&:hover": { color: theme => (theme.palette.mode === "light" ? "#000" : theme.palette.primary.main) },
+                        }}>
+                        {member.project.name}
+                      </TableCell>
+                      <TableCell>
+                        {member.roles.map(role => (
+                          <div key={role.id}>{role.name}</div>
+                        ))}
+                      </TableCell>
+                    </StyledTableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
           </Box>
-          <Box sx={{mb: 3}}>
-            <Typography sx={{mb: 1}} color={theme => theme.palette.primary.defaultText} variant="h6">
+          <Box sx={{ mb: 3 }}>
+            <Typography sx={{ mb: 1 }} color={theme => theme.palette.primary.defaultText} variant="h6">
               Teams
             </Typography>
-            <Divider/>
+            <Divider />
             <Grid container spacing={2} sx={{ mt: 2 }}>
-              {me?.groups.map(team => (
+              {me?.groups?.map(team => (
                 <Grid item lg={4} key={team.id}>
-                  <Card onClick={() => setState(team.id)} sx={{ ":hover": { cursor: "pointer" }, background: theme => theme.palette.mode === "light" ? "" : theme.palette.background.modal }}>
+                  <Card
+                    onClick={() => setState(team.id)}
+                    sx={{ ":hover": { cursor: "pointer" }, background: theme => (theme.palette.mode === "light" ? "" : theme.palette.background.modal) }}>
                     <Box sx={{ display: "flex", alignItems: "center", py: 1.5, px: 2 }}>
                       <MemberAvatar name={`${team.name}`} height={34} width={34} />
                       <Typography variant="subtitle1" sx={{ ml: 2, color: theme => theme.palette.primary.secondaryText }}>
@@ -179,71 +196,73 @@ export default function Me() {
             </Grid>
           </Box>
           <Box>
-            <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" , justifyContent: "space-between", mb: 2}} >
+            <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
               <Typography color={theme => theme.palette.primary.defaultText} variant="h6">
                 Assigned Issues
               </Typography>
-              <FormControl size="small" sx={{ minWidth: 120, display: "flex", flexDirection: "row", alignItems: "center" , gap: 1 }}>
+              <FormControl size="small" sx={{ minWidth: 120, display: "flex", flexDirection: "row", alignItems: "center", gap: 1 }}>
                 <Typography variant="body2" display="block" sx={{ color: theme => theme.palette.primary.defaultText }}>
-                  Sort by: 
+                  Sort by:
                 </Typography>
-                <Select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+                <Select value={filterType} onChange={e => setFilterType(e.target.value)}>
                   <MenuItem value="start_date">Start Date</MenuItem>
                   <MenuItem value="due_date">Due Date</MenuItem>
                 </Select>
               </FormControl>
             </Box>
-            <Divider/>
+            <Divider />
             {allMonths.length === 0 ? (
-              <Typography sx={{ mt: 2, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }}>No activity yet for this period.</Typography>
+              <Typography sx={{ mt: 2, color: theme => (theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText) }}>No activity yet for this period.</Typography>
             ) : (
               <>
-                {visibleMonthsList.map((month) => (
+                {visibleMonthsList.map(month => (
                   <Box key={month} sx={{ mt: 2, mb: 3, position: "relative", pl: 3 }}>
-                    <Typography sx={{ mb:1, color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText }} variant="h6">{month}</Typography>
-                    <Divider sx={{width: "50%", my: 1 }} />                      
-                      {groupedIssues[month].map((issue, index) => (
-                        <Box key={issue.id} sx={{ display: "flex", alignItems: "center", position: "relative", mb: 2 }}>
-                          {index !== 0 && (
-                            <Box
-                              sx={{                                
-                                position: "absolute",
-                                left: 24,
-                                top: "-18px",
-                                width: "1px",
-                                height: "16px",
-                                bgcolor: "#444444",
-                              }}
-                            />
-                          )}
+                    <Typography sx={{ mb: 1, color: theme => (theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText) }} variant="h6">
+                      {month}
+                    </Typography>
+                    <Divider sx={{ width: "50%", my: 1 }} />
+                    {groupedIssues[month].map((issue, index) => (
+                      <Box key={issue.id} sx={{ display: "flex", alignItems: "center", position: "relative", mb: 2 }}>
+                        {index !== 0 && (
                           <Box
                             sx={{
-                              width: 32,
-                              height: 32,
-                              bgcolor: theme => theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal ,
-                              borderRadius: "50%",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexShrink: 0,
-                              zIndex: 1,
-                              ml: "8px",
+                              position: "absolute",
+                              left: 24,
+                              top: "-18px",
+                              width: "1px",
+                              height: "16px",
+                              bgcolor: "#444444",
                             }}
-                          >
-                            <IssueTypeIcon type_name={issue.tracker.name} sx={{ color: "white" }} />
-                          </Box>
-                          <Typography sx={{ color: theme => theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText, ml: 2 }}>
-                            <Box component="span" onClick={() => handleIssue(issue)} sx={{ fontWeight: 500, cursor: "pointer", "&:hover": { color: "#0071E1" } }}> {issue.subject} </Box>
-                          </Typography>
+                          />
+                        )}
+                        <Box
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            bgcolor: theme => (theme.palette.mode === "light" ? "#f1f5f9" : theme.palette.background.modal),
+                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexShrink: 0,
+                            zIndex: 1,
+                            ml: "8px",
+                          }}>
+                          <IssueTypeIcon type_name={issue.tracker.name} sx={{ color: "white" }} />
                         </Box>
-                      ))}
+                        <Typography sx={{ color: theme => (theme.palette.mode === "light" ? "" : theme.palette.primary.defaultText), ml: 2 }}>
+                          <Box component="span" onClick={() => handleIssue(issue)} sx={{ fontWeight: 500, cursor: "pointer", "&:hover": { color: "#0071E1" } }}>
+                            {" "}
+                            {issue.subject}{" "}
+                          </Box>
+                        </Typography>
+                      </Box>
+                    ))}
                   </Box>
                 ))}
                 {hasMore && (
                   <Box sx={{ textAlign: "center", mt: 2 }}>
-                    <StyledButton onClick={() => setVisibleMonths((prev) => prev + 2)}>
-                      Show More
-                    </StyledButton>
+                    <StyledButton onClick={() => setVisibleMonths(prev => prev + 2)}>Show More</StyledButton>
                   </Box>
                 )}
               </>
@@ -252,8 +271,14 @@ export default function Me() {
         </Box>
       </Box>
 
-      <CustomDialog back open={Boolean(state)} onClose={() => setState(null)} >
-        {state === "edit_profile" ? <EditInformation onClose={() => setState(null)} user={user} editedUser={editedUser} setEditedUser={setEditedUser} /> : state === "change_pwd" ? <ChangePassword onClose={() => setState(null)} user={user} /> : state !== null ? <EditGroup team_id={state} onClose={() => setState(null)} /> : null }
+      <CustomDialog back open={Boolean(state)} onClose={() => setState(null)}>
+        {state === "edit_profile" ? (
+          <EditInformation onClose={() => setState(null)} user={user} editedUser={editedUser} setEditedUser={setEditedUser} />
+        ) : state === "change_pwd" ? (
+          <ChangePassword onClose={() => setState(null)} user={user} />
+        ) : state !== null ? (
+          <EditGroup team_id={state} onClose={() => setState(null)} />
+        ) : null}
       </CustomDialog>
     </Container>
   )
